@@ -197,7 +197,7 @@ export default function HudAdmin() {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                
+                onClick={() => navigate('../NovaSolicitacao')}
               >
                 <ListItemIcon
                   sx={{
@@ -228,7 +228,7 @@ export default function HudAdmin() {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={() => navigate('../MinhasSolicitacoes')}
+                onClick={() => navigate('../')}
               >
                 <ListItemIcon
                   sx={{
