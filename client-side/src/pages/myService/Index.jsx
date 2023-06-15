@@ -20,17 +20,17 @@ export default function MyService() {
                 <h2>{"Solicitações > Meus Atendimentos"}</h2>
                 <Divider />
                 <div style={{width: '100%', height: 'fit-content', display: 'flex', marginBottom: '25px'}}>
-                    <div style={{width: '30%', display: 'flex', justifyContent: 'space-evenly', height: '30px', marginTop: '10px'}}>
-                        <Button variant="contained" size="small">todas</Button>
-                        <Button variant="outlined" size="small">pendentes</Button>
-                        <Button variant="outlined" size="small">agardando avalização</Button>
-                        <Button variant="outlined" size="small">finalizadas</Button>
-                        <Button variant="outlined" size="small">canceladas</Button>
+                    <div style={{width: '40%', display: 'flex', justifyContent: 'space-evenly', height: '30px', marginTop: '10px'}}>
+                        <Button variant="contained" size="small" sx={{minWidth: '80px'}}>todas</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>pendentes</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '200px'}}>agardando avalização</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>finalizadas</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>canceladas</Button>
                     </div>
-                    <div style={{width: '70%', display: 'flex', justifyContent: 'flex-end'}}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-end', marginRight: '50px', width: '600px'}}>
+                    <div style={{width: '60%', display: 'flex', justifyContent: 'flex-end'}}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end', marginRight: '50px', width: '50%'}}>
                             <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                            <TextField sx={{width: '100%'}} size="small" label="Pesquisar..." variant="standard" />
+                            <TextField sx={{width: '100%'}} size="small" label="Pesquisar..." variant="standard" aria-label="Campo de pesquisa" />
                         </Box>
                     </div>
                 </div>
