@@ -20,12 +20,12 @@ export default function openRequest() {
                 <h2>{"Solicitações > Minhas Solicitações"}</h2>
                 <Divider />
                 <div style={{width: '100%', height: 'fit-content', display: 'flex', marginBottom: '25px'}}>
-                    <div style={{width: '40%', display: 'flex', justifyContent: 'space-evenly', height: '30px', marginTop: '10px'}}>
-                        <Button variant="contained" size="small" sx={{minWidth: '80px'}}>todas</Button>
-                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>pendentes</Button>
-                        <Button variant="outlined" size="small" sx={{minWidth: '200px'}}>agardando avalização</Button>
-                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>finalizadas</Button>
-                        <Button variant="outlined" size="small" sx={{minWidth: '100px'}}>canceladas</Button>
+                    <div style={{width: '40%', display: 'flex', height: '30px', marginTop: '10px'}}>
+                        <Button variant="contained" size="small" sx={{minWidth: '80px', marginRight: '10px'}}>todas</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px', marginRight: '10px'}}>pendentes</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '200px', marginRight: '10px'}}>agardando avalização</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px', marginRight: '10px'}}>finalizadas</Button>
+                        <Button variant="outlined" size="small" sx={{minWidth: '100px', marginRight: '10px'}}>canceladas</Button>
                     </div>
                     <div style={{width: '60%', display: 'flex', justifyContent: 'flex-end'}}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-end', marginRight: '50px', width: '50%'}}>
