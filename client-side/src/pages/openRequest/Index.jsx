@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import HudAdmin from "../components/mainHud/Index";
 import MainTable from "../components/mainTable/Index";
 
@@ -8,8 +8,12 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import FirstLogin from "../components/firstLogin/Index";
 
-export default function openRequest() {
+export default function OpenRequest() {
+
+  const [openDialogFirstLogin, setOpenDialogFirstLogin] = useState(true);
+
   return (
     <>
       <HudAdmin />
@@ -38,6 +42,10 @@ export default function openRequest() {
             </div>
         </div>
       </div>
+      <FirstLogin 
+        open={openDialogFirstLogin}
+        setOpenDialogFirstLogin={setOpenDialogFirstLogin}
+      />
     </>
   );
 }

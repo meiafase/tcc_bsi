@@ -13,8 +13,10 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Divider from "@mui/material/Divider";
 import { ValidateEmail } from "../../utils/email/ValidateEmail";
 import SnackbarSuccess from "../components/snackBarError/Index";
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -28,8 +30,13 @@ export default function Index() {
     event.preventDefault();
   };
 
+  const handleSaveInfos = () => {
+    navigate('../')
+  }
+
   const handleValidateInputs = () => {
     if (email && senha) {
+      handleSaveInfos();
     } else {
       setMensagemSnackBarError("Preencha todos os campos corretamente!")
       setOpenSnackBarError(true)
