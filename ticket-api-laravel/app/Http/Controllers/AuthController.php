@@ -51,7 +51,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // dd($request);
         $user = $request->user();
 
         // Revogar todos os tokens do usuário
