@@ -9,10 +9,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import FirstLogin from "../components/firstLogin/Index";
+import SnackbarError from "../components/snackBarError/Index";
 
 export default function OpenRequest() {
 
   const [openDialogFirstLogin, setOpenDialogFirstLogin] = useState(true);
+  const [openSnackBarError, setOpenSnackBarError] = useState(false);
+  const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
 
   return (
     <>
@@ -45,7 +48,10 @@ export default function OpenRequest() {
       <FirstLogin 
         open={openDialogFirstLogin}
         setOpenDialogFirstLogin={setOpenDialogFirstLogin}
+        setOpenSnackBarError={setOpenSnackBarError}
+        setMensagemSnackBarError={setMensagemSnackBarError}
       />
+      <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError}/>
     </>
   );
 }

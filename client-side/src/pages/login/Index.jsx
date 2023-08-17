@@ -14,6 +14,8 @@ import Divider from "@mui/material/Divider";
 import { ValidateEmail } from "../../utils/email/ValidateEmail";
 import SnackbarSuccess from "../components/snackBarError/Index";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/header/Index";
+//import Axios from 'axios';
 
 export default function Index() {
   const navigate = useNavigate();
@@ -30,12 +32,17 @@ export default function Index() {
     event.preventDefault();
   };
 
-  const handleSaveInfos = () => {
-    navigate('../')
+  const handleSaveInfos = async () => {
+    navigate('../AbrirRequisicao')
+    // await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/login`, {
+    //   email, password: senha
+    // }).then(res => {
+      
+    // })
   }
 
   const handleValidateInputs = () => {
-    if (email && senha) {
+    if (ValidateEmail(email) === undefined && senha) {
       handleSaveInfos();
     } else {
       setMensagemSnackBarError("Preencha todos os campos corretamente!")
@@ -46,6 +53,7 @@ export default function Index() {
 
   return (
     <>
+    <Header />
       <div
         style={{
           width: "100%",

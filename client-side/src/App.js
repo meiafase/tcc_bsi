@@ -11,7 +11,8 @@ function App() {
   return (
     <div className="App">
         <Routes>
-          <Route path="/" element={<OpenRequest />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/AbrirRequisicao" element={<OpenRequest />} />
           <Route path="/MeusAtendimentos" element={<MyService />} />
           <Route path="/Relatorio" element={<Report />} />
           <Route path="/NovaSolicitacao" element={<NewRequest />} />
