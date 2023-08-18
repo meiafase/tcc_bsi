@@ -24,7 +24,6 @@ return new class extends Migration
             $table->text("descricao")->nullable();
             $table->boolean("possui_subcategorias");
             $table->boolean("restricao")->default(false);
-            $table->boolean("possui_template")->nullable();
             $table->boolean("possui_adicionais")->nullable();
             $table->time("prazo_horas")->nullable();
             $table->boolean("ativo")->default(false);

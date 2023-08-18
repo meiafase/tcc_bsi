@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
-            $table->string("titulo");
             $table->integer("usuario_id");
             $table->foreignId("area_id");
+            $table->string("titulo");
             $table->boolean("ativo")->default(false);
             $table->timestamps();
         });

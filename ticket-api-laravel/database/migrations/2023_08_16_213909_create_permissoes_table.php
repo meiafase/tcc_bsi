@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('permissoes', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_usuario');
-            $table->integer('id_setor');
+            $table->integer('usuario_id');
+            $table->integer('area_id');
             $table->boolean('abrir_chamados')->default(true);
             $table->boolean('abrir_chamados_restritos')->default(false);
             $table->boolean('atender_chamados')->default(false);
