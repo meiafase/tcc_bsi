@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('historicos', function (Blueprint $table) {
             $table->id()->index();
             $table->integer('usuario_id')->index();
-            $table->foreignId('pedido_id')->constrained('pedidos')->index();
+            $table->foreignId('pedido_id')->index();
             $table->longText('descricao');
             $table->boolean('publico')->default(1);
             $table->timestamps();

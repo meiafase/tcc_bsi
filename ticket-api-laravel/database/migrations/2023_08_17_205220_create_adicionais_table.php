@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('adicionais', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("usuario_id")->constrained();
-            $table->foreignId("categoria_id")->nullable()->constrained();
-            $table->foreignId("sub_categoria_id")->nullable()->constrained();
+            $table->foreignId("usuario_id");
+            $table->foreignId("categoria_id")->nullable();
+            $table->foreignId("sub_categoria_id")->nullable();
             $table->string("titulo");
             $table->timestamps();
         });

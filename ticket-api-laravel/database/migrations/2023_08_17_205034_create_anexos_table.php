@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('anexos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mensagem_id')->constrained('mensagens');
+            $table->foreignId('mensagem_id');
             $table->string('nome_arquivo');
             $table->string('nome_arquivo_completo');
             $table->string('extensao');

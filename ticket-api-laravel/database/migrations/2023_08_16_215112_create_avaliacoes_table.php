@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('avaliacoes', function (Blueprint $table) {
             $table->id()->index();
             $table->integer('usuario_id')->index();
-            $table->foreignId('pedido_id')->constrained('pedidos')->index();
+            $table->foreignId('pedido_id')->index();
             $table->decimal('nota', 2, 1);
             $table->boolean('avaliacao_gestor')->nullable();
             $table->boolean('util')->nullable();

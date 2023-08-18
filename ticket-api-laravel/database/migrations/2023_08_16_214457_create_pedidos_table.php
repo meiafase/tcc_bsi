@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id()->index();
             $table->integer('solicitante_id')->index();
             $table->integer('responsavel_id')->nullable()->index();
-            $table->foreignId('area_id')->constrained('areas')->index();
-            $table->foreignId('assunto_id')->constrained('assuntos')->index();
-            $table->foreignId('categoria_id')->constrained('categorias')->index();
-            $table->foreignId('sub_categoria_id')->nullable()->constrained('sub_categorias')->index();
-            $table->foreignId('status_id')->constrained('status')->index();
-            $table->foreignId('prioridade_id')->constrained('prioridades')->index();
+            $table->foreignId('area_id')->index();
+            $table->foreignId('assunto_id')->index();
+            $table->foreignId('categoria_id')->index();
+            $table->foreignId('sub_categoria_id')->nullable()->index();
+            $table->foreignId('status_id')->index();
+            $table->foreignId('prioridade_id')->index();
             $table->dateTime('prazo_limite')->nullable();
             $table->dateTime('inicio_atendimento')->nullable();
             $table->dateTime('fim_atendimento')->nullable();

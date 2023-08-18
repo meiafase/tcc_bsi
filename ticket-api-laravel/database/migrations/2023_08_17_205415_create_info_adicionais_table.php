@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('info_adicionais', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos');
-            $table->foreignId('adicional_id')->constrained('adicionais');
+            $table->foreignId('pedido_id');
+            $table->foreignId('adicional_id');
             $table->string('campo');
             $table->string('conteudo');
             $table->timestamps();

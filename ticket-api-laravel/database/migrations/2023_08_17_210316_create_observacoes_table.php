@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('observacoes', function (Blueprint $table) {
             $table->id();
             $table->integer('usuario_id');
-            $table->foreignId('pedido_id')->constrained('pedidos');
+            $table->foreignId('pedido_id');
             $table->longText('observacao');
             $table->timestamps();
         });

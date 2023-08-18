@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('assuntos', function (Blueprint $table) {
             $table->id()->index();
-            $table->foreignId("usuario_id")->constrained()->index();
-            $table->foreignId("area_id")->constrained()->index();
+            $table->foreignId("usuario_id")->index();
+            $table->foreignId("area_id")->index();
             $table->string('titulo');
             $table->text('descricao');
             $table->boolean('ativo')->default(false);
