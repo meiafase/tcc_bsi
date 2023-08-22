@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Usuario;
 use Illuminate\Database\Eloquent\Model;
 
 class Observacao extends Model
 {
-    use HasFactory;
+    protected $table = 'observacoes';
+    protected $guarded = ["id"];
+
+    public function usuario()
+    {
+        return $this->hasOne(Usuario::class, "id", "usuario_id")->select("id", "nome", "email");
+    }
 }

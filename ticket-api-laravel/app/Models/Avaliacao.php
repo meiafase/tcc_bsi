@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Usuario;
 use Illuminate\Database\Eloquent\Model;
 
 class Avaliacao extends Model
 {
-    use HasFactory;
+    protected $table = 'avaliacoes';
+
+    protected $guarded = ["id"];
+
+    protected $casts = [
+        'nota' => 'float'
+    ];
+
+    public function usuario()
+    {
+        return $this->hasOne(Usuario::class, "id", "usuario_id")->select("id", "nome", "email");
+    }
 }

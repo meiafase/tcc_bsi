@@ -2,10 +2,48 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Categoria;
+use App\Models\Prioridade;
+use App\Models\Adicional;
 use Illuminate\Database\Eloquent\Model;
 
 class SubCategoria extends Model
 {
-    use HasFactory;
+    protected $table = 'sub_categorias';
+
+    protected $guarded = ["id"];
+
+    protected $fillable = [
+        "usuario_id",
+        "categoria_id",
+        "prioridade_id",
+        "equipe_id",
+        "responsavel_id",
+        "titulo",
+        "descricao",
+        "restricao",
+        "possui_adicionais",
+        "prazo_horas",
+        "ativo"
+    ];
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
+    public function prioridade()
+    {
+        return $this->belongsTo(Prioridade::class);
+    }
+
+    public function adicionais()
+    {
+        return $this->hasMany(Adicional::class);
+    }
+
+    public function setTituloAttribute($value)
+    {
+        $this->attributes['titulo'] = strtoupper($value);
+    }
 }

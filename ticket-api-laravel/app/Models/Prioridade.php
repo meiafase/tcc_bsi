@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Categoria;
+use App\Models\SubCategoria;
 use Illuminate\Database\Eloquent\Model;
 
 class Prioridade extends Model
 {
-    use HasFactory;
+    public function categoriaPrioridade()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
+    public function subCategoriaPrioridade()
+    {
+        return $this->belongsTo(SubCategoria::class);
+    }
 }
