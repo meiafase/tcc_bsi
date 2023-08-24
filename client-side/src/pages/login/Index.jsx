@@ -15,7 +15,7 @@ import { ValidateEmail } from "../../utils/email/ValidateEmail";
 import SnackbarSuccess from "../components/snackBarError/Index";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header/Index";
-//import Axios from 'axios';
+import Axios from 'axios';
 
 export default function Index() {
   const navigate = useNavigate();
@@ -33,12 +33,13 @@ export default function Index() {
   };
 
   const handleSaveInfos = async () => {
-    navigate('../AbrirRequisicao')
-    // await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/login`, {
-    //   email, password: senha
-    // }).then(res => {
-      
-    // })
+    
+    await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/login`, {
+      email, password: senha
+    }).then(res => {
+      localStorage.setItem("token",res.data.token);
+      navigate('../AbrirRequisicao')
+    })
   }
 
   const handleValidateInputs = () => {
