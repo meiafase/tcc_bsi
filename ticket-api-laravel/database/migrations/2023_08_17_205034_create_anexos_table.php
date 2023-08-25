@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('anexos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('mensagem_id');
+            $table->id()->index();
+            $table->foreignId('mensagem_id')->index();
             $table->string('nome_arquivo');
             $table->string('nome_arquivo_completo');
             $table->string('extensao');

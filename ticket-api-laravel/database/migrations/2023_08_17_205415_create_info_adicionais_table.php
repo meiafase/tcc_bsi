@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('info_adicionais', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pedido_id');
-            $table->foreignId('adicional_id');
+            $table->id()->index();
+            $table->foreignId('pedido_id')->index();
+            $table->foreignId('adicional_id')->index();
             $table->string('campo');
             $table->string('conteudo');
             $table->timestamps();

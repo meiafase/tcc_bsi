@@ -9,8 +9,8 @@ const service = new RabbitMQService();
 export class PessoaController {
    
     async cadastrar(request: Request, response: Response) {
-        let { name, email, area_id, tp_coord, coord_id } = request.body;
-        let pessoa: Pessoa = { name, email, area_id, tp_coord, coord_id }
+        let { nome, email, area_id, tp_coord, coord_id } = request.body;
+        let pessoa: Pessoa = { nome, email, area_id, tp_coord, coord_id }
         const result = await repositoryPessoa.incluir(pessoa);
 
         service.enviar(JSON.stringify(pessoa));

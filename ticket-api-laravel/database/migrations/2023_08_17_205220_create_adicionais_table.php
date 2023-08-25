@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('adicionais', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("usuario_id");
-            $table->foreignId("categoria_id")->nullable();
-            $table->foreignId("sub_categoria_id")->nullable();
+            $table->id()->index();
+            $table->foreignId("usuario_id")->index();
+            $table->foreignId("categoria_id")->nullable()->index();
+            $table->foreignId("sub_categoria_id")->nullable()->index();
             $table->string("titulo");
             $table->timestamps();
         });

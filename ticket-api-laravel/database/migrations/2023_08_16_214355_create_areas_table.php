@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('areas', function (Blueprint $table) {
-            $table->id();
+            $table->id()->index();
             $table->string("titulo");
             $table->timestamps();
         });

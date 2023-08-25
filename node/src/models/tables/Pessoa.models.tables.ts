@@ -8,7 +8,7 @@ const Pessoa = Conn.define('pessoa', {
         allowNull: false,
         primaryKey: true
     },
-    name: {
+    nome: {
         type: STRING,
         autoIncrement: false,
         allowNull: true

@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('observacoes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('usuario_id');
-            $table->foreignId('pedido_id');
+            $table->id()->index();
+            $table->integer('usuario_id')->index();
+            $table->foreignId('pedido_id')->index();
             $table->longText('observacao');
             $table->timestamps();
         });

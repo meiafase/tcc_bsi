@@ -6,7 +6,7 @@ let pessoas: Pessoa[] = [];
 export class PessoaRepository {
     async incluir(pessoa: Pessoa) {
         const insert = await PessoaModelTable.create({
-            name: pessoa.name,
+            nome: pessoa.nome,
             email: pessoa.email,
             area_id: pessoa.area_id,
             tp_coord: pessoa.tp_coord,

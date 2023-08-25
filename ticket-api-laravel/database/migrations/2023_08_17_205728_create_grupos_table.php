@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('grupos', function (Blueprint $table) {
-            $table->id();
-            $table->integer("usuario_id");
-            $table->foreignId("area_id");
+            $table->id()->index();
+            $table->integer("usuario_id")->index();
+            $table->foreignId("area_id")->index();
             $table->string("titulo");
             $table->boolean("ativo")->default(false);
             $table->timestamps();
