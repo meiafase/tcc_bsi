@@ -29,19 +29,18 @@ class RabbitMQService
     public function consume($fila)
     {
         $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
-        dd($fila);
         $channel = $connection->channel();
         $messages = [];
         $callback = function ($msg) {
-           $messages[] = $msg->body;
+            $messages[] = $msg->body;
         };
         $channel->queue_declare($fila, false, false, false, false);
         $channel->basic_consume($fila, '', false, true, false, false, $callback);
-           while (count($messages) == 0) {
+        while (count($messages) == 0) {
             $channel->wait();
         }
         $channel->close();
         $connection->close();
-       return $messages;
+        return $messages;
     }
 }
