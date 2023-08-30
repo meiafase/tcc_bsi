@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
     "nome": "Ana Santos",
-    "email": "joel_vargas@hotmail.com",
-    "area_id": 1,
+    "email": "ana_vargas@hotmail.com",
+    "area_id": 3,
     "tp_coord": "S",
     "coord_id": 20
 }

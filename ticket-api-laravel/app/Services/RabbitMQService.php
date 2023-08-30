@@ -28,19 +28,33 @@ class RabbitMQService
 
     public function consume($fila)
     {
-        $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
-        $channel = $connection->channel();
-        $messages = [];
-        $callback = function ($msg) {
-            $messages[] = $msg->body;
-        };
-        $channel->queue_declare($fila, false, false, false, false);
-        $channel->basic_consume($fila, '', false, true, false, false, $callback);
-        while (count($messages) == 0) {
-            $channel->wait();
+        try {
+            $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
+            $channel = $connection->channel();
+            $messages = [];
+
+            $callback = function ($msg) use (&$messages) {
+                $messages[] = $msg->body;
+            };
+
+            $channel->queue_declare($fila, false, false, false, false);
+            $channel->basic_consume($fila, '', false, true, false, false, $callback);
+
+            // while (count($messages) == 0 || count($channel->callbacks)) {
+            $mtz = 10;
+            while ($mtz) {
+                $channel->wait();
+                $mtz--;
+            }
+
+            $channel->close();
+            $connection->close();
+
+            dd($messages);
+            return $messages;
+        } catch (\PhpAmqpLib\Exception\AMQPExceptionInterface $e) {
+            // Trate a exceção aqui (por exemplo, log de erro)
+            dd($e->getMessage());
         }
-        $channel->close();
-        $connection->close();
-        return $messages;
     }
 }
