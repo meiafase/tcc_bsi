@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import IconButton from "@mui/material/IconButton";
@@ -15,7 +15,7 @@ import { ValidateEmail } from "../../utils/email/ValidateEmail";
 import SnackbarSuccess from "../components/snackBarError/Index";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header/Index";
-import Axios from 'axios';
+import Axios from "axios";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -32,29 +32,45 @@ export default function Index() {
     event.preventDefault();
   };
 
+  useEffect(() => {
+    const verifySession = async () => {
+      let token = localStorage.getItem("token");
+      if(token) {
+        navigate("../AbrirRequisicao");
+      }
+    } 
+    verifySession();
+  }, [])
+
   const handleSaveInfos = async () => {
-    
     await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/login`, {
-      email, password: senha
-    }).then(res => {
-      localStorage.setItem("token",res.data.token);
-      navigate('../AbrirRequisicao')
+      email,
+      password: senha,
     })
-  }
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        navigate("../AbrirRequisicao");
+      })
+      .catch((err) => {
+        setMensagemSnackBarError("Algo deu errado ao tentar fazer o login!");
+        setOpenSnackBarError(true);
+        setErrorInput(true);
+      });
+  };
 
   const handleValidateInputs = () => {
     if (ValidateEmail(email) === undefined && senha) {
       handleSaveInfos();
     } else {
-      setMensagemSnackBarError("Preencha todos os campos corretamente!")
-      setOpenSnackBarError(true)
+      setMensagemSnackBarError("Preencha todos os campos corretamente!");
+      setOpenSnackBarError(true);
       setErrorInput(true);
     }
   };
 
   return (
     <>
-    <Header />
+      <Header />
       <div
         style={{
           width: "100%",
@@ -136,7 +152,7 @@ export default function Index() {
               Entrar
             </Button>
           </div>
-          
+
           <div
             style={{
               width: "100%",
