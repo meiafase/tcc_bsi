@@ -53,6 +53,7 @@ class BaseRepository
 
     public function criar($dados)
     {
+        // dd($dados);
         $objeto = $this->model::create($dados);
         return $objeto;
     }

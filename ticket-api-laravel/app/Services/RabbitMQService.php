@@ -37,24 +37,57 @@ class RabbitMQService
                 $messages[] = $msg->body;
             };
 
+            // $callback = function ($msg) use ($channel, $fila) {
+            //     while ($msg = $channel->basic_get($fila, false)) {
+            //         $messages[] = $msg->body;
+            //         $channel->basic_ack($msg->delivery_tag);
+            //     }
+            // };
+
             $channel->queue_declare($fila, false, false, false, false);
             $channel->basic_consume($fila, '', false, true, false, false, $callback);
 
-            // while (count($messages) == 0 || count($channel->callbacks)) {
-            $mtz = 10;
-            while ($mtz) {
+
+
+            // while (count($messages) == 0 || count($channel->callbacks)) { //"Error receiving data" // app\Services\RabbitMQService.php:70
+            //         $channel->wait();
+            // }
+
+            // while (count($channel->callbacks)) { //"Error receiving data" // app\Services\RabbitMQService.php:74
+            //         $channel->wait();
+            // }
+
+            // while (count($messages) < $channel->queue_declare($fila, false, false, false, false)[1]) { //vazio
+            //         $channel->wait();
+            // }
+
+            // $maxWaitIterations = 10; //"Error receiving data"
+            // $waitIterations = 0;
+            // while (count($messages) < 5 && $waitIterations < $maxWaitIterations) {
+            //     $channel->wait();
+            //     $waitIterations++;
+            // }
+
+            // while (count($messages) < 1) { //"Short out of range: Array"
+            //     $channel->wait();
+            // }
+
+            // while (empty($messages)) { //"Short out of range: Array"
+            //     $channel->wait();
+            // }
+
+            while (count($messages) == 0 ) { //retorna apenas 1
                 $channel->wait();
-                $mtz--;
             }
 
             $channel->close();
             $connection->close();
 
-            dd($messages);
             return $messages;
         } catch (\PhpAmqpLib\Exception\AMQPExceptionInterface $e) {
             // Trate a exceção aqui (por exemplo, log de erro)
-            dd($e->getMessage());
+            // dd('deu ruim');
+            return $e->getMessage();
         }
     }
 }
