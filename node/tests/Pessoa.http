@@ -3,8 +3,8 @@ POST http://localhost:3000/newPessoa
 Content-Type: application/json
 
 {
-    "nome": "Ana Maria Vargas",
-    "email": "vargas@hotmail.com",
+    "name": "Ana Maria Vargas",
+    "email": "ana_vargas@hotmail.com",
     "area_id": 12,
     "tp_coord": "S",
     "coord_id": 20

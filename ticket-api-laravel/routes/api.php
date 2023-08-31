@@ -22,13 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/usuario', [UsuarioController::class, 'cadastrar']);
+
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
-// exemplo de rota com auth
-// Route::middleware('auth:sanctum')->get('/dashboard', 'DashboardController@index');
 Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [AssuntoController::class, 'cadastrar']);
 });
 Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
-    Route::post('/', [UsuarioController::class, 'cadastrar']);
+    Route::put('/', [UsuarioController::class, 'editar']);
 });

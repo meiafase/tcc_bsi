@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
 use App\Services\RabbitMQServiceService;
+use Exception;
 
 class UsuarioService
 {
@@ -36,9 +37,9 @@ class UsuarioService
                     }
                 }
             // $senha = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-            $senha = '12345678';
-            // $objeto['senha'] = password_hash($senha, PASSWORD_DEFAULT);
-            $objeto['senha'] = '12345678';
+            $password = '12345678';
+            $objeto['password'] = password_hash($password, PASSWORD_DEFAULT);
+            // $objeto['password'] = '12345678';
             }
 
             //Salva usuario no BD Laravel
@@ -54,5 +55,30 @@ class UsuarioService
         // } catch () {
         //     dd('deu ruim');
         // }
+    }
+
+    public function editar($dados)
+    {
+        try {
+            $usuario = $this->repository->filtrar([['email', $dados['email']]])->first();
+
+            $resset = [
+                "password" => password_hash($dados["password"], PASSWORD_DEFAULT),
+                "primeiro_acesso" => false
+            ];
+            $retorno = $this->repository->atualizar($usuario->id, $resset);
+
+            return array(
+                'status' => true,
+                'mensagem' => "Senha atualizada com sucesso.",
+                'dados' =>  $retorno
+            );
+        } catch (Exception $ex) {
+            return array(
+                'status' => false,
+                'mensagem' => "Erro na solicitação.",
+                'exception' => $ex->getMessage()
+            );
+        }
     }
 }

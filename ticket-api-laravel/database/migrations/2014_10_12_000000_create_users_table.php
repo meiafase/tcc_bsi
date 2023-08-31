@@ -20,6 +20,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->boolean('primeiro_acesso')->default(true);
+            $table->foreignId('area_id')->index();
+            $table->char('tp_coord', 1)->nullable()->default(NULL);
+            $table->foreignId('coord_id')->index();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

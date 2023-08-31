@@ -18,4 +18,9 @@ class UsuarioController extends Controller
     {
         return $this->service->cadastrar();
     }
+
+    public function editar(Request $request)
+    {
+        return $this->service->editar($request->all());
+    }
 }
