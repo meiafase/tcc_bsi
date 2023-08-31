@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "name": "Ana Maria Vargas",
-    "email": "ana_vargas@hotmail.com",
+    "email": "aninha_vargas@hotmail.com",
     "area_id": 12,
     "tp_coord": "S",
     "coord_id": 20

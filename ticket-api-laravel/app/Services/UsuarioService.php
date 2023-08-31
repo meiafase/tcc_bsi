@@ -19,8 +19,7 @@ class UsuarioService
 
     public function cadastrar()
     {
-        // try {
-
+        try {
             //Busca cadastro no Rabbit
             $fila = "node";
             $usuarios = $this->rabbitMQService->consume($fila);
@@ -48,13 +47,19 @@ class UsuarioService
             //enviar email usuario e senha.
 
 
-            return $usuario;
+            return array(
+                'status' => true,
+                'mensagem' => "Usuário cadastrado com sucesso.",
+                'dados' =>  $usuario
+            );
 
-            // dd('aqui', $user);
-
-        // } catch () {
-        //     dd('deu ruim');
-        // }
+        } catch (Exception $ex) {
+            return array(
+                'status' => false,
+                'mensagem' => "Erro ao cadastrar usuário.",
+                'exception' => $ex->getMessage()
+            );
+        }
     }
 
     public function editar($dados)

@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
-// const sequelize = new Sequelize('node', 'root', '', {
-const sequelize = new Sequelize('node', 'root', 'senha', {
+const sequelize = new Sequelize('node', 'root', '', {
+// const sequelize = new Sequelize('node', 'root', 'senha', {
     host: 'localhost',
     dialect: 'mysql',
 });
