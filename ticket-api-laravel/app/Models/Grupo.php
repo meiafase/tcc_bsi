@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Area;
-use App\Models\Usuario;
+use App\Models\User;
 use App\Pivots\GrupoIntegrantesPivot;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,7 @@ class Grupo extends Model
 
     public function integrantes() {
 
-        return $this->belongsToMany(Usuario::class, "grupos_integrantes", "grupo_id", "usuario_id");
+        return $this->belongsToMany(User::class, "grupos_integrantes", "grupo_id", "usuario_id");
     }
 
     public function grupos_integrantes() {

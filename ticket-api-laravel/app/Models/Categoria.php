@@ -7,8 +7,6 @@ use App\Models\Assunto;
 use App\Models\SubCategoria;
 use App\Models\Prioridade;
 use App\Models\Adicional;
-use App\Models\Template;
-use App\Models\Classificacao;
 
 class Categoria extends Model
 {

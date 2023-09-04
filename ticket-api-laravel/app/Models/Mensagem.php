@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Mensagem extends Model
@@ -17,6 +17,6 @@ class Mensagem extends Model
 
     public function usuario()
     {
-        return $this->hasOne(Usuario::class, "id", "usuario_id")->select("id", "nome", "email");
+        return $this->hasOne(User::class, "id", "usuario_id")->select("id", "nome", "email");
     }
 }

@@ -13,7 +13,7 @@ class BaseRequest extends FormRequest
 
     public function __construct(Request $request)
     {
-        $this->usuario = $request->usuario;
+        $this->usuario = $request->user();
         $this->request = $request;
     }
 

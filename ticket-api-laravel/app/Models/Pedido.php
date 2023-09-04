@@ -8,7 +8,7 @@ use App\Models\Categoria;
 use App\Models\Prioridade;
 use App\Models\Status;
 use App\Models\SubCategoria;
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Pedido extends Model
@@ -19,12 +19,12 @@ class Pedido extends Model
 
     public function solicitante()
     {
-        return $this->hasOne(Usuario::class, "id", "solicitante_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
+        return $this->hasOne(User::class, "id", "solicitante_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
     }
 
     public function responsavel()
     {
-        return $this->hasOne(Usuario::class, "id", "responsavel_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
+        return $this->hasOne(User::class, "id", "responsavel_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
     }
 
     public function area()

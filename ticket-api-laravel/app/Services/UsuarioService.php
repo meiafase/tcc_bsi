@@ -3,18 +3,25 @@
 namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
-use App\Services\RabbitMQServiceService;
+use App\Services\RabbitMQService;
+use App\Services\PermissoesService;
 use Exception;
 
 class UsuarioService
 {
     protected $repository;
     protected $rabbitMQService;
+    protected $permissoesService;
 
-    public function __construct(UsuarioRepository $repository, RabbitMQService $rabbitMQService)
+    public function __construct(
+        UsuarioRepository $repository,
+        RabbitMQService $rabbitMQService,
+        PermissoesService $permissoesService
+    )
     {
         $this->repository = $repository;
         $this->rabbitMQService = $rabbitMQService;
+        $this->permissoesService = $permissoesService;
     }
 
     public function cadastrar()
@@ -85,5 +92,15 @@ class UsuarioService
                 'exception' => $ex->getMessage()
             );
         }
+    }
+
+    public function validarPermissoesLogin($id)
+    {
+        $usuario = $this->repository->obter($id);
+        if ($usuario->permissoes == null) {
+            unset($usuario->permissoes);
+            $usuario->setAttribute('permissoes', $this->permissoesService->iniciarPermissoes($usuario));
+        }
+        return $usuario;
     }
 }

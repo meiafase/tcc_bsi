@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +27,6 @@ class Permissoes extends Model
 
     public function usuario()
     {
-        return $this->hasOne(Usuario::class, 'id', 'id_usuario');
+        return $this->hasOne(User::class, 'id', 'id_usuario');
     }
 }

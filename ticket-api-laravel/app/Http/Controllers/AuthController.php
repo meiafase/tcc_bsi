@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Services\UsuarioService;
 use Exception;
 
 class AuthController extends Controller
 {
+    private $usuarioService;
+
+    public function __construct(UsuarioService $usuarioService)
+    {
+        $this->usuarioService = $usuarioService;
+    }
+
     public function login(Request $request)
     {
         try{
@@ -16,6 +24,10 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
                 $token = $user->createToken('token-name')->plainTextToken;
+
+                //Cria permissao
+                $usuario = $this->usuarioService->validarPermissoesLogin($user->id);
+
                 return array(
                     'status' => true,
                     'mensagem' => "Login realizado com sucesso.",
