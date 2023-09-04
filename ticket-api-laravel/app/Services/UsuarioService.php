@@ -103,4 +103,19 @@ class UsuarioService
         }
         return $usuario;
     }
+
+    public function listarEquipe($usuario)
+    {
+        if (!$usuario->isCoordenador()) {
+            if ($usuario->permissoes->manter_permissoes) {
+                $this->equipePermissao = $this->repository->listarEquipe($usuario->coord_id);
+                return $this->equipePermissao;
+            } else {
+                return [$usuario];
+            }
+        } else {
+            $this->equipePermissao = $this->repository->listarEquipe($usuario->id);
+            return array_merge_recursive([$usuario], $this->equipePermissao);
+        }
+    }
 }

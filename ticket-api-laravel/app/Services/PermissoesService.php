@@ -3,8 +3,14 @@
 namespace App\Services;
 
 use App\Repositories\PermissoesRepository;
+use App\Models\Permissoes;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
-
+/**
+ * @property PermissoesRepository $permissoesRepository
+ */
 class PermissoesService
 {
     private $repository;
@@ -26,8 +32,37 @@ class PermissoesService
             $dados['relatorios'] = 1;
             $dados['manter_catalogo'] = 1;
             $dados['manter_permissoes'] = 1;
-            $dados['abertura_area'] = 1;
         }
         return $this->repository->criar($dados);
+    }
+
+    public function alterarPermissoes(array $dados, int $usuario_id)
+    {
+        try {
+            DB::beginTransaction();
+            if($dados['usuario']['permissoes']['manter_permissoes'] || $dados['usuario']->isCoordenador()){
+                $permissoes = $this->repository->atualizarPermissoes($usuario_id, $dados)->toArray();
+
+                DB::commit();
+                return array(
+                    'status' 	=> true,
+                    'mensagem' 	=> "Permissões atualizadas com sucesso.",
+                    'dados' 	=>  $permissoes
+                );
+            } else {
+                return array(
+                    'status' 	=> true,
+                    'mensagem' 	=> "Usuário sem permissão.",
+                    'dados' 	=>  []
+                );
+            }
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status' 	=> false,
+                'mensagem' 	=> "Erro ao atualizar permissões.",
+                'exception' => $ex->getMessage()
+            );
+        }
     }
 }

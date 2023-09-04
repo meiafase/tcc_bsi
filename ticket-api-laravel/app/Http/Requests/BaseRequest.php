@@ -20,6 +20,7 @@ class BaseRequest extends FormRequest
     public function dataRequest(){
         $dados = $this->all();
         $dados['usuario'] = $this->usuario;
+        $dados['usuario']['permissoes'] = $this->usuario->permissoes;
         return $dados;
     }
 

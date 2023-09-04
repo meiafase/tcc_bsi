@@ -17,4 +17,15 @@ class PermissoesRepository extends BaseRepository
         $this->model = Permissoes::class;
     }
 
+    public function atualizarPermissoes($usuario_id, $dados)
+    {
+        $permissoes = $this->model::firstOrNew([
+            'usuario_id' => $usuario_id,
+            'area_id' => $dados['area_id']
+        ]);
+        $permissoes->fill($dados);
+        $permissoes->save();
+        return $permissoes;
+    }
+
 }

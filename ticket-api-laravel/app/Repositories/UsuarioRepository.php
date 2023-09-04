@@ -11,4 +11,15 @@ class UsuarioRepository extends BaseRepository
     {
         $this->model = User::class;
     }
+
+    public function listarEquipe(int $id)
+    {
+        $retorno = $this->model::where('coord_id', $id)
+        ->where('status', '1')
+        ->with('permissoes')
+        ->orderBy('name', 'ASC')
+        ->get()
+        ->toArray();
+        return $retorno;
+    }
 }
