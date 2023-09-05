@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AssuntoController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\GrupoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +33,11 @@ Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
     Route::put('/', [UsuarioController::class, 'editar']);
     Route::get('/equipe', [UsuarioController::class, 'listarEquipe']);
     Route::put('/permissoes/{usuario_id}', [UsuarioController::class, 'alterarPermissoes']);
+
+});
+Route::prefix('grupo')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [GrupoController::class, 'cadastrar']);
+    Route::put('/{id}', [GrupoController::class, 'editar']);
+    Route::get('/listar/{area_id}', [GrupoController::class, 'listar']);
 
 });

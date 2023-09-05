@@ -25,8 +25,17 @@ class Permissoes extends Model
         'manter_permissoes'
     ];
 
+    protected $visible = [
+        'abrir_chamados',
+        'abrir_chamados_restritos',
+        'atender_chamados',
+        'relatorios',
+        'manter_catalogo',
+        'manter_permissoes'
+    ];
+
     public function usuario()
     {
-        return $this->hasOne(User::class, 'id', 'id_usuario');
+        return $this->hasOne(User::class, 'id', 'usuario_id');
     }
 }
