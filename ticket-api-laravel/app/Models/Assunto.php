@@ -11,6 +11,11 @@ class Assunto extends Model
     protected $table = 'assuntos';
     protected $guarded = ["id"];
 
+    protected $hidden = [
+        "created_at",
+        "updated_at"
+    ];
+
     public function area()
     {
         return $this->belongsTo(Area::class, "area_id", "id");

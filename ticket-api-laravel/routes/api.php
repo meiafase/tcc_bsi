@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [AssuntoController::class, 'cadastrar']);
+    Route::get('/', [AssuntoController::class, 'listar']);
+    Route::put('/{id}', [AssuntoController::class, 'editar']);
 });
 Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
     Route::put('/', [UsuarioController::class, 'editar']);

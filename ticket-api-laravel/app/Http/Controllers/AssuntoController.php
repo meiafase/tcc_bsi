@@ -28,4 +28,14 @@ class AssuntoController extends Controller
     {
         return $this->service->cadastrar($request->dataRequest());
     }
+
+    public function editar($id, AssuntoRequest $request)
+    {
+        return $this->service->editar($id, $request->dataRequest());
+    }
+
+    public function listar(AssuntoRequest $request)
+    {
+        return $this->service->listar($request->dataRequest());
+    }
 }

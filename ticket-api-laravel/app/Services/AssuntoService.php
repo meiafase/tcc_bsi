@@ -22,28 +22,87 @@ class AssuntoService
 
     public function cadastrar($dados)
     {
-        $dados["usuario_id"] = $dados["usuario"]["id"];
-        $dados["area_id"] = $dados["area_id"] ?? $dados["usuario"]["area_id"];
-        unset($dados["usuario"]);
         try {
-            DB::beginTransaction();
+            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
+                DB::beginTransaction();
+                $dados["usuario_id"] = $dados["usuario"]["id"];
+                $dados["area_id"] = $dados["area_id"] ?? $dados["usuario"]["area_id"];
+                unset($dados["usuario"]);
 
-            $dados = $this->repository->criar($dados);
+                $dados = $this->repository->criar($dados);
 
-            DB::commit();
+                DB::commit();
+                return array(
+                    "status"    => true,
+                    "mensagem"  => "Assunto cadastrado com sucesso",
+                    "dados"     => $dados
+                );
+            } else {
+                return array(
+                    'status' 	=> true,
+                    'mensagem' 	=> "Usuário sem permissão.",
+                    'dados' 	=>  []
+                );
+            }
 
-            return array(
-                "status"    => true,
-                "mensagem"  => "Assunto cadastrado com sucesso",
-                "dados"     => $dados
-            );
         } catch (Exception $ex) {
-
             DB::rollBack();
-
             return array(
                 'status'    => false,
                 'mensagem'  => "Erro ao cadastrar assunto.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
+
+    public function editar(int $id, $dados)
+    {
+        try {
+            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
+                unset($dados["usuario"]);
+
+                DB::beginTransaction();
+                $dados = $this->repository->atualizar($id, $dados);
+
+                DB::commit();
+                return array(
+                    "status" => true,
+                    "mensagem" => "Assunto editado com sucesso",
+                    "dados" => $dados
+                );
+            } else {
+                return array(
+                    'status' 	=> true,
+                    'mensagem' 	=> "Usuário sem permissão.",
+                    'dados' 	=>  []
+                );
+            }
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao editar assunto.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
+
+    public function listar($dados)
+    {
+        try{
+            $filtros = [['area_id', $dados['usuario']['area_id']]];
+            $with = ["categorias.Adicionais", "categorias.subCategorias", "categorias.subCategorias.adicionais"];
+            $dados = $this->repository->filtrar($filtros, $with, "titulo", "ASC");
+
+            return array(
+                "status" => true,
+                "mensagem" => "Assunto listado com sucesso",
+                "dados" => $dados
+            );
+        } catch (Exception $ex) {
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao listar assunto.",
                 'exception' => $ex->getMessage()
             );
         }
