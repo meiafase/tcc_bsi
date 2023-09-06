@@ -1,0 +1,64 @@
+anotações trabalho:
+
+Tirado fora:
+1) tratativas UF
+2) abertura_chamado (pedido)
+3) Templates / possui template (cat e su)
+4) Agendamento (pedido, cat e sub)
+5) funcionario com troca de setor
+6) Classificacao (pedido, cat e sub)
+7) ativo (adicionais)
+7) Soft delete (info_adicionais)
+7) Tipo_mensagem (mensagem, tipo_mensagem)
+8) abertura_area (pedido)
+9) pendente, reaberto, recategorizar (status, mensagem)
+10) ultima interacao (pedido)
+11) pausas (mensagem)
+12) histórico publico (historico)
+13) setores_tb -> areas
+
+Mudança - tab permissoes:
+id_usuario para usuario_id
+id_setor para area_id
+
+Relacinamentos Usuario
+Ajustar Class User->Usuario
+
+
+try {
+	DB::beginTransaction();
+
+	DB::commit();
+	return array(
+		'status' 	=> true,
+		'mensagem' 	=> "Usuário cadastrado com sucesso.",
+		'dados' 	=>  $dados
+	);
+
+} catch (Exception $ex) {
+	DB::rollBack();
+	return array(
+		'status' 	=> false,
+		'mensagem' 	=> "Erro ao cadastrar usuário.",
+		'exception' 	=> $ex->getMessage()
+	);
+}
+
+
+Rotas Catalogo:
+Carregar categorias: 
+
+Assunto:
+GET 	http://localhost:8000/api/assunto/setor/16
+N_GET 	http://localhost:8000/api/assunto/ - OK
+POST	http://localhost:8000/api/assunto/ - OK
+PUT	http://localhost:8000/api/assunto/154 - OK
+
+Categoria:
+GET 	http://localhost:8000/api/assunto/151/categorias* (com sub)
+POST	http://localhost:8000/api/categoria/ - OK
+PUT	http://localhost:8000/api/categoria/845 - OK
+
+Sub:
+POST	http://localhost:8000/api/sub_categoria/
+POST	http://localhost:8000/api/sub_categoria/1417

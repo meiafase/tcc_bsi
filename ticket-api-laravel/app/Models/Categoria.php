@@ -33,6 +33,11 @@ class Categoria extends Model
         "ativo"
     ];
 
+    protected $hidden = [
+        "created_at",
+        "updated_at"
+    ];
+
     public function assunto()
     {
         return $this->belongsTo(Assunto::class);

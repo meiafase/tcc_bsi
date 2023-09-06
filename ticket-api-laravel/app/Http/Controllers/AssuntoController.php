@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\AssuntoRequest;
 use App\Services\AssuntoService;
-use App\Services\Catalogo\AssuntoService as CatalogoAssuntoService;
 use App\Services\CategoriaService;
 
 

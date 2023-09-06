@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AssuntoController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
 
@@ -31,6 +33,19 @@ Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AssuntoController::class, 'listar']);
     Route::put('/{id}', [AssuntoController::class, 'editar']);
 });
+
+Route::prefix('categoria')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [CategoriaController::class, 'cadastrar']);
+    // Route::get('/', [CategoriaController::class, 'listar']);
+    Route::put('/{id}', [CategoriaController::class, 'editar']);
+});
+
+Route::prefix('sub_categoria')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [SubCategoriaController::class, 'cadastrar']);
+    // Route::get('/', [SubCategoriaController::class, 'listar']);
+    Route::put('/{id}', [SubCategoriaController::class, 'editar']);
+});
+
 Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
     Route::put('/', [UsuarioController::class, 'editar']);
     Route::get('/equipe', [UsuarioController::class, 'listarEquipe']);
