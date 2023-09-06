@@ -48,7 +48,9 @@ export default function Index() {
       password: senha,
     })
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("token", res.data.dados.token);
+        localStorage.setItem("id", res.data.dados.usuario.id);
+        localStorage.setItem("email", res.data.dados.usuario.email);
         navigate("../AbrirRequisicao");
       })
       .catch((err) => {

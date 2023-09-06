@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,11 +26,28 @@ export default function FirstLogin(props) {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erroSenha, setErroSenha] = useState(false);
 
+  const handleSaveInfos = () => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    };
+
+    Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario`, {
+      email: localStorage.getItem('email'),
+      password: senha
+    }, config).then(res => {
+      if (res.data.status === true) {
+        props.setMensagemSnackBarSuccess("Senha alterada com sucesso!");
+        props.setOpenSnackBarSuccess(true);
+        props.setOpenDialogFirstLogin(false);
+      }
+    })
+  }
+
   const validateInputs = () => {
     if (senha && confirmarSenha) {
       if (senha.length >= 8 && confirmarSenha.length >= 8) {
         if (senha === confirmarSenha) {
-          alert('OK')
+          handleSaveInfos()
         } else {
           props.setMensagemSnackBarError("As senhas não conferem!");
           props.setOpenSnackBarError(true);
@@ -67,11 +85,11 @@ export default function FirstLogin(props) {
         <DialogContent>
           <DialogContentText>
             {"Altere a sua senha."}
-            <FormControl margin="dense" fullWidth variant="outlined" sx={{marginTop: '20px'}}>
+            <FormControl margin="dense" fullWidth variant="outlined" sx={{ marginTop: '20px' }}>
               <InputLabel>Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
-                onChange={(e) => {setErroSenha(false); setSenha(e.target.value)}}
+                onChange={(e) => { setErroSenha(false); setSenha(e.target.value) }}
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
@@ -91,7 +109,7 @@ export default function FirstLogin(props) {
               <InputLabel>Confirmar Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
-                onChange={(e) => {setErroSenha(false); setConfirmarSenha(e.target.value)}}
+                onChange={(e) => { setErroSenha(false); setConfirmarSenha(e.target.value) }}
                 type={showPasswordTwo ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
