@@ -18,20 +18,20 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
-import RequestPageIcon from '@mui/icons-material/RequestPage';
+import RequestPageIcon from "@mui/icons-material/RequestPage";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import AddIcon from '@mui/icons-material/Add';
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import GroupIcon from '@mui/icons-material/Group';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import AddIcon from "@mui/icons-material/Add";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import GroupIcon from "@mui/icons-material/Group";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -51,24 +51,20 @@ export default function Header() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem
-          key="novaSolicitacao"
-          disablePadding
-        >
+        <ListItem key="novaSolicitacao" disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <AddIcon sx={{ color: "#8A2FFE" }} />
             </ListItemIcon>
             <ListItemText primary="" />
             <ListItem>
-              <Button color="success" size="small" variant="contained">Nova Solicitação</Button>
+              <Button color="success" size="small" variant="contained">
+                Nova Solicitação
+              </Button>
             </ListItem>
           </ListItemButton>
         </ListItem>
-        <ListItem
-          key="minhasSolicitacoes"
-          disablePadding
-        >
+        <ListItem key="minhasSolicitacoes" disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <ChecklistIcon sx={{ color: "#8A2FFE" }} />
@@ -76,10 +72,7 @@ export default function Header() {
             <ListItemText primary="Minhas Solicitações" />
           </ListItemButton>
         </ListItem>
-        <ListItem
-          key="meusAtendimentos"
-          disablePadding
-        >
+        <ListItem key="meusAtendimentos" disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <ChecklistIcon sx={{ color: "#8A2FFE" }} />
@@ -87,10 +80,7 @@ export default function Header() {
             <ListItemText primary="Meus Atendimentos" />
           </ListItemButton>
         </ListItem>
-        <ListItem
-          key="solicitacoesArea"
-          disablePadding
-        >
+        <ListItem key="solicitacoesArea" disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <RequestPageIcon sx={{ color: "#8A2FFE" }} />
@@ -101,7 +91,7 @@ export default function Header() {
       </List>
       <Divider />
       <List>
-      <ListItem key="configuracoes">
+        <ListItem key="configuracoes">
           <ListItemButton disabled>
             <ListItemText primary="Configurações" />
           </ListItemButton>
@@ -115,7 +105,9 @@ export default function Header() {
           </ListItemButton>
         </ListItem>
         <ListItem key="usuariosGrupos" disablePadding>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => navigate("../Configuracoes/Permissoes")}
+          >
             <ListItemIcon>
               <GroupIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -135,9 +127,9 @@ export default function Header() {
   );
 
   return (
-    <>
+    <div>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: "#8A2FFE" }}>
+        <AppBar position="static" sx={{ backgroundColor: "black" }}>
           <Toolbar>
             <IconButton
               size="large"
@@ -190,6 +182,6 @@ export default function Header() {
       >
         {list("left")}
       </Drawer>
-    </>
+    </div>
   );
 }

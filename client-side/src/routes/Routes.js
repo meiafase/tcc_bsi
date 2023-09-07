@@ -7,6 +7,7 @@ import Report from "../pages/Report/Index";
 import NewRequest from "../pages/newRequest/Index";
 import Login from "../pages/login/Index";
 import HeaderTeste from "../pages/components/header/Index";
+import UsuariosGrupos from '../pages/usuariosGrupos/Index';
 
 const Rotas = () => {
   return (
@@ -19,6 +20,7 @@ const Rotas = () => {
         <Route path="/NovaSolicitacao" element={<NewRequest />} />
         <Route path="/login" element={<Login />} />
         <Route path="/header" element={<HeaderTeste />} />
+        <Route path="/Configuracoes/Permissoes" element={<UsuariosGrupos />} />
       </Routes>
     </BrowserRouter>
   );

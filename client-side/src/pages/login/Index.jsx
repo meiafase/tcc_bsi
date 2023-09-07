@@ -40,6 +40,7 @@ export default function Index() {
       }
     } 
     verifySession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSaveInfos = async () => {
