@@ -14,7 +14,7 @@ class AdicionalService
         $this->repository = $repository;
     }
 
-    public function cadastrar($user_id, $id_referencia,  $dados, $campo = true)
+    public function cadastrar($user_id, $id_referencia, $dados, $campo = true)
     {
         try {
             DB::beginTransaction();

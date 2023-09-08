@@ -60,25 +60,24 @@ class SubCategoriaService
             if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
                 $dados["usuario_id"] = $dados["usuario"]["id"];
                 unset($dados["usuario"]);
-
                 DB::beginTransaction();
-                //Cadastro da Categoria
-                $categoria = $this->repository->atualizar($id, $dados);
+                //Atualiza SubCategoria
+                $sub_categoria = $this->repository->atualizar($id, $dados);
 
                 // Cadastro Adicionais
                 if (isset($dados["adicionais"])) {
                     foreach ($dados["adicionais"] as $adicional) {
                         if (!isset($adicional["id"]) || !$adicional["id"]) {
-                            $this->adicionalService->cadastrar($dados["usuario_id"], $categoria->id, $adicional["titulo"]);
+                            $this->adicionalService->cadastrar($dados["usuario_id"], $sub_categoria->id, $adicional["titulo"], false);
                         }
                     }
                 }
 
-                $categoria->load("adicionais");
+                $sub_categoria->load("adicionais");
                 DB::commit();
                 return array(
                     "status" => true,
-                    "mensagem" => "Categoria editada com sucesso",
+                    "mensagem" => "SubCategoria editada com sucesso",
                     "dados" => $dados
                 );
             } else {
@@ -92,7 +91,7 @@ class SubCategoriaService
             DB::rollBack();
             return array(
                 'status'    => false,
-                'mensagem'  => "Erro ao editar categoria.",
+                'mensagem'  => "Erro ao editar subcategoria.",
                 'exception' => $ex->getMessage()
             );
         }

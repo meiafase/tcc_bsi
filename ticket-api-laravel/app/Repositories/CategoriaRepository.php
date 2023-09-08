@@ -12,4 +12,15 @@ class CategoriaRepository extends BaseRepository
     {
         $this->model = Categoria::class;
     }
+
+    public function buscarPorAssunto($id)
+    {
+        $order = 'ASC';
+        return $this->model::where('assunto_id', $id)
+            ->with(['subCategorias' => function ($query) use ($order) {
+                $query->OrderBy("titulo", $order);
+            }, 'adicionais', 'subCategorias.adicionais'])
+            ->orderBy('titulo', $order)
+            ->get();
+    }
 }

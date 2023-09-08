@@ -60,5 +60,7 @@ POST	http://localhost:8000/api/categoria/ - OK
 PUT	http://localhost:8000/api/categoria/845 - OK
 
 Sub:
-POST	http://localhost:8000/api/sub_categoria/
-POST	http://localhost:8000/api/sub_categoria/1417
+POST	http://localhost:8000/api/sub_categoria/ - OK
+PUT	http://localhost:8000/api/sub_categoria/1417 - OK
+
+usuario_id (obter)

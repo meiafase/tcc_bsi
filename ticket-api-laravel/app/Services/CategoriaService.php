@@ -101,5 +101,21 @@ class CategoriaService
         }
     }
 
-
+    public function buscarPorAssunto($id)
+    {
+        try {
+            return array(
+                "status" => true,
+                "mensagem" => "Listagem carregada com sucesso",
+                "dados" => $this->repository->buscarPorAssunto($id)
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao carregar listagem.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 }
