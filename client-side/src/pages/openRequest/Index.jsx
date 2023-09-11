@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import HudAdmin from "../components/mainHud/Index";
 import MainTable from "../components/mainTable/Index";
 
 import Divider from '@mui/material/Divider';
@@ -11,10 +10,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import FirstLogin from "../components/firstLogin/Index";
 import SnackbarError from "../components/snackBarError/Index";
 import SnackbarSuccess from "../components/snackBarSuccess/Index";
+import Header from "../components/header/Index";
 
 export default function OpenRequest() {
 
-  const [openDialogFirstLogin, setOpenDialogFirstLogin] = useState(true);
+  const [openDialogFirstLogin, setOpenDialogFirstLogin] = useState(false);
   const [openSnackBarError, setOpenSnackBarError] = useState(false);
   const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
 
@@ -23,9 +23,7 @@ export default function OpenRequest() {
 
   return (
     <>
-      <HudAdmin />
-      <div style={{ display: 'flex' }}>
-        <div style={{ width: "100px", height: "200px" }}></div>
+      <Header drawer={true} />
         <div style={{ width: "100%", height: "200px", display: 'flex', justifyContent: 'center' }}>
           <div style={{ width: '98%', height: 'fit-content' }}>
             <h2>{"Solicitações > Minhas Solicitações"}</h2>
@@ -48,7 +46,6 @@ export default function OpenRequest() {
             <MainTable />
           </div>
         </div>
-      </div>
       <FirstLogin
         open={openDialogFirstLogin}
         setOpenDialogFirstLogin={setOpenDialogFirstLogin}
