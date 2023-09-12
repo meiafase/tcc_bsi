@@ -39,6 +39,6 @@ class AssuntoController extends Controller
 
     public function buscarPorAssunto(int $id)
     {
-        $this->categoriaService->buscarPorAssunto($id);
+        return $this->categoriaService->buscarPorAssunto($id);
     }
 }

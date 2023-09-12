@@ -94,6 +94,24 @@ class UsuarioService
         }
     }
 
+    public function buscar($id)
+    {
+        try {
+            return array(
+                'status' => true,
+                'mensagem' => "Usuário retornado com sucesso.",
+                'dados' =>  $this->repository->obter($id)
+            );
+
+        } catch (Exception $ex) {
+            return array(
+                'status' => false,
+                'mensagem' => "Erro ao retornar usuario.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
+
     public function validarPermissoesLogin($id)
     {
         $usuario = $this->repository->obter($id);

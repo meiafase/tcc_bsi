@@ -31,6 +31,10 @@ class UsuarioController extends Controller
         return $this->service->editar($request->all());
     }
 
+    public function buscar(int $id){
+        return $this->service->buscar($id);
+    }
+
     public function listarEquipe(PermissoesRequest $request): array
     {
         return $this->service->listarEquipe($request->usuario);

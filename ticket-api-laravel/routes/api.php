@@ -49,6 +49,7 @@ Route::prefix('sub_categoria')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
     Route::put('/', [UsuarioController::class, 'editar']);
+    Route::get('/{id}', [UsuarioController::class, 'buscar']);
     Route::get('/equipe', [UsuarioController::class, 'listarEquipe']);
     Route::put('/permissoes/{usuario_id}', [UsuarioController::class, 'alterarPermissoes']);
 
