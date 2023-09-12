@@ -14,7 +14,7 @@ use App\Services\PermissoesService;
  */
 class UsuarioController extends Controller
 {
-    protected $service;
+    private $service;
     public function __construct(UsuarioService $service, PermissoesService $permissoesService)
     {
         $this->service = $service;
@@ -26,9 +26,9 @@ class UsuarioController extends Controller
         return $this->service->cadastrar();
     }
 
-    public function editar(Request $request)
+    public function editar(PermissoesRequest $request)
     {
-        return $this->service->editar($request->all());
+        return $this->service->editar($request->dataRequest());
     }
 
     public function buscar(int $id){

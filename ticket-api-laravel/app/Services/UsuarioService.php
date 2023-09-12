@@ -72,13 +72,11 @@ class UsuarioService
     public function editar($dados)
     {
         try {
-            $usuario = $this->repository->filtrar([['email', $dados['email']]])->first();
-
             $resset = [
                 "password" => password_hash($dados["password"], PASSWORD_DEFAULT),
                 "primeiro_acesso" => false
             ];
-            $retorno = $this->repository->atualizar($usuario->id, $resset);
+            $retorno = $this->repository->atualizar($dados['usuario']['id'], $resset);
 
             return array(
                 'status' => true,
