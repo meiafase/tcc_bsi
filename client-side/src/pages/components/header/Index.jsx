@@ -24,10 +24,11 @@ import AddIcon from "@mui/icons-material/Add";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import GroupIcon from "@mui/icons-material/Group";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useNavigate } from "react-router-dom";
 
-export default function Header() {
+export default function Header(props) {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -54,11 +55,16 @@ export default function Header() {
         <ListItem key="novaSolicitacao" disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <AddIcon sx={{ color: "#8A2FFE" }} />
+              <AddIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="" />
             <ListItem>
-              <Button color="success" size="small" variant="contained">
+              <Button
+                color="success"
+                size="small"
+                variant="contained"
+                onClick={() => navigate("../NovaSolicitacao")}
+              >
                 Nova Solicitação
               </Button>
             </ListItem>
@@ -67,15 +73,15 @@ export default function Header() {
         <ListItem key="minhasSolicitacoes" disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <ChecklistIcon sx={{ color: "#8A2FFE" }} />
+              <ChecklistIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Minhas Solicitações" />
           </ListItemButton>
         </ListItem>
         <ListItem key="meusAtendimentos" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("../MeusAtendimentos")}>
             <ListItemIcon>
-              <ChecklistIcon sx={{ color: "#8A2FFE" }} />
+              <ChecklistIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Meus Atendimentos" />
           </ListItemButton>
@@ -83,7 +89,7 @@ export default function Header() {
         <ListItem key="solicitacoesArea" disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <RequestPageIcon sx={{ color: "#8A2FFE" }} />
+              <RequestPageIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Solicitações da Área" />
           </ListItemButton>
@@ -91,13 +97,8 @@ export default function Header() {
       </List>
       <Divider />
       <List>
-        <ListItem key="configuracoes">
-          <ListItemButton disabled>
-            <ListItemText primary="Configurações" />
-          </ListItemButton>
-        </ListItem>
         <ListItem key="relatorios" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("../Relatorio")}>
             <ListItemIcon>
               <QueryStatsIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -122,6 +123,22 @@ export default function Header() {
             <ListItemText primary="Catálogos de Serviços" />
           </ListItemButton>
         </ListItem>
+        <Divider />
+        <ListItem key="sair" disablePadding>
+          <ListItemButton
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("email");
+              localStorage.removeItem("id");
+              navigate("../Login");
+            }}
+          >
+            <ListItemIcon>
+              <LogoutIcon sx={{ color: "red" }} />
+            </ListItemIcon>
+            <ListItemText primary="Sair" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -131,18 +148,22 @@ export default function Header() {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ backgroundColor: "black" }}>
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-              onClick={() => {
-                setOpenDrawer(true);
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
+            {props.drawer ? (
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                sx={{ mr: 2 }}
+                onClick={() => {
+                  setOpenDrawer(true);
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              ""
+            )}
             <Typography
               variant="h6"
               noWrap

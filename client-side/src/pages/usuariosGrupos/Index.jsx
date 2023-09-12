@@ -27,9 +27,9 @@ export default function Index() {
 
   return (
     <>
-      <Header />
+      <Header drawer={true} />
       <div style={{ marginLeft: "50px", padding: "10px" }}>
-        <h2>Configurações</h2>
+        <h2>Configurações {">"} Usuários e Grupos</h2>
       </div>
       <Divider />
       <div

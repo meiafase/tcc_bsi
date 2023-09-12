@@ -1,5 +1,4 @@
 import React from "react";
-import HudAdmin from "../components/mainHud/Index";
 import MainTable from "../components/mainTable/Index";
 
 import Divider from '@mui/material/Divider';
@@ -8,13 +7,12 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import Header from "../components/header/Index";
 
 export default function MyService() {
   return (
     <>
-      <HudAdmin />
-      <div style={{display: 'flex'}}>
-        <div style={{ width: "100px", height: "200px"}}></div>
+        <Header drawer={true} />
         <div style={{ width: "100%", height: "200px", display: 'flex', justifyContent: 'center' }}>
             <div style={{width: '98%', height: 'fit-content'}}>
                 <h2>{"Solicitações > Meus Atendimentos"}</h2>
@@ -37,7 +35,6 @@ export default function MyService() {
                 <MainTable />
             </div>
         </div>
-      </div>
     </>
   );
 }

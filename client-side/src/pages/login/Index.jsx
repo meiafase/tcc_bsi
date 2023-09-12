@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,6 +15,7 @@ import SnackbarSuccess from "../components/snackBarError/Index";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header/Index";
 import Axios from "axios";
+import TextField from "@mui/material/TextField";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -35,13 +35,13 @@ export default function Index() {
   useEffect(() => {
     const verifySession = async () => {
       let token = localStorage.getItem("token");
-      if(token) {
+      if (token) {
         navigate("../AbrirRequisicao");
       }
-    } 
+    };
     verifySession();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSaveInfos = async () => {
     await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/login`, {
@@ -73,7 +73,7 @@ export default function Index() {
 
   return (
     <>
-      <Header />
+      <Header drawer={false} />
       <div
         style={{
           width: "100%",
@@ -97,24 +97,15 @@ export default function Index() {
             <h1>LOGIN</h1>
             <Divider />
           </div>
-          <FormControl
+          <TextField
             sx={{ marginBottom: "20px" }}
             fullWidth
+            label="E-mail"
             variant="outlined"
             error={ValidateEmail(email)}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          >
-            <InputLabel>E-mail</InputLabel>
-            <OutlinedInput
-              endAdornment={
-                <InputAdornment position="start">
-                  <AccountCircle />
-                </InputAdornment>
-              }
-              label="E-mail"
-            />
-          </FormControl>
+          />
           <FormControl
             sx={{ marginBottom: "30px" }}
             fullWidth
@@ -132,6 +123,7 @@ export default function Index() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
+                    aria-label="visualizar senha"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
@@ -147,6 +139,7 @@ export default function Index() {
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <Button
+              aria-label="Clique aqui para efetuar o login"
               variant="contained"
               color="success"
               sx={{ width: "100%" }}
@@ -168,6 +161,7 @@ export default function Index() {
             <p style={{ fontSize: "20px" }}>
               Esqueceu sua senha?{" "}
               <Button
+                aria-label="esqueceu sua senha? clique aqui"
                 variant="contained"
                 size="small"
                 startIcon={<OpenInNewIcon />}
