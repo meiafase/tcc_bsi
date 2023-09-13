@@ -31,7 +31,7 @@ export default function TableGruposUsuarios() {
               <TableCell align="right">Relatórios</TableCell>
               <TableCell align="right">Catálogos Serviços</TableCell>
               <TableCell align="right">Gerenciar Permissões</TableCell>
-              <TableCell align="right">Abertura Equipe</TableCell>
+              <TableCell align="right">Abrir Chamado</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
