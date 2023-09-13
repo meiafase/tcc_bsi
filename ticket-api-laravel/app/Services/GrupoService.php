@@ -118,7 +118,7 @@ class GrupoService
     {
         try {
 
-            $dados = $this->repository->obter($id);
+            $dados = $this->repository->obter($id, ['integrantes'], "titulo", "ASC");
             if ($dados) {
                 return array(
                     'status'    => true,
