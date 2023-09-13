@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Checkbox from "@mui/material/Checkbox";
 import { Divider } from "@mui/material";
+import Axios from "axios";
 
 let listaUsuarios = [
   { value: 1, nome: "Pessoa 1" },
@@ -26,6 +27,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function DialogListaUsuarios(props) {
+  useEffect(() => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+    const getUsers = async () => {
+      //await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}`, config);
+    };
+
+    getUsers();
+  });
+
   const handleClose = () => {
     props.setOpenDialogListarUsuarios(false);
   };

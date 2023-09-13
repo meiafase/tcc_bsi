@@ -44,9 +44,7 @@ export default function EditarGrupo(props) {
     await Axios.put(
       `${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/${props.idGrupo}`,
       {
-        titulo: grupo,
-        ativo,
-        integrantes,
+        titulo: grupo
       },
       config
     )
