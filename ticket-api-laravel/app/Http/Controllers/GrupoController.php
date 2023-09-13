@@ -9,6 +9,7 @@ use App\Services\GrupoService;
 
 class GrupoController extends Controller
 {
+    private $service;
     public function __construct(GrupoService $service)
     {
         $this->service = $service;
@@ -27,5 +28,10 @@ class GrupoController extends Controller
     public function listar($area_id)
     {
         return $this->service->listar($area_id);
+    }
+
+    public function buscar($id)
+    {
+        return $this->service->buscar($id);
     }
 }

@@ -20,7 +20,7 @@ class GrupoService
     {
         try {
             DB::beginTransaction();
-            if ($dados['usuario']['permissoes']['manter_permissoes'] || $dados['usuario']->isCoordenador()){
+            if ($dados['usuario']['permissoes']['manter_permissoes'] || $dados['usuario']->isCoordenador()) {
 
                 $dados["usuario_id"] = $dados["usuario"]["id"];
                 $dados["area_id"] = $dados["usuario"]["area_id"];
@@ -36,9 +36,9 @@ class GrupoService
                 );
             } else {
                 return array(
-                    'status' 	=> true,
-                    'mensagem' 	=> "Usuário sem permissão.",
-                    'dados' 	=>  []
+                    'status'     => true,
+                    'mensagem'     => "Usuário sem permissão.",
+                    'dados'     =>  []
                 );
             }
         } catch (Exception $ex) {
@@ -54,7 +54,7 @@ class GrupoService
     public function editar($id, $dados)
     {
         try {
-            if ($dados['usuario']['permissoes']['manter_permissoes'] || $dados['usuario']->isCoordenador()){
+            if ($dados['usuario']['permissoes']['manter_permissoes'] || $dados['usuario']->isCoordenador()) {
                 $dados["usuario_id"] = $dados["usuario"]["id"];
                 unset($dados["usuario"]);
 
@@ -67,7 +67,6 @@ class GrupoService
                     $grupo->integrantes()->sync($dados['integrantes'], false);
                     $grupo->save();
                     $grupo->load('integrantes');
-
                 } else {
                     $grupo->save();
                 }
@@ -78,15 +77,13 @@ class GrupoService
                     "mensagem" => "Grupo atualizado com sucesso.",
                     "dados" => $grupo
                 );
-
             } else {
                 return array(
-                    'status' 	=> true,
-                    'mensagem' 	=> "Usuário sem permissão.",
-                    'dados' 	=>  []
+                    'status'     => true,
+                    'mensagem'     => "Usuário sem permissão.",
+                    'dados'     =>  []
                 );
             }
-
         } catch (Exception $ex) {
             DB::rollBack();
             return array(
@@ -103,17 +100,44 @@ class GrupoService
             $dados = $this->repository->filtrar(["area_id" => $area_id], ['integrantes'], "titulo", "ASC");
 
             return array(
-                'status' 	=> true,
-                'mensagem' 	=> "Listagem carregada com sucesso.",
-                'dados' 	=>  $dados
+                'status'     => true,
+                'mensagem'     => "Listagem carregada com sucesso.",
+                'dados'     =>  $dados
             );
-
         } catch (Exception $ex) {
             DB::rollBack();
             return array(
-                'status' 	=> false,
-                'mensagem' 	=> "Erro ao retornar listagem.",
-                'exception' 	=> $ex->getMessage()
+                'status'     => false,
+                'mensagem'     => "Erro ao retornar listagem.",
+                'exception'     => $ex->getMessage()
+            );
+        }
+    }
+
+    public function buscar($id)
+    {
+        try {
+
+            $dados = $this->repository->obter($id);
+            if ($dados) {
+                return array(
+                    'status'    => true,
+                    'mensagem'  => "Grupo carregado com sucesso.",
+                    'dados'     =>  $dados
+                );
+            } else {
+                return array(
+                    'status'    => true,
+                    'mensagem'  => "Não há dados para retornar.",
+                    'dados'     =>  []
+                );
+            }
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status'     => false,
+                'mensagem'   => "Erro ao retornar grupo.",
+                'exception'  => $ex->getMessage()
             );
         }
     }

@@ -52,11 +52,10 @@ Route::prefix('usuario')->middleware('auth:sanctum')->group(function () {
     Route::get('/{id}', [UsuarioController::class, 'buscar']);
     Route::get('/equipe', [UsuarioController::class, 'listarEquipe']);
     Route::put('/permissoes/{usuario_id}', [UsuarioController::class, 'alterarPermissoes']);
-
 });
 Route::prefix('grupo')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [GrupoController::class, 'cadastrar']);
     Route::put('/{id}', [GrupoController::class, 'editar']);
     Route::get('/listar/{area_id}', [GrupoController::class, 'listar']);
-
+    Route::get('/{id}', [GrupoController::class, 'buscar']);
 });
