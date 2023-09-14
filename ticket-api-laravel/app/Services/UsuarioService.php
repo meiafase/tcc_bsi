@@ -98,7 +98,7 @@ class UsuarioService
             return array(
                 'status' => true,
                 'mensagem' => "Usuário retornado com sucesso.",
-                'dados' =>  $this->repository->obter($id)
+                'dados' =>  $this->repository->obter($id, ['permissoes'])
             );
 
         } catch (Exception $ex) {
