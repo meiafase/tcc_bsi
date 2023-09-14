@@ -63,4 +63,6 @@ Sub:
 POST	http://localhost:8000/api/sub_categoria/ - OK
 PUT	http://localhost:8000/api/sub_categoria/1417 - OK
 
-usuario_id (obter)
+usuario_id (obter) - OK
+
+Ana - ajustar rota de grupos pra inativar;
