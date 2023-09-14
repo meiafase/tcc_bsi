@@ -31,7 +31,7 @@ class UsuarioController extends Controller
         return $this->service->editar($request->dataRequest());
     }
 
-    public function buscar(int $id){
+    public function buscar($id){
         return $this->service->buscar($id);
     }
 

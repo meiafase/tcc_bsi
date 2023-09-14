@@ -20,7 +20,7 @@ class BaseRepository
         return $this->model::paginate();
     }
 
-    public function obter(int $id, array $with = null)
+    public function obter($id, array $with = null)
     {
         if (isset($with) && sizeof($with) > 0) {
             return $this->model::with($with)->find($id);
