@@ -26,12 +26,12 @@ export default function TableGruposUsuarios() {
           <TableHead>
             <TableRow>
               <TableCell>Colaborador</TableCell>
+              <TableCell align="right">Abrir Chamados</TableCell>
+              <TableCell align="right">Abrir Chamados Restritos</TableCell>
               <TableCell align="right">Atender Chamados</TableCell>
-              <TableCell align="right">Chamados Restritos</TableCell>
               <TableCell align="right">Relatórios</TableCell>
-              <TableCell align="right">Catálogos Serviços</TableCell>
-              <TableCell align="right">Gerenciar Permissões</TableCell>
-              <TableCell align="right">Abrir Chamado</TableCell>
+              <TableCell align="right">Manter Catálogo</TableCell>
+              <TableCell align="right">Manter Permissões</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
