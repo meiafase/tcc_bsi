@@ -61,8 +61,8 @@ class GrupoService
                 DB::beginTransaction();
                 $grupo = $this->repository->atualizar($id, $dados);
 
-                $grupo->integrantes()->detach();
                 if (isset($dados["integrantes"]) && count($dados["integrantes"]) > 0) {
+                    $grupo->integrantes()->detach();
 
                     $grupo->integrantes()->sync($dados['integrantes'], false);
                     $grupo->save();

@@ -64,8 +64,4 @@ POST	http://localhost:8000/api/sub_categoria/ - OK
 PUT	http://localhost:8000/api/sub_categoria/1417 - OK
 
 usuario_id (obter) - OK
-<<<<<<< HEAD
-Ana ajustar rota pra editar grupo
-=======
 rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro)
->>>>>>> 194d8e6b56683ea685c8e024ebf8066e4a4bad11
