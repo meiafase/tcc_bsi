@@ -64,4 +64,4 @@ POST	http://localhost:8000/api/sub_categoria/ - OK
 PUT	http://localhost:8000/api/sub_categoria/1417 - OK
 
 usuario_id (obter) - OK
-rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro)
+rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro) OK
