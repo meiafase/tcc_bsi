@@ -42,7 +42,7 @@ export default function CadastrarUsuario(props) {
     };
 
     getGrupo();
-  }, [props.idGrupo, props.openEditarGrupo, props.setOpenEditarGrupo]);
+  }, [props.idGrupo, props.openEditarGrupo, props.setOpenEditarGrupo, openDialogListarUsuarios, setOpenDialogListarUsuarios]);
   return (
     <>
       <div
@@ -94,7 +94,6 @@ export default function CadastrarUsuario(props) {
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
-                
               >
                 Adicionar Integrante
               </Button>
@@ -129,6 +128,7 @@ export default function CadastrarUsuario(props) {
         </div>
       )}
       <DialogListaUsuarios
+      idGrupo={props.idGrupo}
         openDialogListarUsuarios={openDialogListarUsuarios}
         setOpenDialogListarUsuarios={setOpenDialogListarUsuarios}
       />

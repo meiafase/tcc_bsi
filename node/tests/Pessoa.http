@@ -3,9 +3,9 @@ POST http://localhost:3000/newPessoa
 Content-Type: application/json
 
 {
-    "name": "Samuel Diel",
-    "email": "samuel@gmail.com",
+    "name": "Jota P",
+    "email": "jota@gmail.com",
     "area_id": 12,
-    "tp_coord": "S",
-    "coord_id": 20
+    "tp_coord": "",
+    "coord_id": 1
 }
