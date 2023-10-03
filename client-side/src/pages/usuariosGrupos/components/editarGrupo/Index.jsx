@@ -49,7 +49,7 @@ export default function EditarGrupo(props) {
       config
     )
       .then((res) => {
-        if (res.data.status === true) handleClose();
+        handleClose();
       })
       .catch((err) => {
         console.log(err);

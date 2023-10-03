@@ -10,7 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import ListItemButton from "@mui/material/ListItemButton";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import PersonIcon from "@mui/icons-material/Person";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import Axios from "axios";
 import EditarGrupo from "../editarGrupo/Index";
 
@@ -20,12 +20,11 @@ export default function CadastrarUsuario(props) {
   const [isGrupoVazio, setIsGrupoVazio] = useState(false);
   const [nomeGrupo, setNomeGrupo] = useState("");
   const [colaboradores, setColaboradores] = useState([]);
-  const [ativo, setAtivo] = useState("");
 
+  const config = {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  };
   useEffect(() => {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
     const getGrupo = async () => {
       await Axios.get(
         `${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/${props.idGrupo}`,
@@ -33,7 +32,7 @@ export default function CadastrarUsuario(props) {
       )
         .then((res) => {
           setNomeGrupo(res.data.dados.titulo);
-          setAtivo(res.data.dados.ativo);
+          props.setAtivo(res.data.dados.ativo);
           setColaboradores(res.data.dados.integrantes);
         })
         .catch((err) => {
@@ -42,7 +41,28 @@ export default function CadastrarUsuario(props) {
     };
 
     getGrupo();
-  }, [props.idGrupo, props.openEditarGrupo, props.setOpenEditarGrupo, openDialogListarUsuarios, setOpenDialogListarUsuarios]);
+  }, [
+    props.idGrupo,
+    props.openEditarGrupo,
+    props.setOpenEditarGrupo,
+    openDialogListarUsuarios,
+    setOpenDialogListarUsuarios,
+  ]);
+
+  const handleSwitch = async (event) => {
+    props.setAtivo(event);
+    await Axios.put(
+      `${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/${props.idGrupo}`,
+      {
+        ativo: event,
+      },
+      config
+    )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {});
+  };
   return (
     <>
       <div
@@ -66,69 +86,42 @@ export default function CadastrarUsuario(props) {
         <div>
           <FormControlLabel
             control={<Switch />}
-            checked={ativo}
-            onChange={() => {ativo === 1? setAtivo(0) : setAtivo(1)}}
+            checked={props.ativo}
+            onChange={(e) => handleSwitch(e.target.checked)}
             label="Ativar grupo"
             labelPlacement="start"
           />
         </div>
       </div>
-      {isGrupoVazio ? (
-        <div
-          style={{
-            width: "100%",
-            height: "80vh",
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "100px",
-          }}
+      <div>
+        <Button
+          sx={{ marginBottom: "30px" }}
+          variant="contained"
+          endIcon={<BorderColorIcon />}
+          onClick={() => setOpenDialogListarUsuarios(true)}
         >
-          <div style={{ height: "500px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <PersonAddAlt1Icon sx={{ fontSize: "200px", color: "#83d9f0" }} />
-            </div>
-            <Divider />
-            <div style={{ textAlign: "center" }}>
-              <h2>Nenhum integrante cadastrado</h2>
-              <h4>Clique em "Adicionar Integrante" para adicionar ao grupo</h4>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-              >
-                Adicionar Integrante
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <Button
-            sx={{ marginBottom: "30px" }}
-            variant="contained"
-            endIcon={<BorderColorIcon />}
-            onClick={() => setOpenDialogListarUsuarios(true)}
-          >
-            Editar integrantes
-          </Button>
-          <h4>Colaborador</h4>
-          <Divider />
-          {colaboradores.length !== 0? (
-            colaboradores.map((colab) => (
-              <>
-                <ListItemButton onClick={() => alert(colab.id)}>
-                  <PersonIcon sx={{ marginRight: "10px" }} />{" "}
-                  <p>Desenvolvimento - {colab.name}</p>
-                </ListItemButton>
-                <Divider />
-              </>
-            ))
-          ) : (
-            <Alert severity="warning">Nenhum integrante adicionado a este grupo.</Alert>
-          )}
-        </div>
-      )}
+          Editar integrantes
+        </Button>
+        <h4>Colaborador</h4>
+        <Divider />
+        {colaboradores.length !== 0 ? (
+          colaboradores.map((colab) => (
+            <>
+              <ListItemButton onClick={() => alert(colab.id)}>
+                <PersonIcon sx={{ marginRight: "10px" }} />{" "}
+                <p>Desenvolvimento - {colab.name}</p>
+              </ListItemButton>
+              <Divider />
+            </>
+          ))
+        ) : (
+          <Alert severity="warning">
+            Nenhum integrante adicionado a este grupo.
+          </Alert>
+        )}
+      </div>
       <DialogListaUsuarios
-      idGrupo={props.idGrupo}
+        idGrupo={props.idGrupo}
         openDialogListarUsuarios={openDialogListarUsuarios}
         setOpenDialogListarUsuarios={setOpenDialogListarUsuarios}
       />
