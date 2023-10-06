@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
 
+const sequelize = new Sequelize('node', 'root', 'positivo', {
 // const sequelize = new Sequelize('node', 'root', '', {
-const sequelize = new Sequelize('node', 'root', '166123', {
+// const sequelize = new Sequelize('node', 'root', '166123', {
     host: 'localhost',
     dialect: 'mysql',
 });

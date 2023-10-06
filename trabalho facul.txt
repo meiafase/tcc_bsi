@@ -1,5 +1,8 @@
 anotações trabalho:
 
+rodar back: php artisan serve --port=9000
+rodar front / node: npm run dev
+
 Tirado fora:
 1) tratativas UF
 2) abertura_chamado (pedido)
