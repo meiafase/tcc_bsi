@@ -23,6 +23,7 @@ export default function Index() {
   const [listaGrupos, setListaGrupos] = useState([]);
   const [idGrupo, setIdGrupo] = useState("");
   const [openEditarGrupo, setOpenEditarGrupo] = useState(false);
+  const [ativo, setAtivo] = useState("");
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -61,7 +62,7 @@ export default function Index() {
 
     getGrupos();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [areaId, openEditarGrupo, setOpenEditarGrupo]);
+  }, [areaId, openEditarGrupo, setOpenEditarGrupo, ativo, setAtivo, openCadastrarGrupo, setOpenCadastrarGrupo]);
 
   return (
     <>
@@ -137,6 +138,8 @@ export default function Index() {
               areaId={areaId}
               openEditarGrupo={openEditarGrupo}
               setOpenEditarGrupo={setOpenEditarGrupo}
+              ativo={ativo}
+              setAtivo={setAtivo}
             />
           )}
         </div>

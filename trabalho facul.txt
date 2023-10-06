@@ -2,6 +2,15 @@ anotações trabalho:
 
 rodar back: php artisan serve --port=9000
 rodar front / node: npm run dev
+Rabbit: https://customer.cloudamqp.com/login
+usuario: faculdade.anavargas@gmail.com / Feliz212*
+
+Antes de Rodar, Ajustar arquivo:
+node\src\models\ConnectionDB.ts confg BD
+rodar: npm run dev
+
+ticket-api-laravel\.env senha BD
+rodar: php artisan serve --port=9000
 
 Tirado fora:
 1) tratativas UF

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -11,11 +11,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { Divider } from "@mui/material";
 import Axios from "axios";
 
-let listaUsuarios = [
-  { value: 1, nome: "Pessoa 1" },
-  { value: 2, nome: "Pessoa 2" },
-  { value: 3, nome: "Pessoa 3" },
-];
+let listaUsuarios = [];
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -26,21 +22,72 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function DialogListaUsuarios(props) {
-  useEffect(() => {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
-    const getUsers = async () => {
-      //await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}`, config);
-    };
+const config = {
+  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+};
 
+export default function DialogListaUsuarios(props) {
+  const [integrantes, setIntegrantes] = useState([]);
+  useEffect(() => {
+
+    const getUsers = async () => {
+      listaUsuarios = []
+      setIntegrantes([])
+      await Axios.get(
+        `${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/${props.idGrupo}`,
+        config
+      )
+        .then((res) => {
+          res.data.dados.integrantes.map(integra => (
+            setIntegrantes(integrantes => [...integrantes, integra.id])
+          ))
+          integrantes.pop();
+          console.log(integrantes)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
+        res.data.map(user => (
+            user.permissoes? listaUsuarios.push(user) : null
+            
+        ))
+      })
+    };
+    
     getUsers();
-  });
+  }, [props.idGrupo]);
+
+  const handleSaveIntegrantes = async () => {
+    await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/${props.idGrupo}`, {
+      integrantes
+    }, config).then(res => {
+      if(res.data.status === true) {
+        props.setOpenDialogListarUsuarios(false);
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  const handleIntegrantes = (id, status) => {
+    
+    if(integrantes.length !== 0) {
+      if(integrantes.includes(Number(id))) {
+          integrantes.splice(integrantes.indexOf(Number(id)), 1);
+      } else {
+        setIntegrantes(integrantes => [...integrantes, Number(id)])
+      }
+    } else {
+      setIntegrantes(integrantes => [...integrantes, Number(id)])
+    }
+  }
 
   const handleClose = () => {
     props.setOpenDialogListarUsuarios(false);
   };
+  
   return (
     <>
       <BootstrapDialog
@@ -64,29 +111,44 @@ export default function DialogListaUsuarios(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers sx={{ width: "500px" }}>
-          {listaUsuarios.map((usuario) => (
-            <p
-              style={{
-                fontSize: "20px",
-                cursor: "pointer",
-              }}
-            >
-              <Checkbox
-                value={usuario.value}
-                onChange={(e) => {
-                  console.log(e.target.value, e.target.checked);
+          {listaUsuarios? (
+            listaUsuarios.map((usuario) => (
+              <p
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
                 }}
-              />
-              {usuario.nome}
-              <Divider />
-            </p>
-          ))}
+              >
+                <Checkbox
+                defaultChecked={integrantes.includes(usuario.id)? true : false}
+                  value={usuario.id}
+                  onChange={(e) => {
+                    handleIntegrantes(e.target.value, e.target.checked);
+                  }}
+                />
+                {usuario.name}
+                <Divider />
+              </p>
+            ))
+          ) : (
+            <p
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  textAlign: 'center',
+                  color: 'red',
+                  padding: '10px'
+                }}
+              >
+                Nenhum integrante disponível
+              </p>
+          )}
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="error" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="contained" color="success">
+          <Button variant="contained" color="success" onClick={handleSaveIntegrantes}>
             Adiconar integrante
           </Button>
         </DialogActions>
