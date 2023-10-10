@@ -41,4 +41,9 @@ class AssuntoController extends Controller
     {
         return $this->categoriaService->buscarPorAssunto($id);
     }
+
+    public function ListarPorCategoriasAtivas(int $id, AssuntoRequest $request)
+    {
+        return $this->service->ListarPorCategoriasAtivas($id, $request->dataRequest());
+    }
 }

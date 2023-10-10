@@ -34,6 +34,7 @@ Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AssuntoController::class, 'listar']);
     Route::put('/{id}', [AssuntoController::class, 'editar']);
     Route::get('/{assunto_id}/categorias', [AssuntoController::class, 'buscarPorAssunto']);
+    Route::get('/{assunto_id}/categoriasAtivas', [AssuntoController::class, 'listarPorCategoriasAtivas']);
 });
 
 Route::prefix('categoria')->middleware('auth:sanctum')->group(function () {
