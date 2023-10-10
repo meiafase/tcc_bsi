@@ -63,4 +63,5 @@ Route::prefix('grupo')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('area')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AreaController::class, 'listar']);
+    Route::get('/{id}/assuntoAtivo', [AreaController::class, 'listarAssuntos']);
 });

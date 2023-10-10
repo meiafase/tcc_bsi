@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
+    protected $service;
+
     public function __construct(AreaService $service)
     {
         $this->service = $service;
@@ -15,6 +17,11 @@ class AreaController extends Controller
     public function listar()
     {
         return $this->service->listar();
+    }
+
+    public function listarAssuntos(int $id)
+    {
+        return $this->service->listarAssuntos($id);
     }
 
 }

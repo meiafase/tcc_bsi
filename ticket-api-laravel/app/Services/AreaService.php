@@ -33,4 +33,25 @@ class AreaService
             );
         }
     }
+
+    public function listarAssuntos(int $id)
+    {
+        try{
+            $dados = $this->repository->obter($id, ["assuntos" => function($query){
+                $query->where("ativo", 1);
+            }]);
+
+            return array(
+                "status" => true,
+                "mensagem" => "Assuntos listados com sucesso",
+                "dados" => $dados['assuntos']
+            );
+        } catch (Exception $ex) {
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao listar assuntos.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 }
