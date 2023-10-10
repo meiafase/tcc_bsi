@@ -116,7 +116,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="catalogoServico" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("../Configuracoes/Catalogo")}>
             <ListItemIcon>
               <AccountTreeIcon sx={{ color: "black" }} />
             </ListItemIcon>
