@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Usuario;
+use App\Models\User;
 use App\Models\Permissoes;
 use App\Repositories\Base\BaseRepository;
 
@@ -26,6 +26,11 @@ class PermissoesRepository extends BaseRepository
         $permissoes->fill($dados);
         $permissoes->save();
         return $permissoes;
+    }
+
+    public function obterPorUsuario (User $usuario)
+    {
+        return $this->model::where('usuario_id', $usuario->id)->first();
     }
 
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\PedidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,4 +66,8 @@ Route::prefix('grupo')->middleware('auth:sanctum')->group(function () {
 Route::prefix('area')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AreaController::class, 'listar']);
     Route::get('/{id}/assuntoAtivo', [AreaController::class, 'listarAssuntos']);
+});
+
+Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [PedidoController::class, 'cadastrar']);
 });

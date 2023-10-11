@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\UsuarioRepository;
 use App\Services\RabbitMQService;
 use App\Services\PermissoesService;
 use Exception;
+
 
 class UsuarioService
 {
@@ -133,5 +135,10 @@ class UsuarioService
             $this->equipePermissao = $this->repository->listarEquipe($usuario->id);
             return array_merge_recursive([$usuario], $this->equipePermissao);
         }
+    }
+
+    public function obterPermissaoUsuario(User $usuario)
+    {
+        return $this->permissoesService->obterPermissoes($usuario);
     }
 }

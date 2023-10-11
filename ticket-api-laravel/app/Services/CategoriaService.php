@@ -118,4 +118,15 @@ class CategoriaService
             );
         }
     }
+
+    public function categoriaValidacao(int $id)
+    {
+        $adicional = $this->adicionalService->contagem($id);
+        $categoria = $this->repository->obterColunas($id, ["possui_subcategorias", "possui_adicionais", "equipe_id", "responsavel_id", "prazo_horas", "prioridade_id"]);
+
+        return array(
+            "adicional" => $adicional,
+            "categoria" => $categoria
+        );
+    }
 }
