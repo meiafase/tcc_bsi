@@ -10,40 +10,43 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CircleIcon from "@mui/icons-material/Circle";
+import DialogCadastrarAssunto from "../dialogCadastrarCategoria/Index";
+import DialogCadastrarCategoria from "../dialogCadastrarCategoria/Index";
 
 export default function Assunto(props) {
-  const [nomeAssunto, setNomeAssunto] = useState("*semNome*");
+  const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
+  const [openCadastrarCategoria, setOpenCadastrarCategoria] = useState(false)
+  const [idAssunto, setIdAssunto] = useState('');
+  const [categorias, setCategorias] = useState([]);
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   };
 
   useEffect(() => {
-    const getAssunto = async () => {
-      await Axios.get(`/api/assunto`, config)
-        .then((res) => {
-          setNomeAssunto(res.data.dados.titulo);
-        })
-        .catch((err) => {});
+    const getCategorias = async () => {
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${props.idAssunto}/categorias`, config).then(res => {
+        setCategorias(res.data.dados)
+      }).catch(err => {})
     };
 
-    getAssunto();
-  }, []);
+    getCategorias();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.idAssunto, openCadastrarAssunto, setOpenCadastrarAssunto, openCadastrarCategoria, setOpenCadastrarCategoria]);
 
-  const [checked, setChecked] = React.useState([1]);
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleSwitch = async (event) => {
+    props.setAtivo(event);
+    await Axios.put(
+      `${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${props.idAssunto}`,
+      {
+        ativo: event,
+      },
+      config
+    )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -56,29 +59,31 @@ export default function Assunto(props) {
         }}
       >
         <p style={{ fontSize: "19px" }}>
-          <b>Assunto</b> {nomeAssunto}
+          <b>Assunto</b> {props.nomeAssunto}
         </p>
         <div style={{ marginTop: "10px" }}>
-          <FormControlLabel
-            control={<Switch defaultChecked />}
+        <FormControlLabel
+            control={<Switch />}
+            checked={props.ativo}
+            onChange={(e) => handleSwitch(e.target.checked)}
             label="Ativar"
+            labelPlacement="start"
           />
-          <Button variant="contained" startIcon={<AddIcon />}>
+          <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => {setIdAssunto(props.idAssunto); setOpenCadastrarCategoria(true)}}>
             Adicionar Categoria
           </Button>
         </div>
       </div>
       <Divider />
       <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {[0, 1, 2, 3].map((value) => {
-          const labelId = `checkbox-list-secondary-label-${value}`;
+        {categorias.map((categoria) => {
           return (
             <ListItem
-              key={value}
+              key={categoria.id}
               secondaryAction={
                 <div>
                   
-                  <FormControlLabel control={<Switch defaultChecked />} />
+                  <FormControlLabel control={<Switch defaultChecked={categoria.ativo} />} />
                 </div>
               }
               disablePadding
@@ -87,12 +92,14 @@ export default function Assunto(props) {
                 <ListItemAvatar>
                   <CircleIcon sx={{ color: "red" }} />
                 </ListItemAvatar>
-                <ListItemText id={labelId} primary={`Line item ${value + 1}` }/>
+                <ListItemText primary={categoria.titulo}/>
               </ListItemButton>
             </ListItem>
           );
         })}
       </List>
+      <DialogCadastrarCategoria openCadastrarCategoria={openCadastrarCategoria} setOpenCadastrarCategoria={setOpenCadastrarCategoria} idAssunto={idAssunto}  />
+      <DialogCadastrarAssunto  />
     </>
   );
 }

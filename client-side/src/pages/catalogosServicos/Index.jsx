@@ -7,11 +7,15 @@ import Alert from "@mui/material/Alert";
 import CircleIcon from "@mui/icons-material/Circle";
 import Axios from "axios";
 import Assunto from "./components/assunto/Index";
+import DialogCadastrarAssunto from "./components/dialogCadastrarAssunto/Index";
 
 export default function CatalogoServico() {
   const [showAssunto, setShowAssunto] = useState(false);
   const [assuntos, setAssuntos] = useState([]);
   const [idAssunto, setIdAssunto] = useState();
+  const [nomeAssunto,  setNomeAssunto] = useState('');
+  const [ativo, setAtivo] = useState();
+  const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -29,7 +33,8 @@ export default function CatalogoServico() {
     };
 
     getAssuntos();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ativo, setAtivo, openCadastrarAssunto, setOpenCadastrarAssunto]);
   return (
     <>
       <Header drawer={true} />
@@ -54,7 +59,7 @@ export default function CatalogoServico() {
           >
             <h3>Assuntos</h3>
             <IconButton>
-              <AddIcon sx={{ color: "green", fontSize: "40px" }} />
+              <AddIcon sx={{ color: "green", fontSize: "40px" }} onClick={() => setOpenCadastrarAssunto(true)} />
             </IconButton>
           </div>
           <Divider />
@@ -68,7 +73,7 @@ export default function CatalogoServico() {
                     listStyle: "none",
                     cursor: "pointer",
                   }}
-                  onClick={() => {setShowAssunto(true); setIdAssunto(assunto.id)}}
+                  onClick={() => {setShowAssunto(true); setIdAssunto(assunto.id); setNomeAssunto(assunto.titulo); setAtivo(assunto.ativo)}}
                 >
                   <CircleIcon
                     sx={{
@@ -84,7 +89,7 @@ export default function CatalogoServico() {
         </div>
         <div style={{ width: "74%", height: "300px" }}>
           {showAssunto ? (
-            <Assunto idAssunto={idAssunto} />
+            <Assunto idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo} />
           ) : (
             <div style={{ padding: "10px" }}>
               <Alert severity="warning">
@@ -94,6 +99,7 @@ export default function CatalogoServico() {
           )}
         </div>
       </div>
+      <DialogCadastrarAssunto openCadastrarAssunto={openCadastrarAssunto} setOpenCadastrarAssunto={setOpenCadastrarAssunto} />
     </>
   );
 }
