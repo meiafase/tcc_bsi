@@ -13,41 +13,60 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import CircleIcon from "@mui/icons-material/Circle";
 import DialogCadastrarAssunto from "../dialogCadastrarCategoria/Index";
 import DialogCadastrarCategoria from "../dialogCadastrarCategoria/Index";
+import Alert from '@mui/material/Alert';
 
 export default function Assunto(props) {
   const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
   const [openCadastrarCategoria, setOpenCadastrarCategoria] = useState(false)
   const [idAssunto, setIdAssunto] = useState('');
   const [categorias, setCategorias] = useState([]);
+  const [categoriaAtivo, setCategoriaAtivo] = useState();
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   };
 
+
+  const handleSwitch = async (event, identificador, idCategoria) => {
+    if(identificador === 'assunto') {
+      props.setAtivo(event);
+      await Axios.put(
+        `${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${props.idAssunto}`,
+        {
+          ativo: event,
+        },
+        config
+      )
+        .then((res) => {
+        })
+        .catch((err) => {});
+      } else {
+        setCategoriaAtivo(true);
+        await Axios.put(
+          `${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${idCategoria}`,
+          {
+            ativo: event,
+          },
+          config
+        )
+          .then((res) => {
+            setCategoriaAtivo(false);
+          })
+          .catch((err) => {});
+      }
+    }
+
   useEffect(() => {
     const getCategorias = async () => {
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${props.idAssunto}/categorias`, config).then(res => {
-        setCategorias(res.data.dados)
+        setCategorias(res.data.dados);
       }).catch(err => {})
     };
 
     getCategorias();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.idAssunto, openCadastrarAssunto, setOpenCadastrarAssunto, openCadastrarCategoria, setOpenCadastrarCategoria]);
+  }, [props.idAssunto, openCadastrarAssunto, setOpenCadastrarAssunto, openCadastrarCategoria, setOpenCadastrarCategoria, categoriaAtivo]);
 
-  const handleSwitch = async (event) => {
-    props.setAtivo(event);
-    await Axios.put(
-      `${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${props.idAssunto}`,
-      {
-        ativo: event,
-      },
-      config
-    )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {});
-  };
+  
 
   return (
     <>
@@ -65,7 +84,7 @@ export default function Assunto(props) {
         <FormControlLabel
             control={<Switch />}
             checked={props.ativo}
-            onChange={(e) => handleSwitch(e.target.checked)}
+            onChange={(e) => handleSwitch(e.target.checked, 'assunto')}
             label="Ativar"
             labelPlacement="start"
           />
@@ -81,19 +100,18 @@ export default function Assunto(props) {
             <ListItem
               key={categoria.id}
               secondaryAction={
-                <div>
-                  
-                  <FormControlLabel control={<Switch defaultChecked={categoria.ativo} />} />
+                <div style={{display: 'flex'}}>
+                  <FormControlLabel control={<Switch checked={categoria.ativo} onChange={(e) => handleSwitch(e.target.checked, 'categoria', categoria.id)}  />} />
                 </div>
-              }
-              disablePadding
+              }   
             >
               <ListItemButton>
                 <ListItemAvatar>
-                  <CircleIcon sx={{ color: "red" }} />
+                  <CircleIcon sx={{ color: categoria.ativo ? "green": "red" }} />
                 </ListItemAvatar>
                 <ListItemText primary={categoria.titulo}/>
               </ListItemButton>
+              {categoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}}>Adicionar informações básicas.</Alert>}
             </ListItem>
           );
         })}
