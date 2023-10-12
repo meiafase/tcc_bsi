@@ -101,17 +101,17 @@ export default function Assunto(props) {
               key={categoria.id}
               secondaryAction={
                 <div style={{display: 'flex'}}>
-                  <FormControlLabel control={<Switch checked={categoria.ativo} onChange={(e) => handleSwitch(e.target.checked, 'categoria', categoria.id)}  />} />
+                  <FormControlLabel control={<Switch checked={categoria.ativo} onChange={(e) => handleSwitch(e.target.checked, 'categoria', categoria.id)} disabled={categoria.possui_subcategorias ? categoria.sub_categorias.length !== 0 ? false : true : categoria.prioridade_id ? false : true} />} />
                 </div>
               }   
             >
-              <ListItemButton>
+              <ListItemButton onClick={() => props.setShowAssunto('informacaoCategoria')}>
                 <ListItemAvatar>
                   <CircleIcon sx={{ color: categoria.ativo ? "green": "red" }} />
                 </ListItemAvatar>
-                <ListItemText primary={categoria.titulo}/>
+                <ListItemText primary={categoria.titulo} secondary={categoria.sub_categorias.length === 0 ? 'Não possui subcategorias' : categoria.sub_categorias.length + " subcategoria(s)"}/>
               </ListItemButton>
-              {categoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}}>Adicionar informações básicas.</Alert>}
+              {categoria.possui_subcategorias ? categoria.sub_categorias.length !== 0 ? "": <Alert severity="warning" style={{ marginRight: '40px'}}>Requer adição de subcategorias.</Alert> : categoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}}>Adicionar informações básicas.</Alert>}
             </ListItem>
           );
         })}

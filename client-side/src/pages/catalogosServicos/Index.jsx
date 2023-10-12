@@ -8,6 +8,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Axios from "axios";
 import Assunto from "./components/assunto/Index";
 import DialogCadastrarAssunto from "./components/dialogCadastrarAssunto/Index";
+import InformacoesCategoria from "./components/informacoesCategoria/Index";
 
 export default function CatalogoServico() {
   const [showAssunto, setShowAssunto] = useState(false);
@@ -73,7 +74,7 @@ export default function CatalogoServico() {
                     listStyle: "none",
                     cursor: "pointer",
                   }}
-                  onClick={() => {setShowAssunto(true); setIdAssunto(assunto.id); setNomeAssunto(assunto.titulo); setAtivo(assunto.ativo)}}
+                  onClick={() => {setShowAssunto('assunto'); setIdAssunto(assunto.id); setNomeAssunto(assunto.titulo); setAtivo(assunto.ativo)}}
                 >
                   <CircleIcon
                     sx={{
@@ -88,8 +89,10 @@ export default function CatalogoServico() {
           </div>
         </div>
         <div style={{ width: "74%", height: "300px" }}>
-          {showAssunto ? (
-            <Assunto idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo} />
+          {showAssunto === 'assunto' ? (
+            <Assunto idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto}/>
+          ) : showAssunto === 'informacaoCategoria' ? (
+            <InformacoesCategoria nomeAssunto={nomeAssunto} />
           ) : (
             <div style={{ padding: "10px" }}>
               <Alert severity="warning">
