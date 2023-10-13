@@ -81,3 +81,6 @@ Novo Pedido:
 Listar Area: http://127.0.0.1:9000/api/area/ OK
 Listar assuntos ativos: http://127.0.0.1:9000/api/area/{area_id}/assuntoAtivo OK
 Listar categorias ativas: http://127.0.0.1:9000/api/assunto/{assunto_id}/categoriasAtivas OK
+
+Rota de Categoria
+buscar: http://localhost:9000/api/categoria/{categoria_id} - OK

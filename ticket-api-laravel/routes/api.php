@@ -40,7 +40,7 @@ Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('categoria')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [CategoriaController::class, 'cadastrar']);
-    // Route::get('/', [CategoriaController::class, 'listar']);
+    Route::get('/{id}', [CategoriaController::class, 'buscar']);
     Route::put('/{id}', [CategoriaController::class, 'editar']);
 });
 
