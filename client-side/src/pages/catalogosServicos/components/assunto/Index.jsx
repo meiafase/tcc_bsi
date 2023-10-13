@@ -25,7 +25,6 @@ export default function Assunto(props) {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   };
 
-
   const handleSwitch = async (event, identificador, idCategoria) => {
     if(identificador === 'assunto') {
       props.setAtivo(event);
@@ -105,7 +104,7 @@ export default function Assunto(props) {
                 </div>
               }   
             >
-              <ListItemButton onClick={() => props.setShowAssunto('informacaoCategoria')}>
+              <ListItemButton onClick={() => {props.setShowAssunto('informacaoCategoria'); props.setIdCategoria(categoria.id)}}>
                 <ListItemAvatar>
                   <CircleIcon sx={{ color: categoria.ativo ? "green": "red" }} />
                 </ListItemAvatar>

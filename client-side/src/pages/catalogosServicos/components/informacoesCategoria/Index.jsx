@@ -13,14 +13,23 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
 import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
+import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import Axios from 'axios';
 
-
 export default function InformacoesCategoria (props) { 
-    const [prioridade, setPrioridade] = useState('baixa');
+    const [prioridade, setPrioridade] = useState();
     const [ativarGrupoResponsavel, setAtivarGrupoResponsavel] = useState('');
+    const [ativarGrupoAtendente, setAtivarGrupoAtendente] = useState(false);
+    const [camposAdicionais, setCamposAdicionais] = useState(false);
     const [users, setUsers] = useState([]);
     const [grupos, setGrupos] = useState([]);
+    const [prazo, setPrazo] = useState("");
+    const [restricao, setRestricao] = useState(false);
+    const [campoAdicionalValue, setCampoAdicionalValue] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [responsavel, setResponsavel] = useState(null);
+    const [grupoResponsavel, setGrupoResponsavel] = useState(null);
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
@@ -48,6 +57,51 @@ export default function InformacoesCategoria (props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const handleSaveCategoria = async () => {
+        await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, {
+            descricao,
+            prazo_horas: prazo,
+            prioridade_id: prioridade,
+            equipe_id: grupoResponsavel,
+            responsavel_id: responsavel,
+            possui_adicionais: camposAdicionais,
+            restricao,
+            adicionais: [{"titulo": campoAdicionalValue}]
+        }, config).then(res => {
+            if(res.data.status) {
+                props.setShowAssunto('assunto');
+            }
+        }).catch(err => {})
+    }
+
+    const validateInputs = () => {
+        if(prazo) {
+            if(prioridade) {
+                if(camposAdicionais) {
+                    if(campoAdicionalValue) {
+                        if(descricao) {
+                            handleSaveCategoria()
+                        } else {
+                            alert('preencha a descricao')
+                        }
+                    } else {
+                        alert('preencha campos adicionais')
+                    }
+                } else {
+                    if(descricao) {
+
+                    } else {
+                        alert('preencha a descricao')
+                    }
+                }
+            } else {
+                alert('preencha prioridade')
+            }
+        } else {
+            alert('preencha prazo')
+        }
+    }
+
     return(
         <>
             <div
@@ -65,7 +119,7 @@ export default function InformacoesCategoria (props) {
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                        <TextField sx={{width: '49%'}} id="outlined-basic" label="Prazo de Finalização" variant="outlined" />
+                        <TextField sx={{width: '49%'}} value={prazo} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" variant="outlined" />
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select
@@ -75,18 +129,21 @@ export default function InformacoesCategoria (props) {
                             label="Prioridade"
                             onChange={handleChange}
                             >
-                            <MenuItem value={'baixa'}>Baixa</MenuItem>
-                            <MenuItem value={'media'}>Média</MenuItem>
-                            <MenuItem value={'alta'}>Alta</MenuItem>
-                            <MenuItem value={'muitoAlta'}>Muito Alta</MenuItem>
+                            <MenuItem value={1}>Baixa</MenuItem>
+                            <MenuItem value={2}>Média</MenuItem>
+                            <MenuItem value={3}>Alta</MenuItem>
+                            <MenuItem value={4}>Muito Alta</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
                     <Divider />
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox />} label="Chamado restrito (somente gestor)." />
-                        <FormControlLabel control={<Checkbox />} label="Incluir campo para dados adicionais." />
+                        <FormControlLabel control={<Checkbox onChange={e => setRestricao(e.target.checked)} />} label="Chamado restrito (somente gestor)." />
+                        <FormControlLabel control={<Checkbox onChange={e => {setCamposAdicionais(e.target.checked)}} />} label="Incluir campo para dados adicionais." />
                     </FormGroup>    
+                    <Paper elevation={3} sx={{padding: '20px', marginTop: '10px', display: camposAdicionais === false ? "none" : "in-line"}}>
+                        <TextField fullWidth id="outlined-basic" value={campoAdicionalValue} onChange={e => setCampoAdicionalValue(e.target.value)} label="Nome do campo desejado" variant="outlined" />
+                    </Paper>
                 </div>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{marginBottom: '20px'}}>
@@ -94,25 +151,28 @@ export default function InformacoesCategoria (props) {
                             fullWidth
                             id="outlined-multiline-static"
                             label="Insira uma breve descrição da categoria"
+                            value={descricao}
+                            onChange={e => setDescricao(e.target.value)}
                             multiline
                             rows={6}
                         /> 
                     </div>
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox />} label="Ativar Grupo ou Atendente responsável" />
+                        <FormControlLabel control={<Checkbox onChange={e => {setAtivarGrupoAtendente(e.target.checked)}} />} label="Ativar Grupo ou Atendente responsável" />
                     </FormGroup>    
-                    <Paper elevation={3} sx={{padding: '20px', marginTop: '10px'}}>
+                    <Paper elevation={3} sx={{padding: '20px', marginTop: '10px', display: ativarGrupoAtendente === false ? "none" : "in-line"}}>
                         <FormControl>
                             <FormLabel>Selecione</FormLabel>
                                 <RadioGroup row >
-                                    <FormControlLabel value="responsavel" onChange={e => setAtivarGrupoResponsavel('responsavel')} control={<Radio />} label="Responsável" />
-                                    <FormControlLabel value="grupo" onChange={e => setAtivarGrupoResponsavel('grupo')} control={<Radio />} label="Grupo" />
+                                    <FormControlLabel value="responsavel" onChange={e => {setAtivarGrupoResponsavel('responsavel'); setGrupoResponsavel('')}} control={<Radio />} label="Responsável" />
+                                    <FormControlLabel value="grupo" onChange={e => {setAtivarGrupoResponsavel('grupo'); setResponsavel('')}} control={<Radio />} label="Grupo" />
                             </RadioGroup>
                         </FormControl>
                         <div style={{display: ativarGrupoResponsavel === "responsavel" ? 'flex': 'none'}}>
                             <Autocomplete
                                 fullWidth
                                 disablePortal
+                                onChange={(e, newValue) =>  setResponsavel(newValue.id)}
                                 id="combo-box-demo"
                                 options={users}
                                 renderInput={(params) => <TextField {...params} label="Selecione o responsável"/>}
@@ -122,8 +182,8 @@ export default function InformacoesCategoria (props) {
                             <Autocomplete
                                 fullWidth
                                 disablePortal
+                                onChange={(e, newValue) => setGrupoResponsavel(newValue.id)}
                                 id="combo-box-demo"
-                                
                                 options={grupos}
                                 renderInput={(params) => <TextField {...params} label="Selecione o grupo"/>}
                             />
@@ -132,6 +192,11 @@ export default function InformacoesCategoria (props) {
                 </div>
             </div>
             <Divider />
+            <div style={{display: 'flex', justifyContent: 'flex-end', padding: '20px'}}>
+                <Button variant="contained" endIcon={<CloudQueueIcon />} onClick={validateInputs}>
+                    salvar
+                </Button>
+            </div>
         </>
     )
 }

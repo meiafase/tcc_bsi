@@ -17,6 +17,7 @@ export default function CatalogoServico() {
   const [nomeAssunto,  setNomeAssunto] = useState('');
   const [ativo, setAtivo] = useState();
   const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
+  const [idCategoria, setIdCategoria] = useState('');
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -90,9 +91,9 @@ export default function CatalogoServico() {
         </div>
         <div style={{ width: "74%", height: "300px" }}>
           {showAssunto === 'assunto' ? (
-            <Assunto idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto}/>
+            <Assunto setIdCategoria={setIdCategoria} idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto}/>
           ) : showAssunto === 'informacaoCategoria' ? (
-            <InformacoesCategoria nomeAssunto={nomeAssunto} />
+            <InformacoesCategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} />
           ) : (
             <div style={{ padding: "10px" }}>
               <Alert severity="warning">
