@@ -65,8 +65,6 @@ export default function Assunto(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.idAssunto, openCadastrarAssunto, setOpenCadastrarAssunto, openCadastrarCategoria, setOpenCadastrarCategoria, categoriaAtivo]);
 
-  
-
   return (
     <>
       <div
@@ -104,7 +102,7 @@ export default function Assunto(props) {
                 </div>
               }   
             >
-              <ListItemButton onClick={() => {props.setShowAssunto('informacaoCategoria'); props.setIdCategoria(categoria.id)}}>
+              <ListItemButton onClick={categoria.possui_subcategorias ? () => {props.setShowAssunto('subcategorias'); props.setIdCategoria(categoria.id)} : () => {props.setShowAssunto('informacaoCategoria'); props.setIdCategoria(categoria.id)}}>
                 <ListItemAvatar>
                   <CircleIcon sx={{ color: categoria.ativo ? "green": "red" }} />
                 </ListItemAvatar>

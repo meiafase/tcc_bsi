@@ -9,6 +9,8 @@ import Axios from "axios";
 import Assunto from "./components/assunto/Index";
 import DialogCadastrarAssunto from "./components/dialogCadastrarAssunto/Index";
 import InformacoesCategoria from "./components/informacoesCategoria/Index";
+import Subcategorias from "./components/subCategorias/Index";
+import InformacoesSubcategoria from "./components/informacoesSubcategoria/Index";
 
 export default function CatalogoServico() {
   const [showAssunto, setShowAssunto] = useState(false);
@@ -18,6 +20,7 @@ export default function CatalogoServico() {
   const [ativo, setAtivo] = useState();
   const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
   const [idCategoria, setIdCategoria] = useState('');
+  const [idSubcategoria, setIdSubcategoria] = useState('');
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -36,7 +39,7 @@ export default function CatalogoServico() {
 
     getAssuntos();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ativo, setAtivo, openCadastrarAssunto, setOpenCadastrarAssunto]);
+  }, [ativo, setAtivo, openCadastrarAssunto, setOpenCadastrarAssunto, setShowAssunto]);
   return (
     <>
       <Header drawer={true} />
@@ -94,6 +97,10 @@ export default function CatalogoServico() {
             <Assunto setIdCategoria={setIdCategoria} idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto}/>
           ) : showAssunto === 'informacaoCategoria' ? (
             <InformacoesCategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} />
+          ) : showAssunto === 'subcategorias' ? (
+              <Subcategorias nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} setIdSubcategoria={setIdSubcategoria} />
+          ) : showAssunto === 'informacaoSubcategoria' ? (
+              <InformacoesSubcategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} idSubcategoria={idSubcategoria} />
           ) : (
             <div style={{ padding: "10px" }}>
               <Alert severity="warning">
