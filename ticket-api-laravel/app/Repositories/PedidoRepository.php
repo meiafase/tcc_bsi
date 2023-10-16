@@ -33,4 +33,12 @@ class PedidoRepository extends BaseRepository
                 LIMIT 1"
         ))->first();
     }
+
+    public function marcarAtribuicaoRodizio($usuario_id, $grupo_id, $data)
+    {
+        return DB::table('grupos_integrantes')
+            ->where('grupo_id', $grupo_id)
+            ->where('usuario_id', $usuario_id)
+            ->update(['ultima_atribuicao' => $data]);
+    }
 }

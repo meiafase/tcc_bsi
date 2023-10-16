@@ -16,15 +16,21 @@ class PedidoService
     protected $repository;
     protected $grupoService;
     protected $usuarioService;
+    protected $mensagemService;
+    protected $historicoService;
 
     public function __construct(
         PedidoRepository $repository,
         GrupoService $grupoService,
         UsuarioService $usuarioService,
+        MensagemService $mensagemService,
+        HistoricoService $historicoService,
     ) {
         $this->repository = $repository;
         $this->grupoService = $grupoService;
         $this->usuarioService = $usuarioService;
+        $this->mensagemService = $mensagemService;
+        $this->historicoService = $historicoService;
     }
 
     public function cadastrar($dados)
@@ -53,32 +59,29 @@ class PedidoService
 
             $pedido = $this->repository->criar($dadosPedido);
 
+            //Cadastro mensagem
+            $this->mensagemService->cadastrar($pedido->id, $dados['usuario']->id, $dados['mensagem']);
 
-            dd('aqui 1', $pedido);
+            //Cadastrar Histórico
+            if ($pedido->responsavel_id > 0) {
+                $responsavel = $this->usuarioService->buscar($pedido->responsavel_id);
+                $responsavel = $responsavel['dados'];
+                $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada e atribuída automaticamente para {$responsavel->name}";
+            } else {
+                $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada";
+            }
+            $this->historicoService->cadastrar($dados['usuario_id'], $pedido->id, $descricaoHist);
+
+            //Cadastrar anexo
 
 
 
-
-            // if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
-            //     DB::beginTransaction();
-            //     $dados["usuario_id"] = $dados["usuario"]["id"];
-            //     unset($dados["usuario"]);
-
-            //     $dados = $this->repository->criar($dados);
-
-            //     DB::commit();
-            //     return array(
-            //         "status"    => true,
-            //         "mensagem"  => "Categoria cadastrada com sucesso",
-            //         "dados"     => $dados
-            //     );
-            // } else {
-            //     return array(
-            //         'status' 	=> true,
-            //         'mensagem' 	=> "Usuário sem permissão.",
-            //         'dados' 	=>  []
-            //     );
-            // }
+            DB::commit();
+            return array(
+                'status' => true,
+                'mensagem' => $descricaoHist,
+                'dados' => $pedido
+            );
 
         } catch (Exception $ex) {
             DB::rollBack();
@@ -193,12 +196,15 @@ class PedidoService
     {
         $responsavel_id = 0;
         $proximoResponsavel = NULL;
+        $dataAtual = Carbon::now();
 
         if ($dados->equipe_id > 0 && is_null($dados->responsavel_id)) {
             $grupo = $this->grupoService->buscar($dados->equipe_id);
             if ($grupo['dados']->ativo) {
                 $proximoResponsavel = $this->repository->proximoResponsavelGrupo($dados->equipe_id);
                 $responsavel_id = $proximoResponsavel->usuario_id;
+                //registra atribuição
+                $this->repository->marcarAtribuicaoRodizio($responsavel_id, $dados->equipe_id, $dataAtual);
             }
         } else if (!is_null($dados->responsavel_id) > 0 && is_null($dados->equipe_id)) {
             $usuario = $this->usuarioService->buscar($dados->responsavel_id);
