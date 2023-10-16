@@ -26,7 +26,7 @@ class CategoriaService
     public function cadastrar($dados)
     {
         try {
-            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
+            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()) {
                 DB::beginTransaction();
                 $dados["usuario_id"] = $dados["usuario"]["id"];
                 unset($dados["usuario"]);
@@ -41,12 +41,11 @@ class CategoriaService
                 );
             } else {
                 return array(
-                    'status' 	=> true,
-                    'mensagem' 	=> "Usuário sem permissão.",
-                    'dados' 	=>  []
+                    'status'     => true,
+                    'mensagem'     => "Usuário sem permissão.",
+                    'dados'     =>  []
                 );
             }
-
         } catch (Exception $ex) {
             DB::rollBack();
             return array(
@@ -60,7 +59,7 @@ class CategoriaService
     public function editar(int $id, $dados)
     {
         try {
-            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()){
+            if ($dados['usuario']['permissoes']['manter_catalogo'] || $dados['usuario']->isCoordenador()) {
                 $dados["usuario_id"] = $dados["usuario"]["id"];
                 unset($dados["usuario"]);
 
@@ -86,9 +85,9 @@ class CategoriaService
                 );
             } else {
                 return array(
-                    'status' 	=> true,
-                    'mensagem' 	=> "Usuário sem permissão.",
-                    'dados' 	=>  []
+                    'status'     => true,
+                    'mensagem'     => "Usuário sem permissão.",
+                    'dados'     =>  []
                 );
             }
         } catch (Exception $ex) {
@@ -128,5 +127,23 @@ class CategoriaService
             "adicional" => $adicional,
             "categoria" => $categoria
         );
+    }
+
+    public function buscar(int $id)
+    {
+        try {
+            return array(
+                "status" => true,
+                "mensagem" => "Categoria carregada com sucesso",
+                "dados" => $this->repository->obter($id, ['subCategorias', 'adicionais'])
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao carregar categoria.",
+                'exception' => $ex->getMessage()
+            );
+        }
     }
 }

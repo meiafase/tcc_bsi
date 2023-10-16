@@ -77,6 +77,9 @@ usuario_id (obter) - OK
 rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro) OK
 rota para retornar assuntos por ID - rota: GET | http://127.0.0.1:9000/api/assunto/6/categorias OK
 
+Rota de Categoria
+buscar: http://localhost:9000/api/categoria/{categoria_id} - OK
+
 Novo Pedido:
 Listar Area: http://127.0.0.1:9000/api/area/ OK
 Listar assuntos ativos: http://127.0.0.1:9000/api/area/{area_id}/assuntoAtivo OK
@@ -87,3 +90,4 @@ Retirado:
 Campos adicionais
 Envio de email
 *pendente: cadastrar anexo
+
