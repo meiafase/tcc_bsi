@@ -6,6 +6,7 @@ use App\Repositories\PedidoRepository;
 use App\Services\GrupoService;
 use App\Services\UsuarioService;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -18,6 +19,7 @@ class PedidoService
     protected $usuarioService;
     protected $mensagemService;
     protected $historicoService;
+    protected $anexoService;
 
     public function __construct(
         PedidoRepository $repository,
@@ -25,12 +27,15 @@ class PedidoService
         UsuarioService $usuarioService,
         MensagemService $mensagemService,
         HistoricoService $historicoService,
+        AnexoService $anexoService,
     ) {
         $this->repository = $repository;
         $this->grupoService = $grupoService;
         $this->usuarioService = $usuarioService;
         $this->mensagemService = $mensagemService;
         $this->historicoService = $historicoService;
+        $this->anexoService = $anexoService;
+
     }
 
     public function cadastrar($dados)
@@ -60,7 +65,7 @@ class PedidoService
             $pedido = $this->repository->criar($dadosPedido);
 
             //Cadastro mensagem
-            $this->mensagemService->cadastrar($pedido->id, $dados['usuario']->id, $dados['mensagem']);
+            $mensagem = $this->mensagemService->cadastrar($pedido->id, $dados['usuario']->id, $dados['mensagem']);
 
             //Cadastrar Histórico
             if ($pedido->responsavel_id > 0) {
@@ -73,8 +78,12 @@ class PedidoService
             $this->historicoService->cadastrar($dados['usuario_id'], $pedido->id, $descricaoHist);
 
             //Cadastrar anexo
-
-
+            if (isset($dados['anexo']) && sizeof(@$dados['anexo']) > 0) {
+                foreach ($dados['anexo'] as $dadosAnexo) {
+                    $envioArquivo = $this->enviarArquivo($dadosAnexo);
+                    $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
+                }
+            }
 
             DB::commit();
             return array(
@@ -214,6 +223,19 @@ class PedidoService
             }
         }
         return $responsavel_id;
+    }
+
+    private function enviarArquivo($arquivo)
+    {
+        $horario_agora = time();
+        $arquivoDados = array(
+            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
+            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
+            "extensao" => $arquivo->getClientOriginalExtension(),
+            "tamanho" => $arquivo->getSize()
+        );
+        $arquivo->storeAs('uploads', $arquivoDados['nome_arquivo'] . '.' . $arquivoDados['extensao']);
+        return ['info' => $arquivoDados];
     }
 
 }
