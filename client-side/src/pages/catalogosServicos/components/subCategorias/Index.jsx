@@ -12,11 +12,13 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import CircleIcon from "@mui/icons-material/Circle";
 import Alert from '@mui/material/Alert';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import DialogCadastrarSubcategorias from "../dialogCadastrarSubcategorias/Index";
 
 export default function Subcategorias (props) {
-    const [nomeSubcategoria, setNomeSubcategoria] = useState('');
     const [subCategoriasList, setSubCategoriasList] = useState([])
     const [categoriaAtivo, setCategoriaAtivo] = useState('');
+    const [openCadastrarSubcategoria, setOpenCadastrarSubcategoria] = useState(false)
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
@@ -24,14 +26,14 @@ export default function Subcategorias (props) {
     useEffect(() => {
         const getSubcategorias = async () =>{
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, config).then(res => {
-                setNomeSubcategoria(res.data.dados.titulo)
+                props.setNomeSubcategoria(res.data.dados.titulo)
                 setSubCategoriasList(res.data.dados.sub_categorias)
             }).catch(err => {})
         }
 
         getSubcategorias()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categoriaAtivo, setCategoriaAtivo])
+    }, [categoriaAtivo, setCategoriaAtivo, setOpenCadastrarSubcategoria, openCadastrarSubcategoria])
 
     const handleSwitch = async (event, idSub) => {
         setCategoriaAtivo(true)
@@ -58,10 +60,10 @@ export default function Subcategorias (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                <b>Assunto</b> {props.nomeAssunto} {" > "} {nomeSubcategoria}
+                <b>Assunto</b> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
                 </p>
                 <div style={{ marginTop: "10px" }}>
-                <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />}>
+                <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCadastrarSubcategoria(true)}>
                     Adicionar Subcategoria
                 </Button>
                 </div>
@@ -91,8 +93,9 @@ export default function Subcategorias (props) {
                   </ListItem>
                 );
               })
-        )}
-      </List>
+            )}
+          </List>
+          <DialogCadastrarSubcategorias openCadastrarSubcategoria={openCadastrarSubcategoria} setOpenCadastrarSubcategoria={setOpenCadastrarSubcategoria} idCategoria={props.idCategoria} />
         </>
     )
 }

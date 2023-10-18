@@ -21,6 +21,7 @@ export default function CatalogoServico() {
   const [openCadastrarAssunto, setOpenCadastrarAssunto] = useState(false)
   const [idCategoria, setIdCategoria] = useState('');
   const [idSubcategoria, setIdSubcategoria] = useState('');
+  const [nomeSubcategoria, setNomeSubcategoria] = useState('');
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -98,9 +99,9 @@ export default function CatalogoServico() {
           ) : showAssunto === 'informacaoCategoria' ? (
             <InformacoesCategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} />
           ) : showAssunto === 'subcategorias' ? (
-              <Subcategorias nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} setIdSubcategoria={setIdSubcategoria} />
+              <Subcategorias nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} setIdSubcategoria={setIdSubcategoria} nomeSubcategoria={nomeSubcategoria} setNomeSubcategoria={setNomeSubcategoria} />
           ) : showAssunto === 'informacaoSubcategoria' ? (
-              <InformacoesSubcategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} idSubcategoria={idSubcategoria} />
+              <InformacoesSubcategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} idSubcategoria={idSubcategoria} nomeSubcategoria={nomeSubcategoria} />
           ) : (
             <div style={{ padding: "10px" }}>
               <Alert severity="warning">

@@ -76,6 +76,7 @@ PUT	http://localhost:8000/api/sub_categoria/1417 - OK
 usuario_id (obter) - OK
 rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro) OK
 rota para retornar assuntos por ID - rota: GET | http://127.0.0.1:9000/api/assunto/6/categorias OK
+rota para retornar as informações de uma subcategoria por id subcategoria
 
 Rota de Categoria
 buscar: http://localhost:9000/api/categoria/{categoria_id} - OK

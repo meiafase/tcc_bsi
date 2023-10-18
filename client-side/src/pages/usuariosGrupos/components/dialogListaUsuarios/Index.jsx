@@ -42,7 +42,6 @@ export default function DialogListaUsuarios(props) {
             setIntegrantes(integrantes => [...integrantes, integra.id])
           ))
           integrantes.pop();
-          console.log(integrantes)
         })
         .catch((err) => {
           console.log(err);

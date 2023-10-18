@@ -11,7 +11,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import CircleIcon from "@mui/icons-material/Circle";
-import DialogCadastrarAssunto from "../dialogCadastrarCategoria/Index";
 import DialogCadastrarCategoria from "../dialogCadastrarCategoria/Index";
 import Alert from '@mui/material/Alert';
 
@@ -75,7 +74,7 @@ export default function Assunto(props) {
         }}
       >
         <p style={{ fontSize: "19px" }}>
-          <b>Assunto</b> {props.nomeAssunto}
+          <b>Assunto</b> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b>
         </p>
         <div style={{ marginTop: "10px" }}>
         <FormControlLabel
@@ -114,7 +113,6 @@ export default function Assunto(props) {
         })}
       </List>
       <DialogCadastrarCategoria openCadastrarCategoria={openCadastrarCategoria} setOpenCadastrarCategoria={setOpenCadastrarCategoria} idAssunto={idAssunto}  />
-      <DialogCadastrarAssunto  />
     </>
   );
 }

@@ -15,6 +15,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Axios from 'axios';
 
 export default function InformacoesSubcategoria (props) { 
@@ -112,7 +113,12 @@ export default function InformacoesSubcategoria (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                    <b>Assunto</b> {props.nomeAssunto} {' > nomeSubcategoria*'}
+                    <b>Assunto</b>
+                    <b onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b>
+                    <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
+                    <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
+                    <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
+                    <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>nomeSubcategoria</b>
                 </p>
             </div>
             <Divider />
