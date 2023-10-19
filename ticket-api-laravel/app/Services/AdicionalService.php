@@ -43,4 +43,13 @@ class AdicionalService
             );
         }
     }
+
+    public function contagem(int $id, $categoria = true)
+    {
+        if ($categoria) {
+            return $this->repository->contagem($id, "categoria_id");
+        } else {
+            return $this->repository->contagem($id, "sub_categoria_id");
+        }
+    }
 }

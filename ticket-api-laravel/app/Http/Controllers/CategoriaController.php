@@ -23,4 +23,9 @@ class CategoriaController extends Controller
     {
         return $this->service->editar($id, $request->dataRequest());
     }
+
+    public function buscar(int $id)
+    {
+        return $this->service->buscar($id);
+    }
 }

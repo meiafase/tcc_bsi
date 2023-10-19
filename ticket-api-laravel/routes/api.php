@@ -8,6 +8,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\PedidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +35,12 @@ Route::prefix('assunto')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AssuntoController::class, 'listar']);
     Route::put('/{id}', [AssuntoController::class, 'editar']);
     Route::get('/{assunto_id}/categorias', [AssuntoController::class, 'buscarPorAssunto']);
+    Route::get('/{assunto_id}/categoriasAtivas', [AssuntoController::class, 'listarPorCategoriasAtivas']);
 });
 
 Route::prefix('categoria')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [CategoriaController::class, 'cadastrar']);
-    // Route::get('/', [CategoriaController::class, 'listar']);
+    Route::get('/{id}', [CategoriaController::class, 'buscar']);
     Route::put('/{id}', [CategoriaController::class, 'editar']);
 });
 
@@ -58,4 +61,17 @@ Route::prefix('grupo')->middleware('auth:sanctum')->group(function () {
     Route::put('/{id}', [GrupoController::class, 'editar']);
     Route::get('/listar/{area_id}', [GrupoController::class, 'listar']);
     Route::get('/{id}', [GrupoController::class, 'buscar']);
+});
+
+Route::prefix('area')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [AreaController::class, 'listar']);
+    Route::get('/{id}/assuntoAtivo', [AreaController::class, 'listarAssuntos']);
+});
+
+Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [PedidoController::class, 'cadastrar']);
+    Route::post('/{pedido_id}/mensagem/cadastrar', [PedidoController::class, 'cadastrarMensagem']);
+    Route::get('/{pedido_id}', [PedidoController::class, 'buscar']);
+    Route::patch('/{pedido_id}/iniciar-atendimento', [PedidoController::class, 'iniciarAtendimento']);
+    Route::get('/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar', [PedidoController::class, 'baixarAnexo']);
 });

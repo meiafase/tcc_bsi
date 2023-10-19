@@ -13,4 +13,11 @@ class AdicionalRepository extends BaseRepository
         $this->model = Adicional::class;
 
     }
+
+    public function contagem(int $id, string $coluna)
+    {
+        $query = $this->model::where($coluna,$id)->get();
+        $quantidade = $query ? count($query) : 0;
+        return $quantidade;
+    }
 }

@@ -7,6 +7,7 @@ import Report from "../pages/Report/Index";
 import NewRequest from "../pages/newRequest/Index";
 import Login from "../pages/login/Index";
 import UsuariosGrupos from '../pages/usuariosGrupos/Index';
+import CatalogoServico from '../pages/catalogosServicos/Index';
 
 const Rotas = () => {
   return (
@@ -19,6 +20,7 @@ const Rotas = () => {
         <Route path="/NovaSolicitacao" element={<NewRequest />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Configuracoes/Permissoes" element={<UsuariosGrupos />} />
+        <Route path="/Configuracoes/Catalogo" element={<CatalogoServico />} />
       </Routes>
     </BrowserRouter>
   );

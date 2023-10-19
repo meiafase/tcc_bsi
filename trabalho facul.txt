@@ -28,6 +28,13 @@ Tirado fora:
 11) pausas (mensagem)
 12) histórico publico (historico)
 13) setores_tb -> areas
+14) Campos adicionais
+15) Nota Gestor
+16) Avaliação Util
+
+Retirado: 
+Envio de email *pendente
+
 
 Mudança - tab permissoes:
 id_usuario para usuario_id
@@ -52,7 +59,7 @@ try {
 	return array(
 		'status' 	=> false,
 		'mensagem' 	=> "Erro ao cadastrar usuário.",
-		'exception' 	=> $ex->getMessage()
+		'exception' => $ex->getMessage()
 	);
 }
 
@@ -77,3 +84,26 @@ PUT	http://localhost:8000/api/sub_categoria/1417 - OK
 
 usuario_id (obter) - OK
 rota de editar grupo esta removendo os integrantes que estao no grupo (passando apenas o titulo como parametro) OK
+rota para retornar assuntos por ID - rota: GET | http://127.0.0.1:9000/api/assunto/6/categorias OK
+rota para retornar as informações de uma subcategoria por id subcategoria
+
+Rota de Categoria
+buscar: http://localhost:9000/api/categoria/{categoria_id} - OK
+
+Novo Pedido:
+Listar Area: http://127.0.0.1:9000/api/area/ OK
+Listar assuntos ativos: http://127.0.0.1:9000/api/area/{area_id}/assuntoAtivo OK
+Listar categorias ativas: http://127.0.0.1:9000/api/assunto/{assunto_id}/categoriasAtivas OK
+Cadastrar Pedido: POST http://127.0.0.1:9000/api/pedido OK *arquivos salvo: storage/app/uploads
+
+Interação e Iniciar Atendimento:
+Cadastrar mensagem: 		POST    api/pedido/{pedido_id}/mensagem/cadastrar OK
+Consultar pedido:			GET		api/pedido/{pedido_id}	OK   
+Iniciar atendimento: 		PATCH   api/pedido/{pedido_id}/iniciar-atendimento OK   
+*Baixar anexo: 				GET 	api/pedido/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar	OK   validar com o front
+
+*Cancelar / Finalizar / Avaliar atendimento:
+Cancelar: 					PATCH	api/pedido/22033/alterar-status payload {justificativa:	"xxxx", status_id: 7}
+Finalizar:					PATCH	api/pedido/21935/alterar-status payload {justificativa:	null, status_id: 5}
+Avaliar: 					POST	api/pedido/21935/avaliacao {avaliacao_gestor: false, justificativa	"bbbbb", nota: 5, util: 1}
+alterar status após ava		PATCH	api/pedido/21935/alterar-status {justificativa:	null, status_id: 6}

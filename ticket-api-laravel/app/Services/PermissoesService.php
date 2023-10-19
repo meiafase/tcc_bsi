@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\PermissoesRepository;
 use App\Models\Permissoes;
 use Exception;
@@ -64,5 +65,10 @@ class PermissoesService
                 'exception' => $ex->getMessage()
             );
         }
+    }
+
+    public function obterPermissoes(User $usuario)
+    {
+        return $this->repository->obterPorUsuario($usuario);
     }
 }

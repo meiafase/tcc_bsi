@@ -97,5 +97,13 @@ class SubCategoriaService
         }
     }
 
-
+    public function subCategoriaValidacao(?int $id)
+    {
+        $adicional = $this->adicionalService->contagem($id, false);
+        $sub_categoria = $this->repository->obterColunas($id, ["possui_adicionais", "equipe_id", "responsavel_id", "prazo_horas", "prioridade_id"]);
+        return array(
+            "adicional" => $adicional,
+            "sub_categoria" => $sub_categoria
+        );
+    }
 }

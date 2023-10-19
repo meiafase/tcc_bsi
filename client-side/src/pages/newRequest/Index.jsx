@@ -1,19 +1,82 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import Divider from "@mui/material/Divider";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-
-import SendIcon from "@mui/icons-material/Send";
-import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from '@mui/icons-material/Send';
 import Header from "../components/header/Index";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloseIcon from '@mui/icons-material/Close';
+import Axios from 'axios';
 
 export default function NewRequest() {
+  const [setor, setSetor] = useState('');
+  const [setorList, setSetorList] = useState([])
+  const [assunto, setAssunto] = useState('');
+  const [assuntoList, setAssuntoList] = useState([])
+  const [categoria, setCategoria] = useState('');
+  const [categoriaList, setCategoriaList] = useState([])
+  const [subcategoria, setSubcategoria] = useState('');
+  const [subcategoriaList, setSubcategoriaList] = useState([])
+  const [descricao, setDescricao] = useState("");
+  const [descricaoAtual, setDescricaoAtual] = useState("");
+  const [upload, setUpload] = useState(false);
+
+  const config = {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  };
+
+  useEffect(() => {
+    const getInfos = async () => {
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/`, config).then(res => {
+        setSetorList(res.data.dados);
+      }).catch(err => {});
+
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/12/assuntoAtivo`, config).then(res => {
+        setAssuntoList(res.data.dados);
+      }).catch(err => {});
+
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/assunto/${assunto}/categoriasAtivas`, config).then(res => {
+        setCategoriaList(res.data.dados);
+        res.data.dados.map(categorias => (
+          categorias.id === categoria ? setDescricao(categorias.descricao) : ""
+        ))
+
+        res.data.dados.map(categorias => (
+          categorias.id === categoria ? setSubcategoriaList(categorias.sub_categorias) : "nada"
+        ))
+
+        res.data.dados.map(categorias => (
+          categorias.id === categoria ? setDescricao(categorias.sub_categorias[0].descricao) : ""
+        ))
+      }).catch(err => {});
+    }
+    
+    getInfos();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setAssuntoList, assunto, setCategoria, categoria])
+
+  const handleChangeSetor = (event) => {
+    setSetor(event.target.value);
+  };
+  const handleChangeAssunto = (event) => {
+    setAssunto(event.target.value);
+  };
+  const handleChangeCategoria = (event) => {
+    setCategoria(event.target.value);
+  };
+  const handleChangeSubcategoria = (event) => {
+    setSubcategoria(event.target.value);
+  };
+
+  const handleValidateInputs = () => {
+    console.log(setor, assunto, categoria, subcategoria, descricaoAtual, upload);
+  }
+
   return (
     <>
       <Header drawer={true} />
@@ -26,123 +89,103 @@ export default function NewRequest() {
         }}
       >
         <div style={{ width: "98%", height: "fit-content" }}>
-          <h2>{"Nova Solicitação"}</h2>
+          <div style={{ marginLeft: "50px", padding: "10px" }}>
+            <h2>Nova Solicitação</h2>
+          </div>
           <Divider />
-          <div
-            style={{
-              width: "100%",
-              height: "1000px",
-              display: "flex",
-              marginBottom: "25px",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              style={{ width: "30%", height: "fit-content", padding: "10px" }}
-            >
-              <FormControl fullWidth sx={{ marginTop: "20px" }}>
-                <InputLabel>Setor</InputLabel>
-                <Select label="Setor">
-                  <MenuItem value={10}>Administrativo</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ marginTop: "60px" }}>
-                <InputLabel>Assunto</InputLabel>
-                <Select label="Assunto">
-                  <MenuItem value={10}>Administrativo</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ marginTop: "60px" }}>
-                <InputLabel>Categoria</InputLabel>
-                <Select label="Categoria">
-                  <MenuItem value={10}>Documentos</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ marginTop: "60px" }}>
-                <InputLabel>Sub Categoria</InputLabel>
-                <Select label="Sub Categoria">
-                  <MenuItem value={10}>Formulário Fornecedor</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div style={{ width: "50%", height: "200px", padding: "10px" }}>
+          <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: '20px', marginBottom: '20px' }} >
+            <div style={{ width: "90%", height: "fit-content", display: 'flex', justifyContent: 'space-between' }} >
+              <div style={{width: '40%'}}>
+                <FormControl style={{marginBottom: '30px'}} fullWidth>
+                  <InputLabel>Setor</InputLabel>
+                  <Select
+                    value={setor}
+                    label="Setor"
+                    onChange={handleChangeSetor}
+                  >
+                    {setorList.map(set => (
+                      <MenuItem value={set.id}>{set.titulo}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl style={{marginBottom: '30px', display: setor === '' ? 'none' : 'flex'}} fullWidth>
+                  <InputLabel>Assunto</InputLabel>
+                  <Select
+                    value={assunto}
+                    label="Assunto"
+                    onChange={handleChangeAssunto}
+                  >
+                    {assuntoList.map(set => (
+                      <MenuItem value={set.id}>{set.titulo}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl style={{marginBottom: '30px', display: assunto === '' ? 'none' : 'flex'}} fullWidth>
+                  <InputLabel>Categoria</InputLabel>
+                  <Select
+                    value={categoria}
+                    label="Categoria"
+                    onChange={handleChangeCategoria}
+                  >
+                    {categoriaList.length > 0 ? (
+                      categoriaList.map(set => (
+                        <MenuItem value={set.id}>{set.titulo}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem disabled >Sem categorias ativas</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+                <FormControl style={{marginBottom: '30px', display: subcategoriaList.length > 0 ? 'flex' : 'none'}} fullWidth>
+                  <InputLabel>Subcategoria</InputLabel>
+                  <Select
+                    value={subcategoria}
+                    label="Subcategoria"
+                    onChange={handleChangeSubcategoria}
+                  >
+                    {subcategoriaList.length > 0 ? (
+                      subcategoriaList.map(set => (
+                        <MenuItem value={set.id}>{set.titulo}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem disabled >Sem subcategorias ativas</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+                <Paper sx={{width: '100%', height: 'fit-content', display: descricao ? "flex" : "none"}} elevation={3}>
+                  <p style={{padding: '20px', fontWeight: 'bold'}}>{descricao}</p>
+                </Paper>
+              </div>
+              <div style={{width: '58%'}}>
               <TextField
                 fullWidth
-                label="Código do Cliente"
-                helperText="Preenchimento Obrigatório"
-                error="true"
-                variant="outlined"
-                sx={{ marginTop: "20px" }}
-              />
-              <TextField
-                fullWidth
-                label="Link do Formulário"
-                helperText="Preenchimento Obrigatório"
-                error="true"
-                variant="outlined"
-                sx={{ marginTop: "38px" }}
-              />
-              <TextField
-                fullWidth
-                label="Observação"
-                variant="outlined"
-                sx={{ marginTop: "38px" }}
+                label="Descrição"
+                onChange={e => setDescricaoAtual(e.target.value)}
                 multiline
-                rows={10}
+                rows={12}
               />
-              <Paper
-                elevation={15}
-                sx={{
-                  marginTop: "38px",
-                  padding: "20px",
-                  backgroundColor: "#e4f2f7",
-                  marginBottom: "30px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button variant="outlined" color="error" component="label">
-                    Adicionar Anexo
-                    <input type="file" hidden />
-                  </Button>
-                </div>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <h2>Envie preferencialmente os arquivos em .zip</h2>
+              <Paper elevation={3} style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '20px', backgroundColor: '#87d3f8'}}>
+                <div style={{padding: '30px'}}>
+                  <div style={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}>
+                    <Button component="label" variant="contained" color={upload ? "success" : "error"} startIcon={<CloudUploadIcon />}>
+                      {upload ? "Arquivo selecionado" : "Enviar arquivo"}
+                      <input hidden type="file" onChange={e => setUpload(true)} />
+                    </Button>
+                  </div>
+                  <h3>Envie preferencialmente os arquivos em .zip</h3>
                 </div>
               </Paper>
-              <Divider />
-              <Divider />
-              <div
-                style={{
-                  width: "100%",
-                  marginTop: "10px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Button
-                  variant="text"
-                  color="error"
-                  size="large"
-                  startIcon={<CloseIcon />}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  endIcon={<SendIcon />}
-                >
-                  Enviar
-                </Button>
               </div>
             </div>
+          </div>
+          <Divider />
+          <div style={{width: '100%', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
+          <Button color="error" variant="outlined" startIcon={<CloseIcon />}>
+            Cancelar
+          </Button>
+          <Button variant="contained" color="success" onClick={handleValidateInputs} endIcon={<SendIcon />}>
+            Enviar
+          </Button>
           </div>
         </div>
       </div>

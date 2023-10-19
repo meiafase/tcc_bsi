@@ -19,12 +19,12 @@ class Pedido extends Model
 
     public function solicitante()
     {
-        return $this->hasOne(User::class, "id", "solicitante_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
+        return $this->hasOne(User::class, "id", "solicitante_id")->select("id", "name", "email", "tp_coord", "coord_id", "area_id");
     }
 
     public function responsavel()
     {
-        return $this->hasOne(User::class, "id", "responsavel_id")->select("id", "nome", "email", "tp_coord", "coord_id", "area_id");
+        return $this->hasOne(User::class, "id", "responsavel_id")->select("id", "name", "email", "tp_coord", "coord_id", "area_id");
     }
 
     public function area()

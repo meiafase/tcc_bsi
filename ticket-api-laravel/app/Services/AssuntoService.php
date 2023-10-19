@@ -107,4 +107,38 @@ class AssuntoService
             );
         }
     }
+
+    public function ListarPorCategoriasAtivas($id, $dados)
+    {
+        try{
+            $query = ["categorias" => function ($query) {
+                $query->where("ativo", 1);
+            }, "categorias.Adicionais", "categorias.subCategorias" => function ($query) {
+                $query->where("ativo", 1);
+            }, "categorias.subCategorias.adicionais"];
+
+            if (!($dados["usuario"]["tp_coord"] || $dados["usuario"]["permissoes"]["abrir_chamados_restritos"])) {
+                $query["categorias"] = function ($query) {
+                    $query->where("restricao", 0)->where("ativo", 1);
+                };
+                $query["categorias.subCategorias"] = function ($query) {
+                    $query->where("restricao", 0)->where("ativo", 1);
+                };
+            }
+
+            $dados = $this->repository->obter($id, $query);
+
+            return array(
+                "status" => true,
+                "mensagem" => "Assunto listado com sucesso",
+                "dados" => $dados['categorias']
+            );
+        } catch (Exception $ex) {
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao listar assunto.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 }
