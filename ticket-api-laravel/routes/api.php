@@ -46,7 +46,7 @@ Route::prefix('categoria')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('sub_categoria')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [SubCategoriaController::class, 'cadastrar']);
-    // Route::get('/', [SubCategoriaController::class, 'listar']);
+    Route::get('/{id}', [SubCategoriaController::class, 'buscar']);
     Route::put('/{id}', [SubCategoriaController::class, 'editar']);
 });
 

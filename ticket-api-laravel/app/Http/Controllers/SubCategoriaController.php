@@ -22,4 +22,9 @@ class SubCategoriaController extends Controller
     {
         return $this->service->editar($id, $request->dataRequest());
     }
+
+    public function buscar($id) 
+    {
+        return $this->service->buscar($id);
+    }
 }

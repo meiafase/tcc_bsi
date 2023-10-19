@@ -106,4 +106,22 @@ class SubCategoriaService
             "sub_categoria" => $sub_categoria
         );
     }
+
+    public function buscar(int $id)
+    {
+        try {
+            return array(
+                "status" => true,
+                "mensagem" => "SubCategoria carregada com sucesso",
+                "dados" => $this->repository->obter($id)
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status'    => false,
+                'mensagem'  => "Erro ao carregar subcategoria.",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 }
