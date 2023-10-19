@@ -348,31 +348,49 @@ class PedidoService
 
     public function baixarAnexo($mensagem_id, $anexo_id)
     {
-        $anexo = $this->anexoService->obter($anexo_id);
+        // $anexo = $this->anexoService->obter($anexo_id);
 
-        if ($anexo->mensagem_id == $mensagem_id) {
-            $arquivo = $this->buscarArquivo($anexo->nome_arquivo_completo);
+        // if ($anexo->mensagem_id == $mensagem_id) {
+        //     $arquivo = $this->buscarArquivo($anexo->nome_arquivo_completo);
 
-            $dados = array("nome_arquivo" => $anexo->nome_arquivo_completo, "arquivo" => $arquivo);
-        } else {
-            $dados = false;
+        //     $dados = array("nome_arquivo" => $anexo->nome_arquivo_completo, "arquivo" => $arquivo);
+        // } else {
+        //     $dados = false;
+        // }
+
+        // // dd($dados );
+        // if (!$dados) {
+        //     return array(
+        //         'status' => true,
+        //         'mensagem' => "Não foi possível baixar o arquivo",
+        //         'dados' => []
+        //     );
+        // }
+
+        // $headers = [
+        //     'Content-Type'        => 'Content-Type: '.MimeType::from($dados['nome_arquivo']),
+        //     'Content-Disposition' => 'attachment; filename="'. $dados['nome_arquivo'] .'"',
+        // ];
+
+        // return Response::make($dados['arquivo'], 200, $headers);
+
+
+        $nome_arquivo = $this->anexoService->obter($anexo_id)->nome_arquivo_completo;
+
+        $caminho_arquivo = 'uploads/' . $nome_arquivo;
+
+        if (Storage::exists($caminho_arquivo)) {
+            $arquivo = Storage::get($caminho_arquivo);
+
+            $headers = [
+                'Content-Type' => Storage::mimeType($caminho_arquivo),
+                'Content-Disposition' => 'attachment; filename="' . $nome_arquivo . '"',
+            ];
+
+            return response()->make($arquivo, 200, $headers);
         }
 
-        // dd($dados );
-        if (!$dados) {
-            return array(
-                'status' => true,
-                'mensagem' => "Não foi possível baixar o arquivo",
-                'dados' => []
-            );
-        }
-
-        $headers = [
-            'Content-Type'        => 'Content-Type: '.MimeType::from($dados['nome_arquivo']),
-            'Content-Disposition' => 'attachment; filename="'. $dados['nome_arquivo'] .'"',
-        ];
-
-        return Response::make($dados['arquivo'], 200, $headers);
+        return response()->json(['message' => 'Arquivo não encontrado'], 404);
     }
 
 
