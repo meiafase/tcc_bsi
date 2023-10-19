@@ -38,6 +38,8 @@ class PedidoService
 
     }
 
+    public $arNameArquivos = [];
+
     public function cadastrar($dados)
     {
         try {
@@ -94,6 +96,11 @@ class PedidoService
 
         } catch (Exception $ex) {
             DB::rollBack();
+
+            foreach ($this->arquivosEnviados() as $arquivo) {
+                $this->deletarArquivo($arquivo);
+            }
+
             return array(
                 'status'    => false,
                 'mensagem'  => "Erro ao cadastrar categoria.",
@@ -225,26 +232,12 @@ class PedidoService
         return $responsavel_id;
     }
 
-    private function enviarArquivo($arquivo)
-    {
-        $horario_agora = time();
-        $arquivoDados = array(
-            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
-            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
-            "extensao" => $arquivo->getClientOriginalExtension(),
-            "tamanho" => $arquivo->getSize()
-        );
-        $arquivo->storeAs('uploads', $arquivoDados['nome_arquivo'] . '.' . $arquivoDados['extensao']);
-        return ['info' => $arquivoDados];
-    }
-
     public function cadastrarMensagem($pedido_id, $dados)
     {
         try {
             DB::beginTransaction();
 
             $dados['usuario_id'] = $dados['usuario']->id;
-            $pedido = $this->repository->obter($pedido_id);
 
             //Cadastro mensagem
             $mensagem = $this->mensagemService->cadastrar($pedido_id, $dados['usuario_id'], $dados['mensagem']);
@@ -256,7 +249,6 @@ class PedidoService
                     $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
                 }
             }
-
             $retorno_mensagem = $this->mensagemService->obter($mensagem->id, array('anexos', 'usuario'));
 
             //Inserir Historico
@@ -271,12 +263,48 @@ class PedidoService
             );
         } catch (Exception $ex) {
             DB::rollBack();
+
+            foreach ($this->arquivosEnviados() as $arquivo) {
+                $this->deletarArquivo($arquivo);
+            }
+
             return array(
                 'status' => false,
                 'mensagem' => 'Erro ao cadastrar a mensagem',
                 'exception' => $ex->getMessage()
             );
         }
+    }
+
+    private function enviarArquivo($arquivo)
+    {
+        $horario_agora = time();
+        $arquivoDados = array(
+            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
+            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
+            "extensao" => $arquivo->getClientOriginalExtension(),
+            "tamanho" => $arquivo->getSize()
+        );
+        $arquivo->storeAs('uploads', $arquivoDados['nome_arquivo'] . '.' . $arquivoDados['extensao']);
+        $this->arNameArquivos[] = $arquivoDados['nome_arquivo_completo'];
+        return ['info' => $arquivoDados];
+    }
+
+    public function arquivosEnviados()
+    {
+        return $this->arNameArquivos;
+    }
+
+    public function deletarArquivo($nome_arquivo)
+    {
+        $caminho_arquivo = 'uploads/' . $nome_arquivo;
+
+        if (Storage::exists($caminho_arquivo)) {
+            Storage::delete($caminho_arquivo);
+            return true;
+        }
+
+        return false;
     }
 
 }

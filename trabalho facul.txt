@@ -92,4 +92,8 @@ Campos adicionais
 Envio de email *pendente
 
 Interação e Iniciar Atendimento:
-Enviar Mensagem:
+Cadastrar mensagem: 		POST    api/pedido/{pedido_id}/mensagem/cadastrar OK
+
+*Baixar anexo: 			GET 	api/pedido/mensagem/50014/anexo/11730/baixar	-   mensagem_id / id (anexo)
+*Iniciar atendimento: 	PATCH   api/pedido/21930/iniciar-atendimento  		-   pedido_id
+*Consultar pedido:		GET		api/pedido/21930							-   pedido_id
