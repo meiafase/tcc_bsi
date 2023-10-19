@@ -307,4 +307,31 @@ class PedidoService
         return false;
     }
 
+    public function buscar($pedido_id, $dados)
+    {
+        try {
+            DB::beginTransaction();
+
+            $with = array("solicitante", "responsavel", "mensagens", "area", "categoria", "subCategoria", "prioridade", "status", "assunto");
+
+            $pedido = $this->repository->obter($pedido_id, $with);
+
+            DB::commit();
+            return array(
+                'status' 	=> true,
+                'mensagem' 	=> "Pedido listado com sucesso.",
+                'dados' 	=>  $pedido
+            );
+
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status' 	=> false,
+                'mensagem' 	=> "Erro ao listar pedido.",
+                'exception' => $ex->getMessage()
+            );
+        }
+
+    }
+
 }

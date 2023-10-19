@@ -26,6 +26,11 @@ Tirado fora:
 11) pausas (mensagem)
 12) histórico publico (historico)
 13) setores_tb -> areas
+14) Campos adicionais
+
+Retirado: 
+Envio de email *pendente
+
 
 Mudança - tab permissoes:
 id_usuario para usuario_id
@@ -50,7 +55,7 @@ try {
 	return array(
 		'status' 	=> false,
 		'mensagem' 	=> "Erro ao cadastrar usuário.",
-		'exception' 	=> $ex->getMessage()
+		'exception' => $ex->getMessage()
 	);
 }
 
@@ -87,13 +92,9 @@ Listar assuntos ativos: http://127.0.0.1:9000/api/area/{area_id}/assuntoAtivo OK
 Listar categorias ativas: http://127.0.0.1:9000/api/assunto/{assunto_id}/categoriasAtivas OK
 Cadastrar Pedido: POST http://127.0.0.1:9000/api/pedido OK *arquivos salvo: storage/app/uploads
 
-Retirado: 
-Campos adicionais
-Envio de email *pendente
-
 Interação e Iniciar Atendimento:
 Cadastrar mensagem: 		POST    api/pedido/{pedido_id}/mensagem/cadastrar OK
+Consultar pedido:			GET		api/pedido/{pedido_id}	OK   
 
 *Baixar anexo: 			GET 	api/pedido/mensagem/50014/anexo/11730/baixar	-   mensagem_id / id (anexo)
 *Iniciar atendimento: 	PATCH   api/pedido/21930/iniciar-atendimento  		-   pedido_id
-*Consultar pedido:		GET		api/pedido/21930							-   pedido_id
