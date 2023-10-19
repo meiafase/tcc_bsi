@@ -18,4 +18,9 @@ class PedidoController extends Controller
     {
         return $this->service->cadastrar($request->dataRequestPedido());
     }
+
+    public function cadastrarMensagem(int $id, PedidoRequest $request)
+    {
+        return $this->service->cadastrarMensagem($id, $request->dataRequest());
+    }
 }

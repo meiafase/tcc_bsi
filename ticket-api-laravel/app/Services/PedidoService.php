@@ -238,4 +238,45 @@ class PedidoService
         return ['info' => $arquivoDados];
     }
 
+    public function cadastrarMensagem($pedido_id, $dados)
+    {
+        try {
+            DB::beginTransaction();
+
+            $dados['usuario_id'] = $dados['usuario']->id;
+            $pedido = $this->repository->obter($pedido_id);
+
+            //Cadastro mensagem
+            $mensagem = $this->mensagemService->cadastrar($pedido_id, $dados['usuario_id'], $dados['mensagem']);
+
+            //adicionar anexo se houver
+            if (isset($dados['anexo']) && sizeof(@$dados['anexo']) > 0) {
+                foreach ($dados['anexo'] as $dadosAnexo) {
+                    $envioArquivo = $this->enviarArquivo($dadosAnexo);
+                    $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
+                }
+            }
+
+            $retorno_mensagem = $this->mensagemService->obter($mensagem->id, array('anexos', 'usuario'));
+
+            //Inserir Historico
+            $descricaoHist = "Solicitação nº " . str_pad($pedido_id, 6, 0, STR_PAD_LEFT) . " foi atualizada";
+            $this->historicoService->cadastrar($dados['usuario_id'], $pedido_id, $descricaoHist);
+
+            DB::commit();
+            return array(
+                'status' => true,
+                'mensagem' => "Mensagem cadastrada com sucesso",
+                'dados' => $retorno_mensagem
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao cadastrar a mensagem',
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
+
 }

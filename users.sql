@@ -1,0 +1,2 @@
+INSERT INTO `users` VALUES (1, 'Ana Maria Vargas', 'aninha_vargas@hotmail.com', NULL, '$2y$10$.KzJWmptVw1e/GAR.8srT.MDTiH8D9VDP3htnBkBdMHwQncCCwwf.', NULL, 0, 12, 'S', 20, 1, '2023-09-04 12:10:26', '2023-09-12 16:01:12');
+INSERT INTO `users` VALUES (2, 'Pedro Garcia', 'pedro@gmail.com', NULL, '$2y$10$mp2CtAq/pT4xbP9Y3t320utNt5aOeCW6WPMJraUUwIqVW1rjLGXXu', NULL, 1, 12, NULL, 1, 1, '2023-08-31 18:00:07', '2023-08-31 18:00:07');

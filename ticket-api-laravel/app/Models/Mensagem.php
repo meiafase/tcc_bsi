@@ -17,6 +17,6 @@ class Mensagem extends Model
 
     public function usuario()
     {
-        return $this->hasOne(User::class, "id", "usuario_id")->select("id", "nome", "email");
+        return $this->hasOne(User::class, "id", "usuario_id")->select("id", "name", "email");
     }
 }

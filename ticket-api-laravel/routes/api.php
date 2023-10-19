@@ -70,4 +70,5 @@ Route::prefix('area')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [PedidoController::class, 'cadastrar']);
+    Route::post('/{id}/mensagem/cadastrar', [PedidoController::class, 'cadastrarMensagem']);
 });

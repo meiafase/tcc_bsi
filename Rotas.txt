@@ -1,0 +1,5 @@
+*Baixar anexo: 		GET 	api/pedido/mensagem/50014/anexo/11730/baixar	-   mensagem_id / id (anexo)
+*Iniciar atendimento: 	PATCH   api/pedido/21930/iniciar-atendimento  		-   pedido_id
+*Consultar pedido:	GET	api/pedido/21930				-   pedido_id
+*Enviar mensagem: 	POST    api/pedido/21930/mensagem/cadastrar   		-   pedido_id
+(payload: {mensagem: ""}
