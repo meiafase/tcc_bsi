@@ -72,5 +72,5 @@ Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [PedidoController::class, 'cadastrar']);
     Route::post('/{pedido_id}/mensagem/cadastrar', [PedidoController::class, 'cadastrarMensagem']);
     Route::get('/{pedido_id}', [PedidoController::class, 'buscar']);
-
+    Route::patch('/{pedido_id}/iniciar-atendimento', [PedidoController::class, 'iniciarAtendimento']);
 });

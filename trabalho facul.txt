@@ -95,6 +95,6 @@ Cadastrar Pedido: POST http://127.0.0.1:9000/api/pedido OK *arquivos salvo: stor
 Interação e Iniciar Atendimento:
 Cadastrar mensagem: 		POST    api/pedido/{pedido_id}/mensagem/cadastrar OK
 Consultar pedido:			GET		api/pedido/{pedido_id}	OK   
+Iniciar atendimento: 		PATCH   api/pedido/{pedido_id}/iniciar-atendimento OK   
 
 *Baixar anexo: 			GET 	api/pedido/mensagem/50014/anexo/11730/baixar	-   mensagem_id / id (anexo)
-*Iniciar atendimento: 	PATCH   api/pedido/21930/iniciar-atendimento  		-   pedido_id

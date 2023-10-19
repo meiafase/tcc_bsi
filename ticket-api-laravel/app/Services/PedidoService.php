@@ -334,4 +334,44 @@ class PedidoService
 
     }
 
+    public function iniciarAtendimento($pedido_id, $dados)
+    {
+        try {
+            DB::beginTransaction();
+
+            $pedido = $this->repository->obter($pedido_id);
+
+            if ($pedido["status_id"] != 1) {
+                return array(
+                    'status' => true,
+                    'mensagem' => "Atendimento já iniciado!",
+                    'dados' => []
+                );
+            }
+
+            $usuario_id = $dados['usuario']->id;
+            $novo_responsavel = $this->usuarioService->buscar($usuario_id);
+            $novo_responsavel = $novo_responsavel['dados'];
+            $arrAlteracao = array('inicio_atendimento' => date("Y-m-d H:i:s"), 'status_id' => 2, 'responsavel_id' => $novo_responsavel['id']);
+            $descricaoHist = "Atendimento iniciado por {$novo_responsavel->name}";
+
+            $this->repository->atualizarColuna($pedido_id, $arrAlteracao);
+            $this->historicoService->cadastrar($usuario_id, $pedido_id, $descricaoHist);
+
+            DB::commit();
+            return array(
+                'status' 	=> true,
+                'mensagem' 	=> "Atendimento iniciado com sucesso",
+                'dados' 	=>  []
+            );
+
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status' 	=> false,
+                'mensagem' 	=> "Erro ao iniciar o atendimento",
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 }

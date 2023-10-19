@@ -28,4 +28,9 @@ class PedidoController extends Controller
     {
         return $this->service->buscar($id, $request->dataRequest());
     }
+
+    public function iniciarAtendimento(int $id, PedidoRequest $request)
+    {
+        return $this->service->iniciarAtendimento($id, $request->dataRequest());
+    }
 }
