@@ -33,4 +33,9 @@ class PedidoController extends Controller
     {
         return $this->service->iniciarAtendimento($id, $request->dataRequest());
     }
+
+    public function baixarAnexo($mensagem_id, $anexo_id)
+    {
+        return $this->service->baixarAnexo($mensagem_id, $anexo_id);
+    }
 }

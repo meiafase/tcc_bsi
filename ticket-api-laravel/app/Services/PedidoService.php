@@ -8,6 +8,8 @@ use App\Services\UsuarioService;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Testing\MimeType;
+use Illuminate\Support\Facades\Response;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -276,37 +278,6 @@ class PedidoService
         }
     }
 
-    private function enviarArquivo($arquivo)
-    {
-        $horario_agora = time();
-        $arquivoDados = array(
-            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
-            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
-            "extensao" => $arquivo->getClientOriginalExtension(),
-            "tamanho" => $arquivo->getSize()
-        );
-        $arquivo->storeAs('uploads', $arquivoDados['nome_arquivo'] . '.' . $arquivoDados['extensao']);
-        $this->arNameArquivos[] = $arquivoDados['nome_arquivo_completo'];
-        return ['info' => $arquivoDados];
-    }
-
-    public function arquivosEnviados()
-    {
-        return $this->arNameArquivos;
-    }
-
-    public function deletarArquivo($nome_arquivo)
-    {
-        $caminho_arquivo = 'uploads/' . $nome_arquivo;
-
-        if (Storage::exists($caminho_arquivo)) {
-            Storage::delete($caminho_arquivo);
-            return true;
-        }
-
-        return false;
-    }
-
     public function buscar($pedido_id, $dados)
     {
         try {
@@ -374,4 +345,80 @@ class PedidoService
             );
         }
     }
+
+    public function baixarAnexo($mensagem_id, $anexo_id)
+    {
+        $anexo = $this->anexoService->obter($anexo_id);
+
+        if ($anexo->mensagem_id == $mensagem_id) {
+            $arquivo = $this->buscarArquivo($anexo->nome_arquivo_completo);
+
+            $dados = array("nome_arquivo" => $anexo->nome_arquivo_completo, "arquivo" => $arquivo);
+        } else {
+            $dados = false;
+        }
+
+        // dd($dados );
+        if (!$dados) {
+            return array(
+                'status' => true,
+                'mensagem' => "Não foi possível baixar o arquivo",
+                'dados' => []
+            );
+        }
+
+        $headers = [
+            'Content-Type'        => 'Content-Type: '.MimeType::from($dados['nome_arquivo']),
+            'Content-Disposition' => 'attachment; filename="'. $dados['nome_arquivo'] .'"',
+        ];
+
+        return Response::make($dados['arquivo'], 200, $headers);
+    }
+
+
+
+
+    private function enviarArquivo($arquivo)
+    {
+        $horario_agora = time();
+        $arquivoDados = array(
+            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
+            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
+            "extensao" => $arquivo->getClientOriginalExtension(),
+            "tamanho" => $arquivo->getSize()
+        );
+        $arquivo->storeAs('uploads', $arquivoDados['nome_arquivo'] . '.' . $arquivoDados['extensao']);
+        $this->arNameArquivos[] = $arquivoDados['nome_arquivo_completo'];
+        return ['info' => $arquivoDados];
+    }
+
+    public function arquivosEnviados()
+    {
+        return $this->arNameArquivos;
+    }
+
+    public function deletarArquivo($nome_arquivo)
+    {
+        $caminho_arquivo = 'uploads/' . $nome_arquivo;
+
+        if (Storage::exists($caminho_arquivo)) {
+            Storage::delete($caminho_arquivo);
+            return true;
+        }
+
+        return false;
+    }
+
+    public function buscarArquivo($nome_arquivo){
+        // return Storage::get($nome_arquivo);
+        $caminho_arquivo = 'uploads/' . $nome_arquivo;
+
+        if (Storage::exists($caminho_arquivo)) {
+            Storage::get($caminho_arquivo);
+            return true;
+        }
+
+        return false;
+    }
+
 }

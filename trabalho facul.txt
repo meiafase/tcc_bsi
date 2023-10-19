@@ -96,5 +96,5 @@ Interação e Iniciar Atendimento:
 Cadastrar mensagem: 		POST    api/pedido/{pedido_id}/mensagem/cadastrar OK
 Consultar pedido:			GET		api/pedido/{pedido_id}	OK   
 Iniciar atendimento: 		PATCH   api/pedido/{pedido_id}/iniciar-atendimento OK   
+*Baixar anexo: 				GET 	api/pedido/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar	OK   validar com o front
 
-*Baixar anexo: 			GET 	api/pedido/mensagem/50014/anexo/11730/baixar	-   mensagem_id / id (anexo)
