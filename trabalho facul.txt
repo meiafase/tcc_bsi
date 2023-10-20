@@ -103,7 +103,12 @@ Iniciar atendimento: 		PATCH   api/pedido/{pedido_id}/iniciar-atendimento OK
 *Baixar anexo: 				GET 	api/pedido/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar	OK   validar com o front
 
 *Cancelar / Finalizar / Avaliar atendimento:
-Cancelar: 					PATCH	api/pedido/22033/alterar-status payload {justificativa:	"xxxx", status_id: 7}
-Finalizar:					PATCH	api/pedido/21935/alterar-status payload {justificativa:	null, status_id: 5}
-Avaliar: 					POST	api/pedido/21935/avaliacao {avaliacao_gestor: false, justificativa	"bbbbb", nota: 5, util: 1}
-alterar status após ava		PATCH	api/pedido/21935/alterar-status {justificativa:	null, status_id: 6}
+Cancelar: 					PATCH	api/pedido/{pedido_id}/alterar-status OK
+Avaliar: 					POST	api/pedido/{pedido_id}/avaliacao OK
+alterar status após ava		**rota que grava avaliação, ja altera status OK
+
+
+************************************************************
+@SAMUEL dar o pull e rodar o comando, no projeto Laravel:
+php artisan migrate
+************************************************************

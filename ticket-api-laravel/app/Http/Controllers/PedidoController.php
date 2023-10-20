@@ -38,4 +38,14 @@ class PedidoController extends Controller
     {
         return $this->service->baixarAnexo($mensagem_id, $anexo_id);
     }
+
+    public function alterarStatus(int $id, PedidoRequest $request)
+    {
+        return $this->service->alterarStatus($id, $request->dataRequest());
+    }
+
+    public function cadastrarAvaliacao(int $id, PedidoRequest $request)
+    {
+        return $this->service->cadastrarAvaliacao($id, $request->dataRequest());
+    }
 }

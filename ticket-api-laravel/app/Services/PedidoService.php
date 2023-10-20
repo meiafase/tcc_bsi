@@ -22,6 +22,7 @@ class PedidoService
     protected $mensagemService;
     protected $historicoService;
     protected $anexoService;
+    protected $statusService;
 
     public function __construct(
         PedidoRepository $repository,
@@ -30,6 +31,8 @@ class PedidoService
         MensagemService $mensagemService,
         HistoricoService $historicoService,
         AnexoService $anexoService,
+        StatusService $statusService,
+        AvaliacaoService $avaliacaoService,
     ) {
         $this->repository = $repository;
         $this->grupoService = $grupoService;
@@ -37,7 +40,8 @@ class PedidoService
         $this->mensagemService = $mensagemService;
         $this->historicoService = $historicoService;
         $this->anexoService = $anexoService;
-
+        $this->statusService = $statusService;
+        $this->avaliacaoService = $avaliacaoService;
     }
 
     public $arNameArquivos = [];
@@ -393,7 +397,77 @@ class PedidoService
         return response()->json(['message' => 'Arquivo não encontrado'], 404);
     }
 
+    public function alterarStatus($pedido_id, $dados)
+    {
+        try {
+            DB::beginTransaction();
 
+            $usuario_id = $dados['usuario']->id;
+            $status = $this->statusService->obter($dados['status_id']);
+            $descricaoHist = "Status da solicitação alterada: {$status->descricao}";
+            $pedido = $this->repository->obter($pedido_id);
+
+            $dados['status_id'] != 5 ? @$dados['justificativa'] = NULL : NULL;
+            $arrAlteracao = array('status_id' => $dados['status_id'], 'justificativa_cancelar' => @$dados['justificativa']);
+
+            if ($dados['status_id'] == 3) {
+                $fim_atendimento = now();
+                $inicio_atendimento = Carbon::create($pedido->inicio_atendimento);
+                $tempo_atendimento = $fim_atendimento->diffInSeconds($inicio_atendimento);
+
+                $arrAlteracao = array_merge(array("fim_atendimento" => $fim_atendimento, "tempo_total_atendimento" => $tempo_atendimento), $arrAlteracao);
+                $descricaoHist = "Atendimento concluído, aguardando avaliação do solicitante";
+            }
+
+            $this->repository->atualizarColuna($pedido_id, $arrAlteracao);
+            $this->historicoService->cadastrar($usuario_id, $pedido_id, $descricaoHist);
+
+            DB::commit();
+            return array(
+                'status' => true,
+                'mensagem' => "Status alterado com sucesso",
+                'dados' => []
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao alterar status',
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
+
+    public function cadastrarAvaliacao($pedido_id, $dados)
+    {
+        try {
+            DB::beginTransaction();
+
+            $avaliacao = $this->avaliacaoService->cadastrar($pedido_id, $dados);
+
+            //Grava histórico
+            $this->historicoService->cadastrar($dados['usuario']->id, $pedido_id, "Avaliação registrada com sucesso por {$dados['usuario']->name}, Nota: {$dados['nota']}");
+
+            //Atualiza Pedido
+            $this->repository->atualizarColuna($pedido_id, array('nota_solicitante' => $dados['nota'], 'status_id' => 4));
+
+            DB::commit();
+
+            return array(
+                'status' => true,
+                'mensagem' => "Avaliação cadastrada com sucesso",
+                'dados' => $avaliacao
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao cadastrar a avaliação',
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 
 
     private function enviarArquivo($arquivo)
@@ -427,7 +501,8 @@ class PedidoService
         return false;
     }
 
-    public function buscarArquivo($nome_arquivo){
+    public function buscarArquivo($nome_arquivo)
+    {
         // return Storage::get($nome_arquivo);
         $caminho_arquivo = 'uploads/' . $nome_arquivo;
 
