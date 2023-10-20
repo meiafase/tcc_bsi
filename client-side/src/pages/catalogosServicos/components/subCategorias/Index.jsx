@@ -60,7 +60,7 @@ export default function Subcategorias (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                <b>Assunto</b> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
+                <b>Assunto</b> <b onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
                 </p>
                 <div style={{ marginTop: "10px" }}>
                 <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCadastrarSubcategoria(true)}>

@@ -74,7 +74,7 @@ export default function NewRequest() {
   };
 
   const handleValidateInputs = () => {
-    console.log(setor, assunto, categoria, subcategoria, descricaoAtual, upload);
+    console.log(setor, assunto, categoria, subcategoria, descricaoAtual , upload);
   }
 
   return (

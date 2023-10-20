@@ -22,15 +22,14 @@ export default function InformacoesSubcategoria (props) {
     const [prioridade, setPrioridade] = useState();
     const [ativarGrupoResponsavel, setAtivarGrupoResponsavel] = useState('');
     const [ativarGrupoAtendente, setAtivarGrupoAtendente] = useState(false);
-    const [camposAdicionais, setCamposAdicionais] = useState(false);
     const [users, setUsers] = useState([]);
     const [grupos, setGrupos] = useState([]);
     const [prazo, setPrazo] = useState("");
     const [restricao, setRestricao] = useState(false);
-    const [campoAdicionalValue, setCampoAdicionalValue] = useState('');
     const [descricao, setDescricao] = useState('');
     const [responsavel, setResponsavel] = useState(null);
     const [grupoResponsavel, setGrupoResponsavel] = useState(null);
+    const [nomeSubcategoria, setNomeSubcategoria] = useState("");
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
@@ -41,6 +40,15 @@ export default function InformacoesSubcategoria (props) {
 
     useEffect(() => {
         const getUsersAndGroup = async () => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, config).then(res => {
+                setNomeSubcategoria(res.data.dados.titulo);
+                setPrazo(res.data.dados.prazo_horas);
+                setPrioridade(res.data.dados.prioridade_id);
+                setRestricao(res.data.dados.restricao);
+                setDescricao(res.data.dados.descricao);
+                console.log(res.data.dados);
+            }).catch(err => {})
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
                 res.data.map(us => (
                     setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id}])
@@ -58,16 +66,14 @@ export default function InformacoesSubcategoria (props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleSaveCategoria = async () => {
+    const handleSaveSubcategoria = async () => {
         await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, {
             descricao,
             prazo_horas: prazo,
             prioridade_id: prioridade,
             equipe_id: grupoResponsavel,
             responsavel_id: responsavel,
-            possui_adicionais: camposAdicionais,
             restricao,
-            adicionais: [{"titulo": campoAdicionalValue}]
         }, config).then(res => {
             if(res.data.status) {
                 props.setShowAssunto('subcategorias');
@@ -78,22 +84,10 @@ export default function InformacoesSubcategoria (props) {
     const validateInputs = () => {
         if(prazo) {
             if(prioridade) {
-                if(camposAdicionais) {
-                    if(campoAdicionalValue) {
-                        if(descricao) {
-                            handleSaveCategoria()
-                        } else {
-                            alert('preencha a descricao')
-                        }
-                    } else {
-                        alert('preencha campos adicionais')
-                    }
+                if(descricao) {
+                    handleSaveSubcategoria()
                 } else {
-                    if(descricao) {
-
-                    } else {
-                        alert('preencha a descricao')
-                    }
+                    alert('preencha a descricao')
                 }
             } else {
                 alert('preencha prioridade')
@@ -113,12 +107,12 @@ export default function InformacoesSubcategoria (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                    <b>Assunto</b>
+                    <b>Assunto </b>
                     <b onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b>
                     <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
-                    <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
+                    <b onClick={() => props.setShowAssunto('subcategorias')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
                     <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
-                    <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>nomeSubcategoria</b>
+                    <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{nomeSubcategoria}</b>
                 </p>
             </div>
             <Divider />
@@ -131,7 +125,7 @@ export default function InformacoesSubcategoria (props) {
                             <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={prioridade}
+                            value={Number(prioridade)}
                             label="Prioridade"
                             onChange={handleChange}
                             >
@@ -144,12 +138,8 @@ export default function InformacoesSubcategoria (props) {
                     </div>
                     <Divider />
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox onChange={e => setRestricao(e.target.checked)} />} label="Chamado restrito (somente gestor)." />
-                        <FormControlLabel control={<Checkbox onChange={e => {setCamposAdicionais(e.target.checked)}} />} label="Incluir campo para dados adicionais." />
-                    </FormGroup>    
-                    <Paper elevation={3} sx={{padding: '20px', marginTop: '10px', display: camposAdicionais === false ? "none" : "in-line"}}>
-                        <TextField fullWidth id="outlined-basic" value={campoAdicionalValue} onChange={e => setCampoAdicionalValue(e.target.value)} label="Nome do campo desejado" variant="outlined" />
-                    </Paper>
+                        <FormControlLabel control={<Checkbox onChange={e => setRestricao(e.target.checked)} checked={restricao} />} label="Chamado restrito (somente gestor)." />
+                    </FormGroup>
                 </div>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{marginBottom: '20px'}}>
