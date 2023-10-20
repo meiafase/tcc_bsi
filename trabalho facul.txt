@@ -102,10 +102,23 @@ Consultar pedido:			GET		api/pedido/{pedido_id}	OK
 Iniciar atendimento: 		PATCH   api/pedido/{pedido_id}/iniciar-atendimento OK   
 *Baixar anexo: 				GET 	api/pedido/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar	OK   validar com o front
 
-*Cancelar / Finalizar / Avaliar atendimento:
+Cancelar / Finalizar / Avaliar atendimento:
 Cancelar: 					PATCH	api/pedido/{pedido_id}/alterar-status OK
 Avaliar: 					POST	api/pedido/{pedido_id}/avaliacao OK
 alterar status após ava		**rota que grava avaliação, ja altera status OK
+
+Listagem / Historico / Email:
+*Filtros:
+	Areas: 			GET		api/usuario/areas
+	Status: 		GET		api/status/
+	Area:			GET		api/area/
+	Responsavel:	GET		api/pedido/filtrar-responsavel/minhas/{area_id}
+	Solicitante:	GET		api/pedido/filtrar-solicitante/area/{area_id}
+					GET		api/pedido/filtrar-responsavel/area/{area_id}
+	Assunto:		GET		api/assunto/listar-assuntos/{area_id}
+Listar pedidos:		POST	api/pedido/listar-pedidos/ payload {area_responsavel_id, area_solicitante_id, assunto_id, 
+							categoria_id, responsavel_id, solicitante_id, status_id, sub_categoria_id, tipo: "minhas" / "atendimentos" / "area"}
+Histórico:			GET		api/pedido/{pedido_id}/historico
 
 
 ************************************************************
