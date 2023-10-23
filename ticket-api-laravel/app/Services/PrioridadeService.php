@@ -2,18 +2,13 @@
 
 namespace App\Services;
 use Exception;
-use App\Repositories\StatusRepository;
+use App\Repositories\PrioridadeRepository;
 
-class StatusService
+class PrioridadeService
 {
-    public function __construct(StatusRepository $repository)
+    public function __construct(PrioridadeRepository $repository)
     {
         $this->repository = $repository;
-    }
-
-    public function obter ($id)
-    {
-        return $this->repository->obter($id);
     }
 
     public function listar()
@@ -22,14 +17,14 @@ class StatusService
             $dados = $this->repository->listar();
             return array(
                 'status' 	=> true,
-                'mensagem' 	=> "Status listado com sucesso.",
+                'mensagem' 	=> "Prioridades listada com sucesso.",
                 'dados' 	=> $dados
             );
 
         } catch (Exception $ex) {
             return array(
                 'status' 	=> false,
-                'mensagem' 	=> "Erro ao listar Status.",
+                'mensagem' 	=> "Erro ao listar Prioridades.",
                 'exception' => $ex->getMessage()
             );
         }

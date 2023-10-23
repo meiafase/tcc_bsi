@@ -22,8 +22,8 @@ class HistoricoService
         return $this->repository->criar($dadosHistorico);
     }
 
-    public function buscar($pedido_id)
+    public function filtrar($pedido_id)
     {
-        return $this->repository->buscar($pedido_id);
+        return $this->repository->filtrar(array(['pedido_id', $pedido_id]));
     }
 }

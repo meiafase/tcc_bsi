@@ -108,18 +108,15 @@ Avaliar: 					POST	api/pedido/{pedido_id}/avaliacao OK
 alterar status após ava		**rota que grava avaliação, ja altera status OK
 
 Listagem / Historico / Email:
-*Filtros:
-	Areas: 			GET		api/usuario/areas
-	Status: 		GET		api/status/
-	Area:			GET		api/area/
-	Responsavel:	GET		api/pedido/filtrar-responsavel/minhas/{area_id}
-	Solicitante:	GET		api/pedido/filtrar-solicitante/area/{area_id}
-					GET		api/pedido/filtrar-responsavel/area/{area_id}
-	Assunto:		GET		api/assunto/listar-assuntos/{area_id}
-Listar pedidos:		POST	api/pedido/listar-pedidos/ payload {area_responsavel_id, area_solicitante_id, assunto_id, 
-							categoria_id, responsavel_id, solicitante_id, status_id, sub_categoria_id, tipo: "minhas" / "atendimentos" / "area"}
-Histórico:			GET		api/pedido/{pedido_id}/historico
+Histórico:			GET		api/pedido/{pedido_id}/historico    OK
+Filtros:
+	Status: 		GET		api/status/   	OK
+	Prioridades:	GET		api/prioridade  OK
+	Resp/Solic:		GET		api/pedido/filtrar/{tipo_id}   tipo_id = 1 - Responsáveis / tipo_id = 2 - Solicitantes 	OK
+	Areas:			GET		api/area/		OK
 
+Listar pedidos:		POST	api/pedido/listar-pedidos/ payload {status_id, prioridade_id, responsavel_id, solicitante_id, area_id, tipo: "minhas" / "atendimentos" / "area"} OK
+Email
 
 ************************************************************
 @SAMUEL dar o pull e rodar o comando, no projeto Laravel:

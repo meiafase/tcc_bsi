@@ -21,7 +21,7 @@ let swaggerSpec = swaggerJsDoc(options);
 
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 app.use(express.json());

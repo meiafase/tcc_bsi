@@ -469,6 +469,98 @@ class PedidoService
         }
     }
 
+    public function filtrarRespSolic($tipo_id, $dados)
+    {
+        try {
+            $retorno = [];
+
+            if ($tipo_id == 1) {
+                $info = [
+                    'filtro'    => "ped.solicitante_id = " . $dados['usuario']->id,
+                    'variavel'  => 'responsavel'
+                ];
+            }
+
+            if ($tipo_id == 2) {
+                $info = [
+                    'filtro'    => "ped.responsavel_id = " . $dados['usuario']->id,
+                    'variavel'  => 'solicitante'
+                ];
+            }
+
+            $retorno = $this->repository->filtrarRespSolic($info);
+
+            if ($retorno) {
+                return array(
+                    'status' => true,
+                    'mensagem' => "Pesquisa realizada com sucesso.",
+                    'dados' => $retorno
+                );
+            } else {
+                return array(
+                    'status' => true,
+                    'mensagem' => "Não há registros.",
+                    'dados' => []
+                );
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao realizar a busca.',
+                'exception' => $ex
+            );
+        }
+    }
+
+    public function buscarHistorico($pedido_id)
+    {
+        try {
+            $historico = $this->historicoService->filtrar($pedido_id);
+
+            return array(
+                'status' => true,
+                'mensagem' => "Histórico da solicitação nº " . str_pad($pedido_id, 6, 0, STR_PAD_LEFT),
+                'dados' => $historico
+            );
+        } catch (Exception $ex) {
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao buscar histórico',
+                'exception' => $ex
+            );
+        }
+    }
+
+    public function listarPedidos($dados)
+    {
+        try {
+            $retorno = [];
+
+            $retorno = $this->repository->filtrarListagem($dados);
+
+            if ($retorno) {
+                return array(
+                    'status' => true,
+                    'mensagem' => "Pesquisa realizada com sucesso.",
+                    'dados' => $retorno
+                );
+            } else {
+                return array(
+                    'status' => true,
+                    'mensagem' => "Não há registros.",
+                    'dados' => []
+                );
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao realizar a busca.',
+                'exception' => $ex->getMessage()
+            );
+        }
+    }
 
     private function enviarArquivo($arquivo)
     {

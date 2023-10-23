@@ -10,6 +10,8 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\PrioridadeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +70,17 @@ Route::prefix('area')->middleware('auth:sanctum')->group(function () {
     Route::get('/{id}/assuntoAtivo', [AreaController::class, 'listarAssuntos']);
 });
 
+Route::prefix('status')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [StatusController::class, 'listar']);
+});
+
+Route::prefix('prioridade')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [PrioridadeController::class, 'listar']);
+});
+
 Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
+    Route::post('/listar-pedidos', [PedidoController::class, 'listarPedidos']);
+    Route::get('/filtrar/{tipo_id}', [PedidoController::class, 'filtrarRespSolic']);
     Route::post('/', [PedidoController::class, 'cadastrar']);
     Route::post('/{pedido_id}/mensagem/cadastrar', [PedidoController::class, 'cadastrarMensagem']);
     Route::get('/{pedido_id}', [PedidoController::class, 'buscar']);
@@ -76,4 +88,5 @@ Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
     Route::get('/mensagem/{mensagem_id}/anexo/{anexo_id}/baixar', [PedidoController::class, 'baixarAnexo']);
     Route::patch('/{pedido_id}/alterar-status', [PedidoController::class, 'alterarStatus']);
     Route::post('/{pedido_id}/avaliacao/', [PedidoController::class, 'cadastrarAvaliacao']);
+    Route::get('/{pedido_id}/historico/', [PedidoController::class, 'buscarHistorico']);
 });

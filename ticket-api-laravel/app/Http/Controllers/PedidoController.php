@@ -48,4 +48,20 @@ class PedidoController extends Controller
     {
         return $this->service->cadastrarAvaliacao($id, $request->dataRequest());
     }
+
+    public function filtrarRespSolic(int $tipo_id, PedidoRequest $request)
+    {
+        return $this->service->filtrarRespSolic($tipo_id, $request->dataRequest());
+    }
+
+    public function buscarHistorico(int $id)
+    {
+        return $this->service->buscarHistorico($id);
+    }
+
+    public function listarPedidos(PedidoRequest $request)
+    {
+        return $this->service->listarPedidos($request->dataRequest());
+    }
+
 }

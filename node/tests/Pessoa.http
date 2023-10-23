@@ -1,11 +1,11 @@
 ### Cadastrar pessoa
-POST http://localhost:3000/newPessoa
+POST http://localhost:4000/newPessoa
 Content-Type: application/json
 
 {
-    "name": "Ana Vargas",
-    "email": "ana@gmail.com",
+    "name": "Rafael Romig",
+    "email": "rafael@gmail.com",
     "area_id": 12,
-    "tp_coord": "S",
+    "tp_coord": "",
     "coord_id": 1
 }
