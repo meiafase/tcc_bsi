@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -25,12 +25,29 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import GroupIcon from "@mui/icons-material/Group";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
 
 export default function Header(props) {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [nomeUser, setNomeUser] = useState("");
+
+  const config = {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${localStorage.getItem("id")}`, config).then(res => {
+        setNomeUser(res.data.dados.name);
+      }).catch(err => {})
+    }
+
+    getUser()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const navigate = useNavigate();
 
@@ -173,11 +190,11 @@ export default function Header(props) {
               Sistema de Solicitações{" "}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ display: nomeUser ? "flex" : "none"}}>
               <IconButton disabled>
                 <Chip
-                  avatar={<Avatar>S</Avatar>}
-                  label="Samuel"
+                  avatar={<Avatar>{nomeUser.slice(0, 1)}</Avatar>}
+                  label={nomeUser}
                   sx={{ color: "white" }}
                 />
               </IconButton>

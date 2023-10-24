@@ -11,9 +11,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 
 export default function NewRequest() {
+
+  const navigate = useNavigate();
   const [setor, setSetor] = useState('');
   const [setorList, setSetorList] = useState([])
   const [assunto, setAssunto] = useState('');
@@ -73,8 +76,45 @@ export default function NewRequest() {
     setSubcategoria(event.target.value);
   };
 
+  const handleSaveInfos = async () => {
+    let formData = new FormData();
+    formData.append("area_id", setor);
+    formData.append("assunto_id", assunto);
+    formData.append("categoria_id", categoria);
+    formData.append("sub_categoria_id", subcategoria);
+    formData.append("mensagem", descricaoAtual);
+    Object.keys(upload).map(fileKey => {
+      return formData.append("anexo", upload[fileKey], upload[fileKey].name)
+    });
+
+    await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido`, formData, config, { headers: { "Content-Type": "multipart/form-data" } } ).then(res => {
+      console.log(res.data);
+    }).catch(err => {console.log(err)})
+
+  }
+
   const handleValidateInputs = () => {
-    console.log(setor, assunto, categoria, subcategoria, descricaoAtual , upload);
+    if(setor) {
+      if(assunto) {
+        if(categoria) {
+          if(descricaoAtual) {
+            if(upload) {
+              handleSaveInfos()
+            } else {
+              alert('upload necessario');
+            }
+          } else {
+            alert('preencha descrição')
+          }
+        } else {  
+          alert('preencha categoria')
+        }
+      } else {
+        alert('preencha assunto')
+      }
+    } else{
+      alert('preencha setor')
+    }
   }
 
   return (
@@ -169,7 +209,7 @@ export default function NewRequest() {
                   <div style={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}>
                     <Button component="label" variant="contained" color={upload ? "success" : "error"} startIcon={<CloudUploadIcon />}>
                       {upload ? "Arquivo selecionado" : "Enviar arquivo"}
-                      <input hidden type="file" onChange={e => setUpload(true)} />
+                      <input hidden type="file" onChange={e => setUpload(e.target.files)} />
                     </Button>
                   </div>
                   <h3>Envie preferencialmente os arquivos em .zip</h3>
@@ -180,7 +220,7 @@ export default function NewRequest() {
           </div>
           <Divider />
           <div style={{width: '100%', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
-          <Button color="error" variant="outlined" startIcon={<CloseIcon />}>
+          <Button color="error" variant="outlined" onClick={() => navigate('../MeusAtendimentos')} startIcon={<CloseIcon />}>
             Cancelar
           </Button>
           <Button variant="contained" color="success" onClick={handleValidateInputs} endIcon={<SendIcon />}>
