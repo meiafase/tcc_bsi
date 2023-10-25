@@ -99,7 +99,6 @@ class PedidoService
                 'mensagem' => $descricaoHist,
                 'dados' => $pedido
             );
-
         } catch (Exception $ex) {
             DB::rollBack();
 
@@ -109,7 +108,7 @@ class PedidoService
 
             return array(
                 'status'    => false,
-                'mensagem'  => "Erro ao cadastrar categoria.",
+                'mensagem'  => "Erro ao cadastrar pedido.",
                 'exception' => $ex->getMessage()
             );
         }
@@ -118,7 +117,7 @@ class PedidoService
     private function definirPrazo($qtdeHoras)
     {
         $qtdeHoras = explode(":", $qtdeHoras);
-        $qtdeHoras =$qtdeHoras[0] + ($qtdeHoras[1] / 60) + ($qtdeHoras[2] / 3600);
+        $qtdeHoras = $qtdeHoras[0] + ($qtdeHoras[1] / 60) + ($qtdeHoras[2] / 3600);
 
         $prazo_final = '';
         $data_hora = Carbon::now();
@@ -200,7 +199,6 @@ class PedidoService
     private function verificaFeriado($data_hora)
     {
         $ano = $data_hora->year;
-
         $feriados = Http::get("https://brasilapi.com.br/api/feriados/v1/" . $ano);
         $feriados = json_decode($feriados);
 
@@ -293,20 +291,18 @@ class PedidoService
 
             DB::commit();
             return array(
-                'status' 	=> true,
-                'mensagem' 	=> "Pedido listado com sucesso.",
-                'dados' 	=>  $pedido
+                'status'     => true,
+                'mensagem'     => "Pedido listado com sucesso.",
+                'dados'     =>  $pedido
             );
-
         } catch (Exception $ex) {
             DB::rollBack();
             return array(
-                'status' 	=> false,
-                'mensagem' 	=> "Erro ao listar pedido.",
+                'status'     => false,
+                'mensagem'     => "Erro ao listar pedido.",
                 'exception' => $ex->getMessage()
             );
         }
-
     }
 
     public function iniciarAtendimento($pedido_id, $dados)
@@ -335,16 +331,15 @@ class PedidoService
 
             DB::commit();
             return array(
-                'status' 	=> true,
-                'mensagem' 	=> "Atendimento iniciado com sucesso",
-                'dados' 	=>  []
+                'status'     => true,
+                'mensagem'     => "Atendimento iniciado com sucesso",
+                'dados'     =>  []
             );
-
         } catch (Exception $ex) {
             DB::rollBack();
             return array(
-                'status' 	=> false,
-                'mensagem' 	=> "Erro ao iniciar o atendimento",
+                'status'     => false,
+                'mensagem'     => "Erro ao iniciar o atendimento",
                 'exception' => $ex->getMessage()
             );
         }
@@ -566,8 +561,8 @@ class PedidoService
     {
         $horario_agora = time();
         $arquivoDados = array(
-            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora)),
-            "nome_arquivo_completo" => str_replace(' ','_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME)."_".$horario_agora.".".$arquivo->getClientOriginalExtension()),
+            "nome_arquivo" => str_replace(' ', '_', (pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME) . "_" . $horario_agora)),
+            "nome_arquivo_completo" => str_replace(' ', '_', pathinfo($arquivo->getClientOriginalName(), PATHINFO_FILENAME) . "_" . $horario_agora . "." . $arquivo->getClientOriginalExtension()),
             "extensao" => $arquivo->getClientOriginalExtension(),
             "tamanho" => $arquivo->getSize()
         );
@@ -605,5 +600,4 @@ class PedidoService
 
         return false;
     }
-
 }
