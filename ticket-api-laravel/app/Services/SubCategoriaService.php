@@ -113,7 +113,7 @@ class SubCategoriaService
             return array(
                 "status" => true,
                 "mensagem" => "SubCategoria carregada com sucesso",
-                "dados" => $this->repository->obter($id)
+                "dados" => $this->repository->obter($id, ['responsavel', 'grupo'])
             );
         } catch (Exception $ex) {
             DB::rollBack();

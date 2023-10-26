@@ -12,6 +12,9 @@ rodar: npm run dev
 ticket-api-laravel\.env senha BD
 rodar: php artisan serve --port=9000
 
+rodar front
+npm start
+
 Tirado fora:
 1) tratativas UF
 2) abertura_chamado (pedido)
@@ -124,4 +127,9 @@ php artisan migrate
 ************************************************************
 
 
-### Retornar nome do responsavel na rota: api/grupo/listar/12
+### Retornar nome do responsavel na rota: api/grupo/listar/12 OK
+
+SAMUEL
+Ajustado retorno de responsável ou grupo nas rotas:
+	api/categoria/{id}
+	api/sub_categoria/{id}

@@ -135,7 +135,7 @@ class CategoriaService
             return array(
                 "status" => true,
                 "mensagem" => "Categoria carregada com sucesso",
-                "dados" => $this->repository->obter($id, ['subCategorias', 'adicionais'])
+                "dados" => $this->repository->obter($id, ['subCategorias', 'responsavel', 'grupo'])
             );
         } catch (Exception $ex) {
             DB::rollBack();

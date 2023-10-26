@@ -62,4 +62,14 @@ class Categoria extends Model
     {
         $this->attributes['titulo'] = strtoupper($value);
     }
+
+    public function responsavel()
+    {
+        return $this->hasMany(User::class, "id", "responsavel_id")->select("id", "name");
+    }
+
+    public function grupo()
+    {
+        return $this->hasMany(Grupo::class, "id", "equipe_id")->select("id", "titulo");
+    }
 }
