@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Axios from 'axios';
+import Axios from "axios";
 
 const columns = [
   { id: "name", label: "#", minWidth: 170 },
@@ -55,12 +55,12 @@ const rows = [
   createData("3", "20/09/2023", 'TI', 'Diel', 'OK'),
 ];
 
-export default function MyService () {
+export default function MyRequests () {
     const [status, setStatus] = useState('');
     const [statusList, setStatusList] = useState([]);
     const [prioridade, setPrioridade] = useState("");
     const [prioridadeList, setPrioridadeList] = useState([]);
-    const [solicitante, setSolicitante] = useState("");
+    const [responsavel, setResponsavel] = useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -98,7 +98,7 @@ export default function MyService () {
             <Header drawer={true} />
             <div style={{ width: "100%", height: "200px", display: 'flex', justifyContent: 'center' }}>
             <div style={{width: '98%', height: 'fit-content'}}>
-                <h2>{"Solicitações > Meus Atendimentos"}</h2>
+                <h2>{"Solicitações > Minhas Solicitações"}</h2>
                 <Divider />
                 <div style={{width: '100%', height: 'fit-content', display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
                     <div style={{width: '95%', display: 'flex', justifyContent: 'space-between'}}>
@@ -132,11 +132,11 @@ export default function MyService () {
                         </div>
                         <div style={{width: '30%'}}>
                             <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Solicitante</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Responsável</InputLabel>
                                 <Select
-                                value={solicitante}
-                                label="Solicitante"
-                                onChange={e => setSolicitante(e.target.value)}
+                                value={responsavel}
+                                label="Responsável"
+                                onChange={e => setResponsavel(e.target.value)}
                                 >
                                 <MenuItem value={10}>Ten</MenuItem>
                                 <MenuItem value={20}>Twenty</MenuItem>

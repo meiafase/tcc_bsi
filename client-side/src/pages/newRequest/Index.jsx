@@ -17,8 +17,8 @@ import Axios from 'axios';
 export default function NewRequest() {
 
   const navigate = useNavigate();
-  const [setor, setSetor] = useState('');
-  const [setorList, setSetorList] = useState([])
+  const [area, setArea] = useState('');
+  const [areaList, setAreaList] = useState([])
   const [assunto, setAssunto] = useState('');
   const [assuntoList, setAssuntoList] = useState([])
   const [categoria, setCategoria] = useState('');
@@ -36,7 +36,7 @@ export default function NewRequest() {
   useEffect(() => {
     const getInfos = async () => {
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/`, config).then(res => {
-        setSetorList(res.data.dados);
+        setAreaList(res.data.dados);
       }).catch(err => {});
 
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/12/assuntoAtivo`, config).then(res => {
@@ -64,7 +64,7 @@ export default function NewRequest() {
   }, [setAssuntoList, assunto, setCategoria, categoria])
 
   const handleChangeSetor = (event) => {
-    setSetor(event.target.value);
+    setArea(event.target.value);
   };
   const handleChangeAssunto = (event) => {
     setAssunto(event.target.value);
@@ -78,7 +78,7 @@ export default function NewRequest() {
 
   const handleSaveInfos = async () => {
     let formData = new FormData();
-    formData.append("area_id", setor);
+    formData.append("area_id", area);
     formData.append("assunto_id", assunto);
     formData.append("categoria_id", categoria);
     formData.append("sub_categoria_id", subcategoria);
@@ -94,7 +94,7 @@ export default function NewRequest() {
   }
 
   const handleValidateInputs = () => {
-    if(setor) {
+    if(area) {
       if(assunto) {
         if(categoria) {
           if(descricaoAtual) {
@@ -137,18 +137,18 @@ export default function NewRequest() {
             <div style={{ width: "90%", height: "fit-content", display: 'flex', justifyContent: 'space-between' }} >
               <div style={{width: '40%'}}>
                 <FormControl style={{marginBottom: '30px'}} fullWidth>
-                  <InputLabel>Setor</InputLabel>
+                  <InputLabel>Área</InputLabel>
                   <Select
-                    value={setor}
-                    label="Setor"
+                    value={area}
+                    label="Área"
                     onChange={handleChangeSetor}
                   >
-                    {setorList.map(set => (
+                    {areaList.map(set => (
                       <MenuItem value={set.id}>{set.titulo}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl style={{marginBottom: '30px', display: setor === '' ? 'none' : 'flex'}} fullWidth>
+                <FormControl style={{marginBottom: '30px', display: area === '' ? 'none' : 'flex'}} fullWidth>
                   <InputLabel>Assunto</InputLabel>
                   <Select
                     value={assunto}

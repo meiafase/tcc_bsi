@@ -88,7 +88,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="minhasSolicitacoes" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("../MinhasSolicitacoes")}>
             <ListItemIcon>
               <ChecklistIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -104,7 +104,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="solicitacoesArea" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate('../SolicitacoesArea')}>
             <ListItemIcon>
               <RequestPageIcon sx={{ color: "black" }} />
             </ListItemIcon>
