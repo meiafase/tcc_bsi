@@ -119,6 +119,9 @@ Listar pedidos:		POST	api/pedido/listar-pedidos/ payload {status_id, prioridade_
 Email
 
 ************************************************************
-@SAMUEL dar o pull e rodar o comando, no projeto Laravel:
+@SAMUEL dar o pull e rodar o comando, no projeto Laravel: OK
 php artisan migrate
 ************************************************************
+
+
+### Retornar nome do responsavel na rota: api/grupo/listar/12
