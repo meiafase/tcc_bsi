@@ -71,7 +71,6 @@ class PedidoService
             $dadosPedido['responsavel_id'] = $this->definirResponsavel($dados['dadosPedido']);
 
             $pedido = $this->repository->criar($dadosPedido);
-
             //Cadastro mensagem
             $mensagem = $this->mensagemService->cadastrar($pedido->id, $dados['usuario']->id, $dados['mensagem']);
 
@@ -198,15 +197,21 @@ class PedidoService
 
     private function verificaFeriado($data_hora)
     {
+        // $ano = "";
         $ano = $data_hora->year;
+        $feriados = [];
+
         $feriados = Http::get("https://brasilapi.com.br/api/feriados/v1/" . $ano);
-        $feriados = json_decode($feriados);
 
-        $data_formatada = $data_hora->format('Y-m-d');
+        if (json_decode($feriados)) {
+            $feriados = json_decode($feriados);
 
-        foreach ($feriados as $feriado) {
-            if ($feriado->date === $data_formatada) {
-                return true;
+            $data_formatada = $data_hora->format('Y-m-d');
+
+            foreach ($feriados as $feriado) {
+                if ($feriado->date === $data_formatada) {
+                    return true;
+                }
             }
         }
         return false;
