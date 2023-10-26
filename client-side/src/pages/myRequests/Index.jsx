@@ -98,7 +98,9 @@ export default function MyRequests () {
             <Header drawer={true} />
             <div style={{ width: "100%", height: "200px", display: 'flex', justifyContent: 'center' }}>
             <div style={{width: '98%', height: 'fit-content'}}>
-                <h2>{"Solicitações > Minhas Solicitações"}</h2>
+            <div style={{ marginLeft: "50px", padding: "10px" }}>
+                <h2>Solicitações {">"} Minhas Solicitações</h2>
+            </div>
                 <Divider />
                 <div style={{width: '100%', height: 'fit-content', display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
                     <div style={{width: '95%', display: 'flex', justifyContent: 'space-between'}}>
