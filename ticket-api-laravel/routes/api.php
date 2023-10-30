@@ -89,4 +89,5 @@ Route::prefix('pedido')->middleware('auth:sanctum')->group(function () {
     Route::patch('/{pedido_id}/alterar-status', [PedidoController::class, 'alterarStatus']);
     Route::post('/{pedido_id}/avaliacao/', [PedidoController::class, 'cadastrarAvaliacao']);
     Route::get('/{pedido_id}/historico/', [PedidoController::class, 'buscarHistorico']);
+    Route::patch('/{id}/atribuir', [PedidoController::class, 'atribuirUsuario']);
 });

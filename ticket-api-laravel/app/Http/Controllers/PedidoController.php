@@ -63,5 +63,8 @@ class PedidoController extends Controller
     {
         return $this->service->listarPedidos($request->dataRequest());
     }
-
+    public function atribuirUsuario(int $id, PedidoRequest $request)
+    {
+        return $this->service->atribuirUsuario($id, $request->dataRequest());
+    }
 }

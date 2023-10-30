@@ -133,3 +133,6 @@ SAMUEL
 Ajustado retorno de responsável ou grupo nas rotas:
 	api/categoria/{id}
 	api/sub_categoria/{id}
+
+Criada Rota Atribuir responsavel (interagir e inicar pedido)
+	PATCH 		api/pedido/{pedido_id}/atribuir payload {"responsavel_id"}

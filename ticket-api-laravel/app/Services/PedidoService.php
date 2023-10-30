@@ -562,6 +562,40 @@ class PedidoService
         }
     }
 
+    public function atribuirUsuario($pedido_id, $dados)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $usuario_id = $dados['usuario']->id;
+            $novo_responsavel_id = $dados['responsavel_id'];
+
+            $this->repository->atualizarColuna($pedido_id, array('responsavel_id' => $novo_responsavel_id));
+
+            $novo_responsavel = $this->usuarioService->buscar($novo_responsavel_id);
+            $nome = $novo_responsavel['dados']['name'];
+
+            $this->historicoService->cadastrar($usuario_id, $pedido_id, "Pedido atribuído para {$nome}");
+
+            DB::commit();
+
+            return array(
+                'status' => true,
+                'mensagem' => "Responsável atribuído com sucesso",
+                'dados' => []
+            );
+        } catch (Exception $ex) {
+            DB::rollBack();
+
+            return array(
+                'status' => false,
+                'mensagem' => 'Erro ao atribuir o responsável',
+                'exception' => $ex
+            );
+        }
+    }
+
     private function enviarArquivo($arquivo)
     {
         $horario_agora = time();
