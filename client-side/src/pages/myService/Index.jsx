@@ -11,49 +11,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Axios from 'axios';
 
-const columns = [
-  { id: "name", label: "#", minWidth: 170 },
-  { id: "code", label: "Enviado em", minWidth: 100 },
-  {
-    id: "population",
-    label: "Setor/Área",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Responsável",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "density",
-    label: "Status",
-    minWidth: 170,
-    align: "right",
-  },
-  {
-    id: "density",
-    label: "Prazo",
-    minWidth: 170,
-    align: "right",
-  },
-];
-
-function createData(name, code, population, size, density) {
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("1", "20/09/2023", 'TI', 'Diel', 'OK'),
-  createData("2", "20/09/2023", 'TI', 'Diel', 'OK'),
-  createData("3", "20/09/2023", 'TI', 'Diel', 'OK'),
-];
 
 export default function MyService () {
     const [status, setStatus] = useState('');
@@ -61,8 +21,8 @@ export default function MyService () {
     const [prioridade, setPrioridade] = useState("");
     const [prioridadeList, setPrioridadeList] = useState([]);
     const [solicitante, setSolicitante] = useState("");
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [solicitanteList, setSolicitanteList] = useState([]);
+    const [rows, setRows] = useState([]);
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -78,20 +38,32 @@ export default function MyService () {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/prioridade`, config).then(res => {
                 setPrioridadeList(res.data.dados);
             }).catch(err => {});
+
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/filtrar/1`, config).then(res => {
+                setSolicitanteList(res.data.dados);
+            }).catch(err => {});
         }
 
         getInfos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    };
+
+    useEffect(() => {
+        const filterTable = async () => {
+            await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/listar-pedidos`, {
+                "tipo": "minhas",
+                status_id: status,
+                prioridade_id: prioridade,
+                solicitante_id: solicitante
+            }, config).then(res => {
+                setRows(res.data.dados)
+            }).catch(err => {})
+        }
+
+        filterTable()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status, setStatus, prioridade, setPrioridade, solicitante, setSolicitante])
+
 
     return(
         <>
@@ -140,62 +112,46 @@ export default function MyService () {
                                 label="Solicitante"
                                 onChange={e => setSolicitante(e.target.value)}
                                 >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {solicitanteList.map((prioridade) => (
+                                    <MenuItem value={prioridade.id}>{prioridade.name}</MenuItem>
+                                ))}
                                 </Select>
                             </FormControl>
                         </div>
                     </div>
                 </div>
-                    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: '40px' }}>
-                        <TableContainer sx={{ maxHeight: 650 }}>
-                            <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                    >
-                                    {column.label}
-                                    </TableCell>
-                                ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
-                                        const value = row[column.id];
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                            {column.format && typeof value === "number"
-                                                ? column.format(value)
-                                                : value}
-                                            </TableCell>
-                                        );
-                                        })}
-                                    </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
+                <TableContainer component={Paper} sx={{marginTop: '50px'}}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Enviado Em</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Área</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Assunto</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Responsável</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Status</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Prazo</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {rows.map((row) => (
+                            <TableRow
+                            key={row.id}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', ":hover": {backgroundColor: '#cccccc'} }}
+                            onClick={e => alert(row.id)}
+                            >
+                            <TableCell component="th" scope="row">{row.id}</TableCell>
+                            <TableCell align="right">{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                            <TableCell align="right">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
+                            <TableCell align="right">{row.assunto ? row.assunto : "---"}</TableCell>
+                            <TableCell align="right">{row.responsavel ? row.responsavel : "---"}</TableCell>
+                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}}>{row.status ? row.status : "---"}</TableCell>
+                            <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}}>{row.prazo ? row.prazo : "---"}</TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </TableContainer>
                 </div>
             </div>
         </>

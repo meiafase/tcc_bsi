@@ -83,9 +83,9 @@ export default function NewRequest() {
     formData.append("categoria_id", categoria);
     formData.append("sub_categoria_id", subcategoria);
     formData.append("mensagem", descricaoAtual);
-    Object.keys(upload).map(fileKey => {
-      return formData.append("anexo", upload[fileKey], upload[fileKey].name)
-    });
+    formData.append("anexo", [upload[0]]);
+
+    //console.log(area, assunto, categoria, subcategoria, descricaoAtual, upload[0].name)
 
     await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido`, formData, config, { headers: { "Content-Type": "multipart/form-data" } } ).then(res => {
       console.log(res.data);
