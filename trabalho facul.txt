@@ -136,3 +136,15 @@ Ajustado retorno de responsável ou grupo nas rotas:
 
 Criada Rota Atribuir responsavel (interagir e inicar pedido)
 	PATCH 		api/pedido/{pedido_id}/atribuir payload {"responsavel_id"}
+
+
+####
+	Verificar se o usuario esta logado para ter acesso as páginas
+	adicionar alerts personalizados
+	melhorar o design das paginas
+####
+
+meus atendimentos mudar responsavel por solicitante
+
+revisar documentação, verificar se diz algo sobre enviar mais de um anexo ao cadastrar
+pedido, se caso tiver, mudar para enviar apenas um anexo, ou uma pasta compactada.

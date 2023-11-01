@@ -13,6 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
+import BackDrop from "../components/backdrop/Index";
 
 export default function NewRequest() {
 
@@ -28,6 +29,7 @@ export default function NewRequest() {
   const [descricao, setDescricao] = useState("");
   const [descricaoAtual, setDescricaoAtual] = useState("");
   const [upload, setUpload] = useState(false);
+  const [openBackdrop, setOpenBackdrop] = useState(false)
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -77,18 +79,29 @@ export default function NewRequest() {
   };
 
   const handleSaveInfos = async () => {
+    setOpenBackdrop(true)
     let formData = new FormData();
     formData.append("area_id", area);
     formData.append("assunto_id", assunto);
     formData.append("categoria_id", categoria);
     formData.append("sub_categoria_id", subcategoria);
     formData.append("mensagem", descricaoAtual);
-    formData.append("anexo", [upload[0]]);
+    formData.append("anexo[0]", upload[0]);
 
-    //console.log(area, assunto, categoria, subcategoria, descricaoAtual, upload[0].name)
+    //console.log(area, assunto, categoria, subcategoria, descricaoAtual, upload)
 
     await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido`, formData, config, { headers: { "Content-Type": "multipart/form-data" } } ).then(res => {
-      console.log(res.data);
+      if(res.data.status) {
+        setArea("");
+        setAssunto("");
+        setCategoria("");
+        setSubcategoria("");
+        setDescricaoAtual("");
+        setDescricao("");
+        setUpload(false);
+        alert('Pedido Cadastrado com sucesso!')
+        setOpenBackdrop(false)
+      }
     }).catch(err => {console.log(err)})
 
   }
@@ -200,6 +213,7 @@ export default function NewRequest() {
               <TextField
                 fullWidth
                 label="Descrição"
+                value={descricaoAtual}
                 onChange={e => setDescricaoAtual(e.target.value)}
                 multiline
                 rows={12}
@@ -229,6 +243,7 @@ export default function NewRequest() {
           </div>
         </div>
       </div>
+      <BackDrop openBackdrop={openBackdrop} />
     </>
   );
 }

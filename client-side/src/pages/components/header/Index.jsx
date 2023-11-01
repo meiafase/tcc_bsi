@@ -19,7 +19,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 import RequestPageIcon from "@mui/icons-material/RequestPage";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import AddIcon from "@mui/icons-material/Add";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import GroupIcon from "@mui/icons-material/Group";
@@ -114,14 +113,6 @@ export default function Header(props) {
       </List>
       <Divider />
       <List>
-        <ListItem key="relatorios" disablePadding>
-          <ListItemButton onClick={() => navigate("../Relatorio")}>
-            <ListItemIcon>
-              <QueryStatsIcon sx={{ color: "black" }} />
-            </ListItemIcon>
-            <ListItemText primary="Relatórios" />
-          </ListItemButton>
-        </ListItem>
         <ListItem key="usuariosGrupos" disablePadding>
           <ListItemButton
             onClick={() => navigate("../Configuracoes/Permissoes")}
