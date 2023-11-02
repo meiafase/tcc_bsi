@@ -72,7 +72,7 @@ export default function AreaRequests () {
             <Header drawer={true} />
             <div style={{ width: "100%", height: "fit-content", display: 'flex', justifyContent: 'center' }}>
             <div style={{width: '98%', height: 'fit-content'}}>
-            <div style={{ marginLeft: "50px", padding: "10px" }}>
+            <div style={{ marginLeft: "50px", padding: "10px" }} aria-label="Solicitações > Solicitações da Área">
                 <h2>Solicitações {">"} Solicitações da Área</h2>
             </div>
                 <Divider />
@@ -123,16 +123,16 @@ export default function AreaRequests () {
                     </div>
                 </div>
                 <TableContainer component={Paper} sx={{marginTop: '50px'}}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table sx={{ minWidth: 650 }} aria-label="Tabela Serviços">
                         <TableHead>
                         <TableRow>
-                            <TableCell>#</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Enviado Em</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Área</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Assunto</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Responsável</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Status</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Prazo</TableCell>
+                            <TableCell aria-label="Número">#</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Enviado Em">Enviado Em</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Área">Área</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Assunto">Assunto</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Responsável">Responsável</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Status">Status</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Prazo">Prazo</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
@@ -142,13 +142,13 @@ export default function AreaRequests () {
                             sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', ":hover": {backgroundColor: '#cccccc'} }}
                             onClick={e => alert(row.id)}
                             >
-                            <TableCell component="th" scope="row">{row.id}</TableCell>
-                            <TableCell align="right">{row.enviado_em ? row.enviado_em : "---"}</TableCell>
-                            <TableCell align="right">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
-                            <TableCell align="right">{row.assunto ? row.assunto : "---"}</TableCell>
-                            <TableCell align="right">{row.responsavel ? row.responsavel : "---"}</TableCell>
-                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}}>{row.status ? row.status : "---"}</TableCell>
-                            <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}}>{row.prazo ? row.prazo : "---"}</TableCell>
+                            <TableCell component="th" scope="row" aria-label={`Número: ${row.id}`}>{row.id}</TableCell>
+                            <TableCell align="right" aria-label={`Enviado Em: ${row.enviado_em ? row.enviado_em : '---'}`}>{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                            <TableCell align="right" aria-label={`Área: ${row.area_pedido ? row.area_pedido : '---'}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
+                            <TableCell align="right" aria-label={`Assunto: ${row.assunto ? row.assunto : '---'}`}>{row.assunto ? row.assunto : "---"}</TableCell>
+                            <TableCell align="right" aria-label={`Responsável: ${row.responsavel ? row.responsavel : '---'}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>
+                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}} aria-label={`Status: ${row.status ? row.status : '---'}`}>{row.status ? row.status : "---"}</TableCell>
+                            <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}} aria-label={`Prazo: ${row.prazo ? row.prazo : '---'}`}>{row.prazo ? row.prazo : "---"}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>

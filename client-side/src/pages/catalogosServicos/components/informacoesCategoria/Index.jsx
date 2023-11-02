@@ -108,7 +108,7 @@ export default function InformacoesCategoria (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                <b>Assunto</b> <b onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{nomeCategoria}</b>
+                <b>Assunto</b> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}} aria-label={`Categoria: ${nomeCategoria}`}>{nomeCategoria}</b>
                 </p>
             </div>
             <Divider />
@@ -122,13 +122,13 @@ export default function InformacoesCategoria (props) {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={Number(prioridade)}
-                            label="Prioridade"
+                            label="Selecione a prioridade da categoria"
                             onChange={handleChange}
                             >
-                            <MenuItem value={1}>Baixa</MenuItem>
-                            <MenuItem value={2}>Média</MenuItem>
-                            <MenuItem value={3}>Alta</MenuItem>
-                            <MenuItem value={4}>Muito Alta</MenuItem>
+                            <MenuItem value={1} aria-label="Prioridade Baixa">Baixa</MenuItem>
+                            <MenuItem value={2} aria-label="Prioridade Média">Média</MenuItem>
+                            <MenuItem value={3} aria-label="Prioridade Alta">Alta</MenuItem>
+                            <MenuItem value={4} aria-label="Prioridade Muito Alta">Muito Alta</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -185,7 +185,7 @@ export default function InformacoesCategoria (props) {
             </div>
             <Divider />
             <div style={{display: 'flex', justifyContent: 'flex-end', padding: '20px'}}>
-                <Button variant="contained" endIcon={<CloudQueueIcon />} onClick={validateInputs}>
+                <Button variant="contained" endIcon={<CloudQueueIcon />} onClick={validateInputs} aria-label="Salvar">
                     salvar
                 </Button>
             </div>

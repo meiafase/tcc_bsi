@@ -80,6 +80,7 @@ export default function Header(props) {
                 size="small"
                 variant="contained"
                 onClick={() => navigate("../NovaSolicitacao")}
+                aria-label="Nova Solicitação"
               >
                 Nova Solicitação
               </Button>
@@ -87,7 +88,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="minhasSolicitacoes" disablePadding>
-          <ListItemButton onClick={() => navigate("../MinhasSolicitacoes")}>
+          <ListItemButton onClick={() => navigate("../MinhasSolicitacoes")} aria-label="Minhas Solicitações">
             <ListItemIcon>
               <ChecklistIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -95,7 +96,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="meusAtendimentos" disablePadding>
-          <ListItemButton onClick={() => navigate("../MeusAtendimentos")}>
+          <ListItemButton onClick={() => navigate("../MeusAtendimentos")} aria-label="Meus Atendimentos">
             <ListItemIcon>
               <ChecklistIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -103,7 +104,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="solicitacoesArea" disablePadding>
-          <ListItemButton onClick={() => navigate('../SolicitacoesArea')}>
+          <ListItemButton onClick={() => navigate('../SolicitacoesArea')} aria-label="Solicitações da Área">
             <ListItemIcon>
               <RequestPageIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -115,7 +116,7 @@ export default function Header(props) {
       <List>
         <ListItem key="usuariosGrupos" disablePadding>
           <ListItemButton
-            onClick={() => navigate("../Configuracoes/Permissoes")}
+            onClick={() => navigate("../Configuracoes/Permissoes")} aria-label="Usuários e Grupos"
           >
             <ListItemIcon>
               <GroupIcon sx={{ color: "black" }} />
@@ -124,7 +125,7 @@ export default function Header(props) {
           </ListItemButton>
         </ListItem>
         <ListItem key="catalogoServico" disablePadding>
-          <ListItemButton onClick={() => navigate("../Configuracoes/Catalogo")}>
+          <ListItemButton onClick={() => navigate("../Configuracoes/Catalogo")} aria-label="Catálogos de Serviços">
             <ListItemIcon>
               <AccountTreeIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -140,6 +141,7 @@ export default function Header(props) {
               localStorage.removeItem("id");
               navigate("../Login");
             }}
+            aria-label="Sair"
           >
             <ListItemIcon>
               <LogoutIcon sx={{ color: "red" }} />
@@ -161,7 +163,7 @@ export default function Header(props) {
                 size="large"
                 edge="start"
                 color="inherit"
-                aria-label="open drawer"
+                aria-label="Abrir menu"
                 sx={{ mr: 2 }}
                 onClick={() => {
                   setOpenDrawer(true);
@@ -177,6 +179,7 @@ export default function Header(props) {
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
+              aria-label="Título do sistema: Sistema de Solicitações"
             >
               Sistema de Solicitações{" "}
             </Typography>
@@ -187,13 +190,14 @@ export default function Header(props) {
                   avatar={<Avatar>{nomeUser.slice(0, 1)}</Avatar>}
                   label={nomeUser}
                   sx={{ color: "white" }}
+                  aria-label={`Nome do usuário: ${nomeUser}`}
                 />
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
-                aria-label="show more"
+                aria-label="Ver mais"
                 aria-controls={mobileMenuId}
                 aria-haspopup="true"
                 color="inherit"
@@ -208,6 +212,7 @@ export default function Header(props) {
         anchor="left"
         open={openDrawer}
         onClose={toggleDrawer("left", false)}
+        aria-label="Navegação lateral"
       >
         {list("left")}
       </Drawer>

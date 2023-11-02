@@ -74,7 +74,13 @@ export default function Assunto(props) {
         }}
       >
         <p style={{ fontSize: "19px" }}>
-          <b>Assunto</b> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b>
+          <b id="assuntoLabel">Assunto</b>{" "}
+          <b
+            style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
+            aria-labelledby="assuntoLabel"
+          >
+            {props.nomeAssunto}
+          </b>
         </p>
         <div style={{ marginTop: "10px" }}>
         <FormControlLabel
@@ -84,7 +90,7 @@ export default function Assunto(props) {
             label="Ativar"
             labelPlacement="start"
           />
-          <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => {setIdAssunto(props.idAssunto); setOpenCadastrarCategoria(true)}}>
+          <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => {setIdAssunto(props.idAssunto); setOpenCadastrarCategoria(true)}} aria-label="Adicionar Categoria">
             Adicionar Categoria
           </Button>
         </div>
@@ -101,13 +107,13 @@ export default function Assunto(props) {
                 </div>
               }   
             >
-              <ListItemButton onClick={categoria.possui_subcategorias ? () => {props.setShowAssunto('subcategorias'); props.setIdCategoria(categoria.id)} : () => {props.setShowAssunto('informacaoCategoria'); props.setIdCategoria(categoria.id)}}>
+              <ListItemButton onClick={categoria.possui_subcategorias ? () => {props.setShowAssunto('subcategorias'); props.setIdCategoria(categoria.id)} : () => {props.setShowAssunto('informacaoCategoria'); props.setIdCategoria(categoria.id)}} aria-label={`Categoria: ${categoria.titulo}`} aria-describedby={`categoriaStatus${categoria.id}`}>
                 <ListItemAvatar>
                   <CircleIcon sx={{ color: categoria.ativo ? "green": "red" }} />
                 </ListItemAvatar>
                 <ListItemText primary={categoria.titulo} secondary={categoria.sub_categorias.length === 0 ? 'Não possui subcategorias' : categoria.sub_categorias.length + " subcategoria(s)"}/>
               </ListItemButton>
-              {categoria.possui_subcategorias ? categoria.sub_categorias.length !== 0 ? "": <Alert severity="warning" style={{ marginRight: '40px'}}>Requer adição de subcategorias.</Alert> : categoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}}>Adicionar informações básicas.</Alert>}
+              {categoria.possui_subcategorias ? categoria.sub_categorias.length !== 0 ? "": <Alert severity="warning" style={{ marginRight: '40px'}} aria-label="Requer adição de subcategorias">Requer adição de subcategorias.</Alert> : categoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}} aria-label="Adicionar informações básicas">Adicionar informações básicas.</Alert>}
             </ListItem>
           );
         })}

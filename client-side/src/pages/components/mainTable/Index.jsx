@@ -64,7 +64,7 @@ export default function MainTable() {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 650 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" summary="Tabela de dados com informações importantes">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -72,6 +72,8 @@ export default function MainTable() {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  aria-label={column.label}
+                  scope="col"
                 >
                   {column.label}
                 </TableCell>
@@ -87,7 +89,7 @@ export default function MainTable() {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id} align={column.align} aria-label={`Célula ${column.label}: ${value}`}>
                           {column.format && typeof value === "number"
                             ? column.format(value)
                             : value}
@@ -108,6 +110,7 @@ export default function MainTable() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Linhas por página:"
       />
     </Paper>
   );

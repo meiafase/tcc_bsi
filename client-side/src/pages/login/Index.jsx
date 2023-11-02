@@ -123,7 +123,7 @@ export default function Index() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="visualizar senha"
+                    aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                     edge="end"

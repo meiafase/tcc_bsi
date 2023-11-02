@@ -52,14 +52,15 @@ export default function DialogCadastrarSubcategorias(props) {
             margin="dense"
             id="name"
             value={subcategorias}
-            label="Nome Categoria"
+            label="Nome Subcategoria"
             fullWidth
             onChange={e => setSubcategorias(e.target.value)}
+            aria-label="Campo de entrada para nome da subcategoria"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained'>Cancelar</Button>
-          <Button onClick={handleValidateInput} color='success' variant='contained'>Cadastrar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão de cancelar">Cancelar</Button>
+          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar subcategoria">Cadastrar</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -223,7 +223,7 @@ export default function NewRequest() {
                   <div style={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}>
                     <Button component="label" variant="contained" color={upload ? "success" : "error"} startIcon={<CloudUploadIcon />}>
                       {upload ? "Arquivo selecionado" : "Enviar arquivo"}
-                      <input hidden type="file" onChange={e => setUpload(e.target.files)} />
+                      <input hidden type="file" onChange={e => setUpload(e.target.files)} aria-label="Selecionar arquivo para envio"/>
                     </Button>
                   </div>
                   <h3>Envie preferencialmente os arquivos em .zip</h3>
@@ -234,10 +234,10 @@ export default function NewRequest() {
           </div>
           <Divider />
           <div style={{width: '100%', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
-          <Button color="error" variant="outlined" onClick={() => navigate('../MeusAtendimentos')} startIcon={<CloseIcon />}>
+          <Button color="error" variant="outlined" onClick={() => navigate('../MeusAtendimentos')} startIcon={<CloseIcon />} aria-label="Cancelar">
             Cancelar
           </Button>
-          <Button variant="contained" color="success" onClick={handleValidateInputs} endIcon={<SendIcon />}>
+          <Button variant="contained" color="success" onClick={handleValidateInputs} endIcon={<SendIcon />} aria-label="Enviar">
             Enviar
           </Button>
           </div>

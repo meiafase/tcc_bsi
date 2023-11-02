@@ -86,7 +86,7 @@ export default function FirstLogin(props) {
           <DialogContentText>
             {"Altere a sua senha."}
             <FormControl margin="dense" fullWidth variant="outlined" sx={{ marginTop: '20px' }}>
-              <InputLabel>Senha</InputLabel>
+              <InputLabel htmlFor="senha">Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
                 onChange={(e) => { setErroSenha(false); setSenha(e.target.value) }}
@@ -97,6 +97,7 @@ export default function FirstLogin(props) {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
+                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -106,7 +107,7 @@ export default function FirstLogin(props) {
               />
             </FormControl>
             <FormControl margin="dense" fullWidth variant="outlined">
-              <InputLabel>Confirmar Senha</InputLabel>
+              <InputLabel htmlFor="confirmarSenha">Confirmar Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
                 onChange={(e) => { setErroSenha(false); setConfirmarSenha(e.target.value) }}
@@ -117,6 +118,7 @@ export default function FirstLogin(props) {
                       onClick={handleClickShowPasswordTwo}
                       onMouseDown={handleMouseDownPasswordTwo}
                       edge="end"
+                      aria-label={showPasswordTwo ? "Ocultar senha" : "Mostrar senha"}
                     >
                       {showPasswordTwo ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -133,6 +135,7 @@ export default function FirstLogin(props) {
             size="large"
             color="success"
             variant="contained"
+            aria-label="Salvar senha"
           >
             Salvar senha
           </Button>

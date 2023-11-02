@@ -65,7 +65,7 @@ export default function CatalogoServico() {
           >
             <h3>Assuntos</h3>
             <IconButton>
-              <AddIcon sx={{ color: "green", fontSize: "40px" }} onClick={() => setOpenCadastrarAssunto(true)} />
+              <AddIcon sx={{ color: "green", fontSize: "40px" }} alt="Adicionar Assunto" onClick={() => setOpenCadastrarAssunto(true)} />
             </IconButton>
           </div>
           <Divider />
@@ -79,7 +79,7 @@ export default function CatalogoServico() {
                     listStyle: "none",
                     cursor: "pointer",
                   }}
-                  onClick={() => {setShowAssunto('assunto'); setIdAssunto(assunto.id); setNomeAssunto(assunto.titulo); setAtivo(assunto.ativo)}}
+                  onClick={() => {setShowAssunto('assunto'); setIdAssunto(assunto.id); setNomeAssunto(assunto.titulo); setAtivo(assunto.ativo)}} role="button" aria-label={assunto.ativo ? "Assunto ativo" : "Assunto inativo"}
                 >
                   <CircleIcon
                     sx={{
@@ -95,15 +95,15 @@ export default function CatalogoServico() {
         </div>
         <div style={{ width: "74%", height: "300px" }}>
           {showAssunto === 'assunto' ? (
-            <Assunto setIdCategoria={setIdCategoria} idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto}/>
+            <Assunto setIdCategoria={setIdCategoria} idAssunto={idAssunto} nomeAssunto={nomeAssunto} ativo={ativo} setAtivo={setAtivo}  setShowAssunto={setShowAssunto} showAssunto={showAssunto} aria-label="Seção de Assunto"/>
           ) : showAssunto === 'informacaoCategoria' ? (
-            <InformacoesCategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} />
+            <InformacoesCategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} aria-label="Seção de Informações da Categoria" />
           ) : showAssunto === 'subcategorias' ? (
-              <Subcategorias nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} setIdSubcategoria={setIdSubcategoria} nomeSubcategoria={nomeSubcategoria} setNomeSubcategoria={setNomeSubcategoria} />
+              <Subcategorias nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} setIdSubcategoria={setIdSubcategoria} nomeSubcategoria={nomeSubcategoria} setNomeSubcategoria={setNomeSubcategoria} aria-label="Seção de Subcategorias" />
           ) : showAssunto === 'informacaoSubcategoria' ? (
-              <InformacoesSubcategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} idSubcategoria={idSubcategoria} nomeSubcategoria={nomeSubcategoria} />
+              <InformacoesSubcategoria nomeAssunto={nomeAssunto} idCategoria={idCategoria} setShowAssunto={setShowAssunto} idSubcategoria={idSubcategoria} nomeSubcategoria={nomeSubcategoria} aria-label="Seção de Informações da Subcategoria" />
           ) : (
-            <div style={{ padding: "10px" }}>
+            <div style={{ padding: "10px" }} aria-label="Seção de Aviso de Seleção de Assunto">
               <Alert severity="warning">
                 <b>Aviso!</b> Selecione algum assunto para prosseguir.
               </Alert>

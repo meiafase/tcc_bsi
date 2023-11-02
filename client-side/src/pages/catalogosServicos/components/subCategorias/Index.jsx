@@ -60,10 +60,10 @@ export default function Subcategorias (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                <b>Assunto</b> <b onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
+                <b>Assunto</b> <b onClick={() => props.setShowAssunto('assunto')} aria-label="Ir para a página de Assunto" style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b aria-label="Nome da Subcategoria" style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeSubcategoria}</b>
                 </p>
                 <div style={{ marginTop: "10px" }}>
-                <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCadastrarSubcategoria(true)}>
+                <Button sx={{marginLeft: '10px'}} variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCadastrarSubcategoria(true)} aria-label="Adicionar Subcategoria">
                     Adicionar Subcategoria
                 </Button>
                 </div>
@@ -71,7 +71,7 @@ export default function Subcategorias (props) {
             <Divider />
             <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
         {subCategoriasList.length === 0 ? (
-            <Alert severity="warning" style={{ marginRight: '40px', textAlign: 'center'}}>Esta categoria não possui nenhuma subcategoria ativa, portanto não será exibida no catálogo de serviços. Adicione uma subcategoria para exibir este assunto em seu catálogo.</Alert>
+            <Alert severity="warning" style={{ marginRight: '40px', textAlign: 'center'}} role="alert">Esta categoria não possui nenhuma subcategoria ativa, portanto não será exibida no catálogo de serviços. Adicione uma subcategoria para exibir este assunto em seu catálogo.</Alert>
         ) : (
             subCategoriasList.map((subcategoria) => {
                 return (
@@ -79,17 +79,17 @@ export default function Subcategorias (props) {
                     key={subcategoria.id}
                     secondaryAction={
                       <div style={{display: 'flex'}}>
-                        <FormControlLabel control={<Switch checked={subcategoria.ativo} onChange={e => {handleSwitch(e.target.checked, subcategoria.id)}} disabled={subcategoria.prioridade_id ? false : true} />} />
+                        <FormControlLabel control={<Switch checked={subcategoria.ativo} onChange={e => {handleSwitch(e.target.checked, subcategoria.id)}} disabled={subcategoria.prioridade_id ? false : true} aria-label="Ativar/Desativar Subcategoria" label="Ativar/Desativar"/>} />
                       </div>
                     }   
                   >
                     <ListItemButton onClick={() => {props.setShowAssunto('informacaoSubcategoria'); props.setIdSubcategoria(subcategoria.id)}}>
                       <ListItemAvatar>
-                        <CircleIcon sx={{ color: subcategoria.ativo ? "green": "red" }} />
+                        <CircleIcon sx={{ color: subcategoria.ativo ? "green": "red" }} aria-label={subcategoria.ativo ? 'Ativo' : 'Inativo'} />
                       </ListItemAvatar>
                       <ListItemText primary={subcategoria.titulo} secondary="Subcategoria"/>
                     </ListItemButton>
-                    {subcategoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}}>Adicionar informações básicas.</Alert>}
+                    {subcategoria.prioridade_id ? "" : <Alert severity="warning" style={{ marginRight: '40px'}} aria-label="Adicionar informações básicas">Adicionar informações básicas.</Alert>}
                   </ListItem>
                 );
               })

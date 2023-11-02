@@ -57,12 +57,13 @@ export default function DialogCadastrarCategoria(props) {
             label="Nome Categoria"
             fullWidth
             onChange={e => setCategoria(e.target.value)}
+            aria-label="Campo de entrada para nome da categoria"
           />
-          <FormControlLabel control={<Checkbox checked={subcategorias} onChange={e => setSubcategorias(e.target.checked)} />} label="Ativar subcategorias?" />
+          <FormControlLabel control={<Checkbox checked={subcategorias} onChange={e => setSubcategorias(e.target.checked)} aria-label="Ativar subcategorias" />} label="Ativar subcategorias?" />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained'>Cancelar</Button>
-          <Button onClick={handleValidateInput} color='success' variant='contained'>Cadastrar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão de cancelar">Cancelar</Button>
+          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar categoria">Cadastrar</Button>
         </DialogActions>
       </Dialog>
     </div>

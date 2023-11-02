@@ -90,15 +90,18 @@ export default function InformacoesSubcategoria (props) {
                     alert('preencha a descricao')
                 }
             } else {
-                alert('preencha prioridade')
+                alert('Selecione  prioridade')
             }
         } else {
-            alert('preencha prazo')
+            alert('preencha o prazo')
         }
     }
 
     return(
         <>
+        <h2>Informações da Subcategoria</h2>
+        <fieldset>
+        <legend>Assunto e Subcategoria</legend>
             <div
                 style={{
                 width: "100%",
@@ -115,11 +118,14 @@ export default function InformacoesSubcategoria (props) {
                     <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{nomeSubcategoria}</b>
                 </p>
             </div>
+            </fieldset>
             <Divider />
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                        <TextField sx={{width: '49%'}} value={prazo} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" variant="outlined" />
+                    <FormControl><InputLabel id="prazo-label">Prazo de Finalização</InputLabel>
+                    <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" variant="outlined"/>
+                    </FormControl>
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select
@@ -129,10 +135,10 @@ export default function InformacoesSubcategoria (props) {
                             label="Prioridade"
                             onChange={handleChange}
                             >
-                            <MenuItem value={1}>Baixa</MenuItem>
-                            <MenuItem value={2}>Média</MenuItem>
-                            <MenuItem value={3}>Alta</MenuItem>
-                            <MenuItem value={4}>Muito Alta</MenuItem>
+                            <MenuItem value={1} aria-label="Prioridade Baixa">Baixa</MenuItem>
+                            <MenuItem value={2} aria-label="Prioridade Média">Média</MenuItem>
+                            <MenuItem value={3} aria-label="Prioridade Alta">Alta</MenuItem>
+                            <MenuItem value={4} aria-label="Prioridade Muito Alta">Muito Alta</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -189,7 +195,7 @@ export default function InformacoesSubcategoria (props) {
             </div>
             <Divider />
             <div style={{display: 'flex', justifyContent: 'flex-end', padding: '20px'}}>
-                <Button variant="contained" endIcon={<CloudQueueIcon />} onClick={validateInputs}>
+                <Button variant="contained" endIcon={<CloudQueueIcon />} onClick={validateInputs} aria-label="Salvar">
                     salvar
                 </Button>
             </div>

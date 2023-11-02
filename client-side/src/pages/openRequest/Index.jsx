@@ -45,7 +45,7 @@ export default function OpenRequest() {
         }}
       >
         <div style={{ width: "98%", height: "fit-content" }}>
-          <h2>{"Solicitações > Minhas Solicitações"}</h2>
+          <h2 aria-label="Solicitações > Minhas Solicitações">{"Solicitações > Minhas Solicitações"}</h2>
           <Divider />
           <div
             style={{
@@ -67,6 +67,7 @@ export default function OpenRequest() {
                 variant="contained"
                 size="small"
                 sx={{ minWidth: "80px", marginRight: "10px" }}
+                aria-label="Selecionar todas"
               >
                 todas
               </Button>
@@ -74,6 +75,7 @@ export default function OpenRequest() {
                 variant="outlined"
                 size="small"
                 sx={{ minWidth: "100px", marginRight: "10px" }}
+                aria-label="Pendentes"
               >
                 pendentes
               </Button>
@@ -81,6 +83,7 @@ export default function OpenRequest() {
                 variant="outlined"
                 size="small"
                 sx={{ minWidth: "200px", marginRight: "10px" }}
+                aria-label="Aguardando avaliação"
               >
                 agardando avalização
               </Button>
@@ -88,6 +91,7 @@ export default function OpenRequest() {
                 variant="outlined"
                 size="small"
                 sx={{ minWidth: "100px", marginRight: "10px" }}
+                aria-label="Finalizadas"
               >
                 finalizadas
               </Button>
@@ -95,6 +99,7 @@ export default function OpenRequest() {
                 variant="outlined"
                 size="small"
                 sx={{ minWidth: "100px", marginRight: "10px" }}
+                aria-label="Canceladas"
               >
                 canceladas
               </Button>

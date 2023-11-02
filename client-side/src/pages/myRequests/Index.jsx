@@ -124,12 +124,12 @@ export default function MyRequests () {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                         <TableRow>
-                            <TableCell>#</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Enviado Em</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Área</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Assunto</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Responsável</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}}>Status</TableCell>
+                            <TableCell aria-label="Número">#</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Enviado Em">Enviado Em</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Área">Área</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Assunto">Assunto</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Responsável">Responsável</TableCell>
+                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Status">Status</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
@@ -138,13 +138,14 @@ export default function MyRequests () {
                             key={row.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', ":hover": {backgroundColor: '#cccccc'} }}
                             onClick={e => alert(row.id)}
+                            aria-label={`Pedido de ID ${row.id}`}
                             >
-                            <TableCell component="th" scope="row">{row.id ? row.id : "---"}</TableCell>
-                            <TableCell align="right">{row.enviado_em ? row.enviado_em : "---"}</TableCell>
-                            <TableCell align="right">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
-                            <TableCell align="right">{row.assunto ? row.assunto : "---"}</TableCell>
-                            <TableCell align="right">{row.responsavel ? row.responsavel : "---"}</TableCell>
-                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}}>{row.status ? row.status : "---"}</TableCell>
+                            <TableCell component="th" scope="row" aria-describedby={`pedidoNumero${row.id}`}>{row.id ? row.id : "---"}</TableCell>
+                            <TableCell align="right" aria-describedby={`pedidoEnviadoEm${row.id}`}>{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                            <TableCell align="right" aria-describedby={`pedidoAreaPedido${row.id}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
+                            <TableCell align="right" aria-describedby={`pedidoAssunto${row.id}`}>{row.assunto ? row.assunto : "---"}</TableCell>
+                            <TableCell align="right" aria-describedby={`pedidoResponsavel${row.id}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>
+                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}} aria-label={`Status do Pedido: ${row.status}`}>{row.status ? row.status : "---"}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
