@@ -148,3 +148,7 @@ meus atendimentos mudar responsavel por solicitante
 
 revisar documentação, verificar se diz algo sobre enviar mais de um anexo ao cadastrar
 pedido, se caso tiver, mudar para enviar apenas um anexo, ou uma pasta compactada.
+
+
+###
+Buscar Historico ----->  /api/pedido/*ID*/historico - esta rota esta retornando o id do usuario, preciso que retorne o nome dele

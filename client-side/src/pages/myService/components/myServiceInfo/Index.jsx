@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from 'axios';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
@@ -17,10 +17,41 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import SendIcon from '@mui/icons-material/Send';
+
 
 import Header from "../../../components/header/Index";
+import BackDrop from "../../../components/backdrop/Index";
+import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
+import DialogHistorico from "../dialogHistorico/Index";
 
 export default function MyServiceInfo (props) {
+
+    const [nomeSolicitante, setNomeSolicitante] = useState("");
+    const [emailSolicitante, setEmailSolicitante] = useState("");
+    const [nomeResponsavel, setNomeResponsavel] = useState("");
+    const [emailResponsavel, setEmailResponsavel] = useState("");
+    const [origem, setOrigem] = useState("");
+    const [assunto, setAssunto] = useState("");
+    const [categoria, setCategoria] = useState("");
+    const [subcategoria, setSubcategoria] = useState("");
+    const [prioridade, setPrioridade] = useState("");
+    const [prazoLimite, setPrazoLimite] = useState("");
+    const [mensagens, setMensagens] = useState([]);
+    const [novaMensagem, setNovaMensagem] = useState("");
+    const [upload, setUpload] = useState(false);
+    const [openBackdrop, setOpenBackdrop] = useState(false)
+    const [startedAt, setStartedAt] = useState(false)
+    const [openDialogEditarResponsavel, setOpenDialogEditarResponsavel] = useState(false);
+    const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
+    const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
+    const [status, setStatus] = useState("");
+
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
@@ -28,13 +59,59 @@ export default function MyServiceInfo (props) {
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
-                console.log(res.data)
+                setNomeSolicitante(res.data.dados.solicitante.name)
+                setEmailSolicitante(res.data.dados.solicitante.email)
+                setNomeResponsavel(res.data.dados.responsavel.name)
+                setEmailResponsavel(res.data.dados.responsavel.email)
+                setOrigem(res.data.dados.area.titulo)
+                setAssunto(res.data.dados.assunto.titulo)
+                setCategoria(res.data.dados.categoria.titulo)
+                setSubcategoria(res.data.dados.sub_categoria.titulo)
+                setPrioridade(res.data.dados.prioridade.descricao)
+                setPrazoLimite(res.data.dados.prazo_limite)
+                setMensagens(res.data.dados.mensagens)
+                setStartedAt(res.data.dados.inicio_atendimento)
+                setSolicitacaoFinalizada(res.data.dados.justificativa_cancelar)
+                setStatus(res.data.dados.status.descricao)
             }).catch(err => {})
         }
 
         getSolicitacao()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.idSolicitacao])
+    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop])
+
+    const handleSaveInfos = async () => {
+        setOpenBackdrop(true)
+        let formData = new FormData();
+        formData.append("mensagem", novaMensagem);
+        if(upload) {
+            formData.append("anexo[0]", upload[0]);
+        }
+
+        await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/mensagem/cadastrar`, formData, config, { headers: { "Content-Type": "multipart/form-data" } } ).then(res => {
+            if(res.data.status) {
+                setNovaMensagem("");
+                setUpload(false);
+                setOpenBackdrop(false)
+              }
+        }).catch(err => {})
+    }
+
+    const handleValidateInputs = () => {
+        if(novaMensagem) {
+            handleSaveInfos()
+        } else {
+            alert('insira uma mensagem')
+        }
+    }
+
+    const handleStartService = async () => {
+        setOpenBackdrop(true)
+        await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/iniciar-atendimento`, {}, config).then(res => {
+            console.log(res.data);
+            setOpenBackdrop(false)
+        }).catch(err => {})
+    }
 
     return(
         <>
@@ -42,9 +119,13 @@ export default function MyServiceInfo (props) {
             <div style={{ width: "100%", height: "fit-content", display: 'flex', justifyContent: 'center'}}>
                 <div style={{width: '98%', height: 'fit-content'}}>
                     <div style={{ marginLeft: "50px", padding: "10px", display: 'flex' }}>
-                        <h2 style={{marginRight: '20px'}}>Meus Atendimentos {">"} Solicitação {props.idSolicitacao}</h2>
-                        <p style={{marginRight: '20px'}}><Chip label="Em Atendimento" color="warning" aria-label="Status: Em Atendimento"/></p>
-                        <Button variant="text" startIcon={<AccessTimeIcon />} aria-label="Ver histórico da solicitação">
+                        <p style={{ fontSize: "19px" }}>
+                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Meus Atendimentos</b>
+                            <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
+                            <b style={{marginRight: '20px'}}>Solicitação {props.idSolicitacao}</b>
+                        </p>
+                        <p style={{marginRight: '20px'}}><Chip label={status} color="warning" /></p>
+                        <Button variant="text" startIcon={<AccessTimeIcon />} onClick={() => setOpenDialogHistorico(true)}>
                             histórico da solicitação
                         </Button>
                     </div>
@@ -54,20 +135,39 @@ export default function MyServiceInfo (props) {
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento">iniciar atendimento </Button>
+                        {solicitacaoFinalizada === 'xxxx' ? (
+                            ""
+                        ) : (
+                            startedAt ? (
+                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento">Concluir atendimento </Button>
+                            ) : (
+                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
+                            )
+                        ) }
+                        
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
                         <div style={{width: '80%'}}>
                             <h3>Origem</h3>
-                            <p>**DESENVOLVIMENTO</p>
+                            <p>{origem}</p>
                         </div>
                     </div>
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        <div style={{width: '80%', height: 'fit-content', border: "1px solid black", borderRadius: '6px'}}>
-                            <div style={{padding: '10px'}}>
-                                <p style={{fontWeight: 'bold', fontSize: '20px'}}>Solicitante <LinkIcon aria-label="Link para informações adicionais" /></p>
-                                <p>**Ana Maria Vargas</p>
-                                <p>**aninha_vargas@hotmail.com</p>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'center', textOverflow: 'ellipsis'}}>
+                        <div style={{width: '80%', height: 'fit-content', border: "1px solid black", borderRadius: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                            <div style={{padding: '10px', textOverflow: 'ellipsis'}}>
+                                <p style={{fontWeight: 'bold', fontSize: '20px'}}>Solicitante <LinkIcon /></p>
+                                <ListItem disablePadding>
+                                    <ListItemIcon>
+                                        <PersonIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={nomeSolicitante} />
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemIcon>
+                                        <EmailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={emailSolicitante} />
+                                </ListItem>
                             </div>
                         </div>
                     </div>
@@ -75,9 +175,19 @@ export default function MyServiceInfo (props) {
                         <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px'}}>
                             <div style={{padding: '10px'}}>
                                 <p style={{fontWeight: 'bold', fontSize: '20px'}}>Atendente</p>
-                                <p>**Ana Maria Vargas</p>
-                                <p>**aninha_vargas@hotmail.com</p>
-                                <Button variant="contained" endIcon={<EditIcon />} aria-label="Editar Atendente">editar Atendente </Button>
+                                <ListItem disablePadding>
+                                    <ListItemIcon>
+                                        <PersonIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={nomeResponsavel} />
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemIcon>
+                                        <EmailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={emailResponsavel} />
+                                </ListItem>
+                                <Button sx={{marginTop: '10px'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -85,12 +195,11 @@ export default function MyServiceInfo (props) {
                         <div style={{width: '80%', height: 'fit-content'}}>
                         <Divider />
                             <div style={{padding: '10px'}}>
-                                <p style={{fontWeight: 'bold', fontSize: '22px'}}>Assunto</p>
-                                <p aria-label="Assunto">**PRINCIPAL</p>
-                                <p style={{fontWeight: 'bold', fontSize: '22px'}}>Categoria</p>
-                                <p aria-label="Categoria">**CATEGORIA</p>
-                                <p style={{fontWeight: 'bold', fontSize: '22px'}}>Sub-Categoria</p>
-                                <p aria-label="Sub-Categoria">**SUBCATEGORIA</p>
+                                <ListItemText sx={{padding: '5px'}} primary="Assunto" secondary={assunto} />
+                                <ListItemText sx={{padding: '5px'}} primary="Categoria" secondary={categoria} />
+                                {subcategoria ? (
+                                    <ListItemText sx={{padding: '5px'}} primary="Sub-Categoria" secondary={subcategoria} />
+                                ) : ""}
                             </div>
                         <Divider />
                         </div>
@@ -98,10 +207,13 @@ export default function MyServiceInfo (props) {
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
                             <div style={{padding: '10px'}}>
-                                <p style={{fontWeight: 'bold', fontSize: '18px'}}>Enviado em:</p>
-                                <p aria-label="Data de envio">**Data</p>
-                                <p style={{fontWeight: 'bold', fontSize: '18px'}}>Prioridade: <span aria-label="Baixa prioridade">***Baixa</span></p>
-                                <p style={{fontWeight: 'bold', fontSize: '18px'}}>Expira em <span aria-label="50 dias">**50 dias</span></p>
+                                <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary="**Data" />
+                                <ListItemText sx={{padding: '5px'}} primary="Prioridade:" secondary={prioridade} />
+                                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
+                                    <b style={{fontSize: '18px', color: 'orange'}}>Expira em:</b>
+                                    <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite}</b>
+                                </div>
+                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px'}}></div>
                             </div>
                         <Divider />
                         </div>
@@ -114,30 +226,43 @@ export default function MyServiceInfo (props) {
                 </div>
                 <div style={{width: '74%', height: '100vh', display: 'flex', justifyContent: 'center', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '80%'}}>
-                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                </ListItemAvatar>
-                                <ListItemText
-                                primary="Brunch this weekend?"
-                                secondary={
-                                    <React.Fragment>
-                                    <Typography
-                                        sx={{ display: 'inline' }}
-                                        component="span"
-                                        variant="body2"
-                                        color="text.primary"
-                                    >
-                                        Ali Connors
-                                    </Typography>
-                                    {" — I'll be in your neighborhood doing errands this…"}
-                                    </React.Fragment>
-                                }
-                                />
-                            </ListItem>
-                            <Divider variant="inset" component="li" />
-                        </List>
+
+                        {mensagens.map(mensagem => (
+                            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                    <Avatar alt={mensagem.usuario.name} src="/static/images/avatar/1.jpg" />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                    primary={
+                                        <Typography sx={{fontWeight: 'bold'}}>
+                                            {mensagem.usuario.name + " / " + mensagem.created_at.split(".")[0].split("T")}
+                                        </Typography>
+                                    }
+                                    secondary={
+                                        <React.Fragment>
+                                        <Typography
+                                            sx={{ display: 'inline' }}
+                                            component="span"
+                                            fontSize="20px"
+                                        >
+                                            - {mensagem.mensagem}
+                                        </Typography>
+                                        </React.Fragment>
+                                    }
+                                    />
+                                </ListItem>
+                                <div style={{width: '100%', padding: '25px', backgroundColor: '#87d3f8', marginTop: '10px', marginBottom: '10px', display: mensagem.anexos[0] ? "flex" : "none", borderRadius: '5px'}}>
+                                    <ListItem >
+                                        <ListItemIcon>
+                                            <AttachFileIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={mensagem.anexos[0] ? mensagem.anexos[0].nome_arquivo_completo : ""} />
+                                    </ListItem>
+                                </div>
+                                <Divider variant="inset" component="li" />
+                            </List>
+                        ))}
                         <div style={{marginTop: '30px', paddingBottom: '200px'}}>
                         <TextField
                             id="outlined-multiline-static"
@@ -145,22 +270,32 @@ export default function MyServiceInfo (props) {
                             fullWidth
                             multiline
                             rows={8}
+                            value={novaMensagem}
+                            onChange={e => setNovaMensagem(e.target.value)}
                             />
                             <Paper elevation={3} style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '20px', backgroundColor: '#87d3f8'}} aria-label="Área de upload de arquivo">
                                 <div style={{padding: '30px'}}>
                                 <div style={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}>
-                                    <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} aria-label="Botão para selecionar um arquivo">
-                                    Enviar arquivo
-                                    <input hidden type="file" />
+                                    <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} color={upload ? "success" : "error"} aria-label="Botão para selecionar um arquivo">
+                                    {upload ? "Arquivo selecionado" : "Enviar arquivo"}
+                                    <input hidden type="file" onChange={e => setUpload(e.target.files)} />
                                     </Button>
                                 </div>
                                 <h3 aria-label="Envie preferencialmente os arquivos em .zip">Envie preferencialmente os arquivos em .zip</h3>
                                 </div>
                             </Paper>
+                            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
+                            <Button variant="contained" color="success" onClick={handleValidateInputs} endIcon={<SendIcon />} aria-label="Enviar">
+                                Enviar
+                            </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <BackDrop openBackdrop={openBackdrop} />
+            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} />
+            <DialogHistorico openDialogHistorico={openDialogHistorico} setOpenDialogHistorico={setOpenDialogHistorico} idSolicitacao={props.idSolicitacao} />
         </>
     )
 }

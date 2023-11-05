@@ -13,6 +13,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Axios from "axios";
+import FirstLogin from "../components/firstLogin/Index";
+import SnackbarError from "../components/snackBarError/Index";
+import SnackbarSuccess from "../components/snackBarSuccess/Index";
 
 
 export default function MyRequests () {
@@ -22,14 +25,26 @@ export default function MyRequests () {
     const [prioridadeList, setPrioridadeList] = useState([]);
     const [responsavel, setResponsavel] = useState("");
     const [responsavelList, setResponsavelList] = useState([]);
-    const [rows, setRows] = useState([])
-
+    const [rows, setRows] = useState([]);
+    const [openDialogFirstLogin, setOpenDialogFirstLogin] = useState(false);
+    const [openSnackBarError, setOpenSnackBarError] = useState(false);
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
+    const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
+  const [mensagemSnackBarSuccess, setMensagemSnackBarSuccess] = useState("");
+ 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
 
     useEffect(() => {
         const getInfos = async () => {
+            let id = localStorage.getItem("id");
+    Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${id}`, config).then(
+      (res) => {
+        if(res.data.dados.primeiro_acesso === 1) setOpenDialogFirstLogin(true)
+      }
+    );
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/status`, config).then(res => {
                 console.log(res.data.dados)
                 setStatusList(res.data.dados);
@@ -153,6 +168,25 @@ export default function MyRequests () {
                     </TableContainer>
                 </div>
             </div>
+            <FirstLogin 
+                open={openDialogFirstLogin}
+                setOpenDialogFirstLogin={setOpenDialogFirstLogin}
+                setOpenSnackBarError={setOpenSnackBarError}
+                setMensagemSnackBarError={setMensagemSnackBarError}
+                setMensagemSnackBarSuccess={setMensagemSnackBarSuccess}
+                setOpenSnackBarSuccess={setOpenSnackBarSuccess}
+            />
+
+            <SnackbarError
+                openSnackBarError={openSnackBarError}
+                setOpenSnackBarError={setOpenSnackBarError}
+                mensagemSnackBarError={mensagemSnackBarError}
+            />
+            <SnackbarSuccess
+                openSnackBarSuccess={openSnackBarSuccess}
+                setOpenSnackBarSuccess={setOpenSnackBarSuccess}
+                mensagemSnackBarSuccess={mensagemSnackBarSuccess}
+            />
         </>
     )
 }

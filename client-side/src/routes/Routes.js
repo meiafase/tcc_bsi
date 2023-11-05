@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 
-import OpenRequest from "../pages/openRequest/Index";
 import MyService from "../pages/myService/Index";
 import MyRequests from "../pages/myRequests/Index";
 import Report from "../pages/Report/Index";
@@ -16,7 +15,6 @@ const Rotas = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/AbrirRequisicao" element={<OpenRequest />} />
         <Route path="/MeusAtendimentos" element={<MyService />} />
         <Route path="/MinhasSolicitacoes" element={<MyRequests />} />
         <Route path="/SolicitacoesArea" element={<AreaRequests />} />

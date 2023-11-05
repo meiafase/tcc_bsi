@@ -36,7 +36,7 @@ export default function Index() {
     const verifySession = async () => {
       let token = localStorage.getItem("token");
       if (token) {
-        navigate("../AbrirRequisicao");
+        navigate("../MinhasSolicitacoes");
       }
     };
     verifySession();
@@ -52,7 +52,7 @@ export default function Index() {
         localStorage.setItem("token", res.data.dados.token);
         localStorage.setItem("id", res.data.dados.usuario.id);
         localStorage.setItem("email", res.data.dados.usuario.email);
-        navigate("../AbrirRequisicao");
+        navigate("../MinhasSolicitacoes");
       })
       .catch((err) => {
         setMensagemSnackBarError("Algo deu errado ao tentar fazer o login!");
