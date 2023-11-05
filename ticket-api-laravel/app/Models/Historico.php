@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Historico extends Model
@@ -11,8 +11,8 @@ class Historico extends Model
 
     protected $guarded = ["id"];
 
-    public function usuarioHistorico()
+    public function usuario()
     {
-        return $this->hasOne(Usuario::class, "id", "usuario_id");
+        return $this->hasOne(User::class, "id", "usuario_id");
     }
 }

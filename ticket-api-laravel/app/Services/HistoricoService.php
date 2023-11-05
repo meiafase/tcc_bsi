@@ -24,6 +24,6 @@ class HistoricoService
 
     public function filtrar($pedido_id)
     {
-        return $this->repository->filtrar(array(['pedido_id', $pedido_id]));
+        return $this->repository->filtrar(array(['pedido_id', $pedido_id]), ['usuario']);
     }
 }
