@@ -29,6 +29,7 @@ import Header from "../../../components/header/Index";
 import BackDrop from "../../../components/backdrop/Index";
 import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
 import DialogHistorico from "../dialogHistorico/Index";
+import DialogCancelarSolicitacao from "../dialogCancelarSolicitacao/Index";
 
 export default function MyServiceInfo (props) {
 
@@ -51,14 +52,17 @@ export default function MyServiceInfo (props) {
     const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
     const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
     const [status, setStatus] = useState("");
+    const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      };
+    };
 
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
+                // console.log(res.data.dados.mensagens)
+                setStatus(res.data.dados.status.descricao)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
                 setNomeResponsavel(res.data.dados.responsavel.name)
@@ -66,19 +70,18 @@ export default function MyServiceInfo (props) {
                 setOrigem(res.data.dados.area.titulo)
                 setAssunto(res.data.dados.assunto.titulo)
                 setCategoria(res.data.dados.categoria.titulo)
-                setSubcategoria(res.data.dados.sub_categoria.titulo)
                 setPrioridade(res.data.dados.prioridade.descricao)
                 setPrazoLimite(res.data.dados.prazo_limite)
                 setMensagens(res.data.dados.mensagens)
                 setStartedAt(res.data.dados.inicio_atendimento)
                 setSolicitacaoFinalizada(res.data.dados.justificativa_cancelar)
-                setStatus(res.data.dados.status.descricao)
+                setSubcategoria(res.data.dados.sub_categoria.titulo)
             }).catch(err => {})
         }
 
         getSolicitacao()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop])
+    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop, openDialogCancelarSolicitacao])
 
     const handleSaveInfos = async () => {
         setOpenBackdrop(true)
@@ -135,7 +138,7 @@ export default function MyServiceInfo (props) {
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        {solicitacaoFinalizada === 'xxxx' ? (
+                        {solicitacaoFinalizada === 'xxxx' || status === 'CANCELADO' ? (
                             ""
                         ) : (
                             startedAt ? (
@@ -172,7 +175,7 @@ export default function MyServiceInfo (props) {
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
-                        <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px'}}>
+                        <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                             <div style={{padding: '10px'}}>
                                 <p style={{fontWeight: 'bold', fontSize: '20px'}}>Atendente</p>
                                 <ListItem disablePadding>
@@ -187,7 +190,7 @@ export default function MyServiceInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
+                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -209,24 +212,23 @@ export default function MyServiceInfo (props) {
                             <div style={{padding: '10px'}}>
                                 <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary="**Data" />
                                 <ListItemText sx={{padding: '5px'}} primary="Prioridade:" secondary={prioridade} />
-                                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
+                                <div style={{width: '100%', justifyContent: 'space-between', marginTop: '20px', display: status === 'CANCELADO' ? 'none' : 'flex'}}>
                                     <b style={{fontSize: '18px', color: 'orange'}}>Expira em:</b>
                                     <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite}</b>
                                 </div>
-                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px'}}></div>
+                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px', display: status === 'CANCELADO' ? 'none' : 'flex'}}></div>
                             </div>
                         <Divider />
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />}>Cancelar solicitação</Button>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' ? 'none' : 'flex'}}>Cancelar solicitação</Button>
                         </div>
                     </div>
                 </div>
                 <div style={{width: '74%', height: '100vh', display: 'flex', justifyContent: 'center', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '80%'}}>
-
                         {mensagens.map(mensagem => (
                             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                 <ListItem alignItems="flex-start">
@@ -263,7 +265,8 @@ export default function MyServiceInfo (props) {
                                 <Divider variant="inset" component="li" />
                             </List>
                         ))}
-                        <div style={{marginTop: '30px', paddingBottom: '200px'}}>
+                        
+                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' ? 'none' : ''}}>
                         <TextField
                             id="outlined-multiline-static"
                             label="Enviar Mensagem"
@@ -290,12 +293,16 @@ export default function MyServiceInfo (props) {
                             </Button>
                             </div>
                         </div>
+                        <div style={{width: '100%',display: 'flex', justifyContent: 'center', marginTop: '50px', paddingBottom: '100px'}}>
+                            <p style={{display: status === 'CANCELADO' ? 'flex' : 'none', color: 'red', fontWeight: 'bold', fontSize: '20px'}}>Solicitação Cancelada.</p>
+                        </div>
                     </div>
                 </div>
             </div>
             <BackDrop openBackdrop={openBackdrop} />
-            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} />
+            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} idSolicitacao={props.idSolicitacao} setSolicitacaoInfo={props.setSolicitacaoInfo} />
             <DialogHistorico openDialogHistorico={openDialogHistorico} setOpenDialogHistorico={setOpenDialogHistorico} idSolicitacao={props.idSolicitacao} />
+            <DialogCancelarSolicitacao openDialogCancelarSolicitacao={openDialogCancelarSolicitacao} setOpenDialogCancelarSolicitacao={setOpenDialogCancelarSolicitacao} idSolicitacao={props.idSolicitacao} />
         </>
     )
 }

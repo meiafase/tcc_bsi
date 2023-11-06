@@ -99,9 +99,6 @@ export default function InformacoesSubcategoria (props) {
 
     return(
         <>
-        <h2>Informações da Subcategoria</h2>
-        <fieldset>
-        <legend>Assunto e Subcategoria</legend>
             <div
                 style={{
                 width: "100%",
@@ -118,14 +115,11 @@ export default function InformacoesSubcategoria (props) {
                     <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{nomeSubcategoria}</b>
                 </p>
             </div>
-            </fieldset>
             <Divider />
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                    <FormControl><InputLabel id="prazo-label">Prazo de Finalização</InputLabel>
-                    <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" variant="outlined"/>
-                    </FormControl>
+                        <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" variant="outlined"/>
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select

@@ -34,7 +34,6 @@ export default function MyService () {
     useEffect(() => {
         const getInfos = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/status`, config).then(res => {
-                console.log(res.data.dados)
                 setStatusList(res.data.dados);
             }).catch(err => {});
 
@@ -54,7 +53,7 @@ export default function MyService () {
     useEffect(() => {
         const filterTable = async () => {
             await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/listar-pedidos`, {
-                "tipo": "minhas",
+                "tipo": "atendimentos",
                 status_id: status,
                 prioridade_id: prioridade,
                 solicitante_id: solicitante
@@ -65,7 +64,7 @@ export default function MyService () {
 
         filterTable()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, setStatus, prioridade, setPrioridade, solicitante, setSolicitante])
+    }, [status, setStatus, prioridade, setPrioridade, solicitante, setSolicitante, solicitacaoInfo])
 
     return(
         !solicitacaoInfo ? (
@@ -144,7 +143,7 @@ export default function MyService () {
                                 onClick={e => {setIdSolicitacao(row.id); setSolicitacaoInfo(true)}}
                                 >
                                 <TableCell component="th" scope="row" aria-label="Número da solicitação">{row.id}</TableCell>
-                                <TableCell align="right" aria-label="Enviado Em">{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                                <TableCell align="right" aria-label="Enviado Em">{row.enviado_em ? row.enviado_em.split("-")  : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Área">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Assunto">{row.assunto ? row.assunto : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Responsável">{row.responsavel ? row.responsavel : "---"}</TableCell>
