@@ -155,6 +155,6 @@ Buscar Historico ----->  /api/pedido/*ID*/historico - esta rota esta retornando 
 
 
 
-minhas solicitações = cancelar / enviar mensagens
+minhas solicitações = cancelar / enviar mensagens OK
 
 solicitações da area = se o usuario logado nao tiver vinculo com o chamado, sera possivel apenas visualizar. Porem se for gestor, pode interagir com tudo

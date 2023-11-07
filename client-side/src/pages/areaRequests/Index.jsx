@@ -13,6 +13,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import AreaRequestsInfo from "./components/areaRequestsInfo/Index";
 
 
 export default function AreaRequests () {
@@ -24,6 +25,8 @@ export default function AreaRequests () {
     const [categoria, setCategoria] = useState("");
     const [areaSolicitante, setAreaSolicitante] = useState("");
     const [areaSolicitanteList, setAreaSolicitanteList] = useState([]);
+    const [solicitacaoInfo,  setSolicitacaoInfo] = useState(false);
+    const [idSolicitacao, setIdSolicitacao] = useState('');
     const [rows, setRows] = useState([])
 
 
@@ -53,7 +56,7 @@ export default function AreaRequests () {
     useEffect(() => {
         const filterTable = async () => {
             await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/listar-pedidos`, {
-                "tipo": "minhas",
+                "tipo": "area",
                 status_id: status,
                 prioridade_id: prioridade,
                 area_id: areaSolicitante
@@ -64,99 +67,104 @@ export default function AreaRequests () {
 
         filterTable()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, setStatus, prioridade, setPrioridade, areaSolicitante, setAreaSolicitante])
+    }, [status, setStatus, prioridade, setPrioridade, areaSolicitante, setAreaSolicitante, solicitacaoInfo])
 
 
     return(
         <>
-            <Header drawer={true} />
-            <div style={{ width: "100%", height: "fit-content", display: 'flex', justifyContent: 'center' }}>
-            <div style={{width: '98%', height: 'fit-content'}}>
-            <div style={{ marginLeft: "50px", padding: "10px" }} aria-label="Solicitações > Solicitações da Área">
-                <h2>Solicitações {">"} Solicitações da Área</h2>
-            </div>
-                <Divider />
-                <div style={{width: '100%', height: 'fit-content', display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
-                    <div style={{width: '95%', display: 'flex', justifyContent: 'space-around'}}>
-                        <div style={{width: '23%'}}>
-                            <FormControl fullWidth>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                value={status}
-                                label="Status"
-                                onChange={e => setStatus(e.target.value)}
-                                >
-                                {statusList.map((status) => (
-                                    <MenuItem value={status.id}>{status.descricao}</MenuItem>
-                                ))}
-                                </Select>
-                            </FormControl>
+            {!solicitacaoInfo ? (
+                <>
+                    <Header drawer={true} />
+                    <div style={{ width: "100%", height: "fit-content", display: 'flex', justifyContent: 'center' }}>
+                    <div style={{width: '98%', height: 'fit-content'}}>
+                    <div style={{ marginLeft: "50px", padding: "10px" }} aria-label="Solicitações > Solicitações da Área">
+                        <h2>Solicitações {">"} Solicitações da Área</h2>
+                    </div>
+                        <Divider />
+                        <div style={{width: '100%', height: 'fit-content', display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
+                            <div style={{width: '95%', display: 'flex', justifyContent: 'space-around'}}>
+                                <div style={{width: '23%'}}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Status</InputLabel>
+                                        <Select
+                                        value={status}
+                                        label="Status"
+                                        onChange={e => setStatus(e.target.value)}
+                                        >
+                                        {statusList.map((status) => (
+                                            <MenuItem value={status.id}>{status.descricao}</MenuItem>
+                                        ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <div style={{width: '23%'}}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Prioridade</InputLabel>
+                                        <Select
+                                        value={prioridade}
+                                        label="Prioridade"
+                                        onChange={e => setPrioridade(e.target.value)}
+                                        >
+                                        {prioridadeList.map((prioridade) => (
+                                            <MenuItem value={prioridade.id}>{prioridade.descricao}</MenuItem>
+                                        ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <div style={{width: '23%'}}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Área Solicitante</InputLabel>
+                                        <Select
+                                        value={areaSolicitante}
+                                        label="Área Solicitante"
+                                        onChange={e => setAreaSolicitante(e.target.value)}
+                                        >
+                                        {areaSolicitanteList.map((areaSolicitante) => (
+                                            <MenuItem value={areaSolicitante.id}>{areaSolicitante.titulo}</MenuItem>
+                                        ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>
                         </div>
-                        <div style={{width: '23%'}}>
-                            <FormControl fullWidth>
-                                <InputLabel>Prioridade</InputLabel>
-                                <Select
-                                value={prioridade}
-                                label="Prioridade"
-                                onChange={e => setPrioridade(e.target.value)}
-                                >
-                                {prioridadeList.map((prioridade) => (
-                                    <MenuItem value={prioridade.id}>{prioridade.descricao}</MenuItem>
+                        <TableContainer component={Paper} sx={{marginTop: '50px'}}>
+                            <Table sx={{ minWidth: 650 }} aria-label="Tabela Serviços">
+                                <TableHead>
+                                <TableRow>
+                                    <TableCell aria-label="Número">#</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Enviado Em">Enviado Em</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Área">Área</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Assunto">Assunto</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Responsável">Responsável</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Status">Status</TableCell>
+                                    <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Prazo">Prazo</TableCell>
+                                </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {rows.map((row) => (
+                                    <TableRow
+                                    key={row.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', ":hover": {backgroundColor: '#cccccc'} }}
+                                    onClick={e => {setIdSolicitacao(row.id); setSolicitacaoInfo(true)}}
+                                    >
+                                    <TableCell component="th" scope="row" aria-label={`Número: ${row.id}`}>{row.id}</TableCell>
+                                    <TableCell align="right" aria-label={`Enviado Em: ${row.enviado_em ? row.enviado_em : '---'}`}>{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                                    <TableCell align="right" aria-label={`Área: ${row.area_pedido ? row.area_pedido : '---'}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
+                                    <TableCell align="right" aria-label={`Assunto: ${row.assunto ? row.assunto : '---'}`}>{row.assunto ? row.assunto : "---"}</TableCell>
+                                    <TableCell align="right" aria-label={`Responsável: ${row.responsavel ? row.responsavel : '---'}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>
+                                    <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}} aria-label={`Status: ${row.status ? row.status : '---'}`}>{row.status ? row.status : "---"}</TableCell>
+                                    <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}} aria-label={`Prazo: ${row.prazo ? row.prazo : '---'}`}>{row.prazo ? row.prazo : "---"}</TableCell>
+                                    </TableRow>
                                 ))}
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div style={{width: '23%'}}>
-                            <FormControl fullWidth>
-                                <InputLabel>Área Solicitante</InputLabel>
-                                <Select
-                                value={areaSolicitante}
-                                label="Área Solicitante"
-                                onChange={e => setAreaSolicitante(e.target.value)}
-                                >
-                                {areaSolicitanteList.map((areaSolicitante) => (
-                                    <MenuItem value={areaSolicitante.id}>{areaSolicitante.titulo}</MenuItem>
-                                ))}
-                                </Select>
-                            </FormControl>
+                                </TableBody>
+                            </Table>
+                            </TableContainer>
                         </div>
                     </div>
-                </div>
-                <TableContainer component={Paper} sx={{marginTop: '50px'}}>
-                    <Table sx={{ minWidth: 650 }} aria-label="Tabela Serviços">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell aria-label="Número">#</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Enviado Em">Enviado Em</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Área">Área</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Assunto">Assunto</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Responsável">Responsável</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Status">Status</TableCell>
-                            <TableCell align="right" sx={{fontWeight: 'bold'}} aria-label="Prazo">Prazo</TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                            key={row.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', ":hover": {backgroundColor: '#cccccc'} }}
-                            onClick={e => alert(row.id)}
-                            >
-                            <TableCell component="th" scope="row" aria-label={`Número: ${row.id}`}>{row.id}</TableCell>
-                            <TableCell align="right" aria-label={`Enviado Em: ${row.enviado_em ? row.enviado_em : '---'}`}>{row.enviado_em ? row.enviado_em : "---"}</TableCell>
-                            <TableCell align="right" aria-label={`Área: ${row.area_pedido ? row.area_pedido : '---'}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
-                            <TableCell align="right" aria-label={`Assunto: ${row.assunto ? row.assunto : '---'}`}>{row.assunto ? row.assunto : "---"}</TableCell>
-                            <TableCell align="right" aria-label={`Responsável: ${row.responsavel ? row.responsavel : '---'}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>
-                            <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}} aria-label={`Status: ${row.status ? row.status : '---'}`}>{row.status ? row.status : "---"}</TableCell>
-                            <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}} aria-label={`Prazo: ${row.prazo ? row.prazo : '---'}`}>{row.prazo ? row.prazo : "---"}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                    </TableContainer>
-                </div>
-            </div>
-            
+                </>
+            ) : (
+                <AreaRequestsInfo idSolicitacao={idSolicitacao} setSolicitacaoInfo={setSolicitacaoInfo} />
+            )}
         </>
     )
 }

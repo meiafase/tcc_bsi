@@ -32,7 +32,7 @@ import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
 import DialogHistorico from "../dialogHistorico/Index";
 import DialogCancelarSolicitacao from "../dialogCancelarSolicitacao/Index";
 
-export default function MyServiceInfo (props) {
+export default function AreaRequestsInfo (props) {
 
     const [nomeSolicitante, setNomeSolicitante] = useState("");
     const [emailSolicitante, setEmailSolicitante] = useState("");
@@ -51,18 +51,21 @@ export default function MyServiceInfo (props) {
     const [startedAt, setStartedAt] = useState(false)
     const [openDialogEditarResponsavel, setOpenDialogEditarResponsavel] = useState(false);
     const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
-    const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
     const [status, setStatus] = useState("");
     const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
+    const [coord, setCoord] = useState('');
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
 
     useEffect(() => {
-        const getSolicitacao = async () => {
+        const getSolicitacaoAndUser = async () => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${localStorage.getItem("id")}`, config).then(res => {
+                setCoord(res.data.dados.tp_coord);
+            }).catch(err => {})
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
-                // console.log(res.data.dados.mensagens)
                 setStatus(res.data.dados.status.descricao)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
@@ -75,12 +78,11 @@ export default function MyServiceInfo (props) {
                 setPrazoLimite(res.data.dados.prazo_limite)
                 setMensagens(res.data.dados.mensagens)
                 setStartedAt(res.data.dados.inicio_atendimento)
-                setSolicitacaoFinalizada(res.data.dados.justificativa_cancelar)
                 setSubcategoria(res.data.dados.sub_categoria.titulo)
             }).catch(err => {})
         }
 
-        getSolicitacao()
+        getSolicitacaoAndUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.idSolicitacao, setOpenBackdrop, openBackdrop, openDialogCancelarSolicitacao])
 
@@ -143,7 +145,7 @@ export default function MyServiceInfo (props) {
                 <div style={{width: '98%', height: 'fit-content'}}>
                     <div style={{ marginLeft: "50px", padding: "10px", display: 'flex' }}>
                         <p style={{ fontSize: "19px" }}>
-                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Meus Atendimentos</b>
+                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Solicitações da Área</b>
                             <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
                             <b style={{marginRight: '20px'}}>Solicitação {props.idSolicitacao}</b>
                         </p>
@@ -158,15 +160,13 @@ export default function MyServiceInfo (props) {
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        {solicitacaoFinalizada === 'xxxx' || status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? (
-                            ""
-                        ) : (
+                        {coord === "S" ? (
                             startedAt ? (
                                 <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleFinishService}>Concluir atendimento </Button>
                             ) : (
                                 <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
                             )
-                        ) }
+                        ) : ("") }
                         
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
@@ -210,7 +210,7 @@ export default function MyServiceInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
+                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' || coord !== 'S' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -243,7 +243,7 @@ export default function MyServiceInfo (props) {
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}>Cancelar solicitação</Button>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || coord !== "S" ? 'none' : 'flex'}}>Cancelar solicitação</Button>
                         </div>
                     </div>
                 </div>
@@ -288,7 +288,7 @@ export default function MyServiceInfo (props) {
                             </List>
                         ))}
                         
-                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : ''}}>
+                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || coord !== 'S' ? 'none' : ''}}>
                         <TextField
                             id="outlined-multiline-static"
                             label="Enviar Mensagem"

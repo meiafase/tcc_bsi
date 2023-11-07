@@ -4,9 +4,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import EastIcon from '@mui/icons-material/East';
 import LinkIcon from '@mui/icons-material/Link';
-import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -24,15 +22,16 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import IconButton from '@mui/material/IconButton';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import Rating from '@mui/material/Rating';
 
 
 import Header from "../../../components/header/Index";
 import BackDrop from "../../../components/backdrop/Index";
-import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
 import DialogHistorico from "../dialogHistorico/Index";
 import DialogCancelarSolicitacao from "../dialogCancelarSolicitacao/Index";
 
-export default function MyServiceInfo (props) {
+export default function MyRequestsInfo (props) {
 
     const [nomeSolicitante, setNomeSolicitante] = useState("");
     const [emailSolicitante, setEmailSolicitante] = useState("");
@@ -46,14 +45,15 @@ export default function MyServiceInfo (props) {
     const [prazoLimite, setPrazoLimite] = useState("");
     const [mensagens, setMensagens] = useState([]);
     const [novaMensagem, setNovaMensagem] = useState("");
+    const [comentario, setComentario] = useState("");
     const [upload, setUpload] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false)
-    const [startedAt, setStartedAt] = useState(false)
-    const [openDialogEditarResponsavel, setOpenDialogEditarResponsavel] = useState(false);
-    const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
-    const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
     const [status, setStatus] = useState("");
     const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
+    const [openDialogHistorico, setOpenDialogHistorico] = useState(false)
+    const [value, setValue] = useState(0);
+    const [nota, setNota] = useState("");
+    const [justificativa, setJustificativa] = useState("!!!!!!!!!!!!!!!!!!!Pegar na requisição do back!!!!!!!!!!!!!!!!!");
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -62,7 +62,7 @@ export default function MyServiceInfo (props) {
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
-                // console.log(res.data.dados.mensagens)
+                console.log(res.data.dados.status.descricao)
                 setStatus(res.data.dados.status.descricao)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
@@ -74,8 +74,7 @@ export default function MyServiceInfo (props) {
                 setPrioridade(res.data.dados.prioridade.descricao)
                 setPrazoLimite(res.data.dados.prazo_limite)
                 setMensagens(res.data.dados.mensagens)
-                setStartedAt(res.data.dados.inicio_atendimento)
-                setSolicitacaoFinalizada(res.data.dados.justificativa_cancelar)
+                setNota(res.data.dados.nota_solicitante.split(".")[0])
                 setSubcategoria(res.data.dados.sub_categoria.titulo)
             }).catch(err => {})
         }
@@ -109,31 +108,24 @@ export default function MyServiceInfo (props) {
         }
     }
 
-    const handleStartService = async () => {
-        setOpenBackdrop(true)
-        await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/iniciar-atendimento`, {}, config).then(res => {
-            setOpenBackdrop(false)
-        }).catch(err => {})
-    }
-
-    const handleFinishService = async () => {
-        setOpenBackdrop(true)
-        await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/alterar-status`, {
-            status_id: 3 
-        }, config).then(res => {
-            setOpenBackdrop(false)
-        }).catch(err => {})
-    }
-
     const handleDownloadAnexo = async (idMensagem, idAnexo) => {
         setOpenBackdrop(true)
         await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/mensagem/${idMensagem}/anexo/${idAnexo}/baixar`, config).then(res => {
-            console.log(res.data)
             setOpenBackdrop(false)
         }).catch(err => {
             setOpenBackdrop(false)
             alert('arquivo nao encontrado')
         })
+    }
+
+    const handleAvaliar = async () => {
+        setOpenBackdrop(true)
+        await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/avaliacao`, {
+            justificativa: comentario,
+            nota: Number(value)
+        }, config).then(res => {
+            setOpenBackdrop(false)
+        }).catch(err => {})
     }
 
     return(
@@ -143,7 +135,7 @@ export default function MyServiceInfo (props) {
                 <div style={{width: '98%', height: 'fit-content'}}>
                     <div style={{ marginLeft: "50px", padding: "10px", display: 'flex' }}>
                         <p style={{ fontSize: "19px" }}>
-                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Meus Atendimentos</b>
+                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Minhas Solicitações</b>
                             <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
                             <b style={{marginRight: '20px'}}>Solicitação {props.idSolicitacao}</b>
                         </p>
@@ -157,18 +149,6 @@ export default function MyServiceInfo (props) {
             </div>
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        {solicitacaoFinalizada === 'xxxx' || status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? (
-                            ""
-                        ) : (
-                            startedAt ? (
-                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleFinishService}>Concluir atendimento </Button>
-                            ) : (
-                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
-                            )
-                        ) }
-                        
-                    </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
                         <div style={{width: '80%'}}>
                             <h3>Origem</h3>
@@ -210,7 +190,6 @@ export default function MyServiceInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -232,23 +211,49 @@ export default function MyServiceInfo (props) {
                             <div style={{padding: '10px'}}>
                                 <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary="**Data" />
                                 <ListItemText sx={{padding: '5px'}} primary="Prioridade:" secondary={prioridade} />
-                                <div style={{width: '100%', justifyContent: 'space-between', marginTop: '20px', display: status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? 'none' : 'flex'}}>
+                                <div style={{width: '100%', justifyContent: 'space-between', marginTop: '20px', display: status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" || status === 'FINALIZADO' ? 'none' : 'flex'}}>
                                     <b style={{fontSize: '18px', color: 'orange'}}>Expira em:</b>
                                     <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite}</b>
                                 </div>
-                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}></div>
+                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'FINALIZADO' ? 'none' : 'flex'}}></div>
                             </div>
                         <Divider />
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}>Cancelar solicitação</Button>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'FINALIZADO' ? 'none' : 'flex'}}>Cancelar solicitação</Button>
                         </div>
                     </div>
                 </div>
                 <div style={{width: '74%', height: '100vh', display: 'flex', justifyContent: 'center', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '80%'}}>
+                        <div style={{width: '100%', height: 'fit-content', padding: '20px', backgroundColor: '#87d3f8', borderRadius: '5px', display: status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE"  ? "" : "none"}}>
+                            <h3>Qual sua nota para este atendimento?</h3>
+                            <p>Atribua uma nota ao atendimento.</p>
+                            <Rating
+                                name="simple-controlled"
+                                value={value}
+                                onChange={(event, newValue) => {
+                                setValue(newValue);
+                                }}
+                            />
+                            <TextField
+                                id="outlined-multiline-static"
+                                label="Comentário"
+                                margin="dense"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                value={comentario}
+                                onChange={e => setComentario(e.target.value)}
+                            />
+                            <div style={{marginTop: '30px'}}>
+                                <Button variant="contained" endIcon={<ArrowRightAltIcon />} onClick={handleAvaliar}>
+                                    enviar
+                                </Button>
+                            </div>
+                        </div>
                         {mensagens.map(mensagem => (
                             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                 <ListItem alignItems="flex-start">
@@ -288,7 +293,7 @@ export default function MyServiceInfo (props) {
                             </List>
                         ))}
                         
-                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : ''}}>
+                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'FINALIZADO' ? 'none' : ''}}>
                         <TextField
                             id="outlined-multiline-static"
                             label="Enviar Mensagem"
@@ -318,12 +323,19 @@ export default function MyServiceInfo (props) {
                         <div style={{width: '100%',display: 'flex', justifyContent: 'center', marginTop: '50px', paddingBottom: '100px'}}>
                             <p style={{display: status === 'CANCELADO' ? 'flex' : 'none', color: 'red', fontWeight: 'bold', fontSize: '20px'}}>Solicitação Cancelada.</p>
                             <p style={{display: status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'flex' : 'none', color: 'green', fontWeight: 'bold', fontSize: '20px'}}>Solicitação Finalizada.</p>
+                            <p style={{display: status === 'FINALIZADO' ? 'flex' : 'none', color: 'green', fontWeight: 'bold', fontSize: '20px'}}>
+                            <Rating
+                                name="simple-controlled"
+                                value={Number(nota)}
+                                readOnly 
+                            />
+                            {justificativa}
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             <BackDrop openBackdrop={openBackdrop} />
-            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} idSolicitacao={props.idSolicitacao} setSolicitacaoInfo={props.setSolicitacaoInfo} />
             <DialogHistorico openDialogHistorico={openDialogHistorico} setOpenDialogHistorico={setOpenDialogHistorico} idSolicitacao={props.idSolicitacao} />
             <DialogCancelarSolicitacao openDialogCancelarSolicitacao={openDialogCancelarSolicitacao} setOpenDialogCancelarSolicitacao={setOpenDialogCancelarSolicitacao} idSolicitacao={props.idSolicitacao} />
         </>
