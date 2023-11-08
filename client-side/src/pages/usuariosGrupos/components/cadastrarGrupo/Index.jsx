@@ -7,9 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Axios from "axios";
+import SnackbarError from "../../../components/snackBarError/Index";
 
 export default function CadastrarGrupo(props) {
   const [grupo, setGrupo] = useState("");
+  const [openSnackBarError, setOpenSnackBarError] = useState(false)
+  const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
+
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   };
@@ -40,7 +44,8 @@ export default function CadastrarGrupo(props) {
     if (grupo !== "") {
       handleSaveInfos();
     } else {
-      alert("campo vazio");
+      setMensagemSnackBarError("Preencha o campo corretamente!")
+      setOpenSnackBarError(true)
     }
   };
   return (
@@ -70,6 +75,7 @@ export default function CadastrarGrupo(props) {
           </Button>
         </DialogActions>
       </Dialog>
+      <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
     </>
   );
 }

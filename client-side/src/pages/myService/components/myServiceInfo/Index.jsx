@@ -31,6 +31,7 @@ import BackDrop from "../../../components/backdrop/Index";
 import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
 import DialogHistorico from "../dialogHistorico/Index";
 import DialogCancelarSolicitacao from "../dialogCancelarSolicitacao/Index";
+import SnackbarError from "../../../components/snackBarError/Index";
 
 export default function MyServiceInfo (props) {
 
@@ -53,6 +54,9 @@ export default function MyServiceInfo (props) {
     const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
     const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
     const [status, setStatus] = useState("");
+    const [openSnackBarError, setOpenSnackBarError] = useState(false);
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
+    const [enviadoEm, setEnviadoEm] = useState("")
     const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
 
     const config = {
@@ -64,6 +68,7 @@ export default function MyServiceInfo (props) {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
                 // console.log(res.data.dados.mensagens)
                 setStatus(res.data.dados.status.descricao)
+                setEnviadoEm(res.data.dados.created_at)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
                 setNomeResponsavel(res.data.dados.responsavel.name)
@@ -87,7 +92,7 @@ export default function MyServiceInfo (props) {
     const handleSaveInfos = async () => {
         setOpenBackdrop(true)
         let formData = new FormData();
-        formData.append("mensagem", novaMensagem);
+        formData.append("mensagem", novaMensagem); 
         if(upload) {
             formData.append("anexo[0]", upload[0]);
         }
@@ -102,10 +107,11 @@ export default function MyServiceInfo (props) {
     }
 
     const handleValidateInputs = () => {
-        if(novaMensagem) {
+        if(novaMensagem) { 
             handleSaveInfos()
         } else {
-            alert('insira uma mensagem')
+            setMensagemSnackBarError("Insira uma mensagem!")
+            setOpenSnackBarError(true);
         }
     }
 
@@ -132,7 +138,8 @@ export default function MyServiceInfo (props) {
             setOpenBackdrop(false)
         }).catch(err => {
             setOpenBackdrop(false)
-            alert('arquivo nao encontrado')
+            setMensagemSnackBarError("Arquivo não encontrado!")
+            setOpenSnackBarError(true);
         })
     }
 
@@ -230,11 +237,11 @@ export default function MyServiceInfo (props) {
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
                             <div style={{padding: '10px'}}>
-                                <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary="**Data" />
+                                <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary={enviadoEm.slice(8, 10)+"/"+enviadoEm.slice(5, 7)+"/"+enviadoEm.slice(0, 4)+" "+enviadoEm.slice(11, 19)} />
                                 <ListItemText sx={{padding: '5px'}} primary="Prioridade:" secondary={prioridade} />
                                 <div style={{width: '100%', justifyContent: 'space-between', marginTop: '20px', display: status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? 'none' : 'flex'}}>
                                     <b style={{fontSize: '18px', color: 'orange'}}>Expira em:</b>
-                                    <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite}</b>
+                                    <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite.slice(8, 10)+"/"+prazoLimite.slice(5, 7)+"/"+prazoLimite.slice(0, 4)+" "+prazoLimite.slice(11, 20)}</b>
                                 </div>
                                 <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}></div>
                             </div>
@@ -326,6 +333,8 @@ export default function MyServiceInfo (props) {
             <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} idSolicitacao={props.idSolicitacao} setSolicitacaoInfo={props.setSolicitacaoInfo} />
             <DialogHistorico openDialogHistorico={openDialogHistorico} setOpenDialogHistorico={setOpenDialogHistorico} idSolicitacao={props.idSolicitacao} />
             <DialogCancelarSolicitacao openDialogCancelarSolicitacao={openDialogCancelarSolicitacao} setOpenDialogCancelarSolicitacao={setOpenDialogCancelarSolicitacao} idSolicitacao={props.idSolicitacao} />
+            <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
+
         </>
     )
 }

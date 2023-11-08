@@ -14,6 +14,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import BackDrop from "../components/backdrop/Index";
+import SnackbarError from "../components/snackBarError/Index";
+import SnackbarSuccess from "../components/snackBarSuccess/Index";
 
 export default function NewRequest() {
 
@@ -30,6 +32,10 @@ export default function NewRequest() {
   const [descricaoAtual, setDescricaoAtual] = useState("");
   const [upload, setUpload] = useState(false);
   const [openBackdrop, setOpenBackdrop] = useState(false)
+  const [openSnackBarError, setOpenSnackBarError] = useState(false);
+  const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
+  const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false)
+  const [mensagemSnackBarSuccess, setMensagemSnackBarSuccess] = useState("");
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -99,7 +105,8 @@ export default function NewRequest() {
         setDescricaoAtual("");
         setDescricao("");
         setUpload(false);
-        alert('Pedido Cadastrado com sucesso!')
+        setMensagemSnackBarSuccess('Pedido cadastrado com sucesso!');
+        setOpenSnackBarSuccess(true)
         setOpenBackdrop(false)
       }
     }).catch(err => {console.log(err)})
@@ -114,19 +121,24 @@ export default function NewRequest() {
             if(upload) {
               handleSaveInfos()
             } else {
-              alert('upload necessario');
+              setMensagemSnackBarError("Upload é necessário!");
+              setOpenSnackBarError(true)
             }
           } else {
-            alert('preencha descrição')
+            setMensagemSnackBarError("Preencha a descrição antes de prosseguir!");
+            setOpenSnackBarError(true)
           }
-        } else {  
-          alert('preencha categoria')
+        } else { 
+          setMensagemSnackBarError("Preencha a categoria antes de prosseguir!");
+          setOpenSnackBarError(true)
         }
       } else {
-        alert('preencha assunto')
+        setMensagemSnackBarError("Preencha o assunto antes de prosseguir!");
+        setOpenSnackBarError(true)
       }
     } else{
-      alert('preencha setor')
+      setMensagemSnackBarError("Preencha a área antes de prosseguir!");
+      setOpenSnackBarError(true)
     }
   }
 
@@ -244,6 +256,8 @@ export default function NewRequest() {
         </div>
       </div>
       <BackDrop openBackdrop={openBackdrop} />
+      <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
+      <SnackbarSuccess openSnackBarSuccess={openSnackBarSuccess} setOpenSnackBarSuccess={setOpenSnackBarSuccess} mensagemSnackBarSuccess={mensagemSnackBarSuccess} />
     </>
   );
 }

@@ -8,7 +8,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function SnackbarError(props) {
-
+ 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

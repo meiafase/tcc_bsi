@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import DialogListaUsuarios from "../dialogListaUsuarios/Index";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -17,7 +15,6 @@ import EditarGrupo from "../editarGrupo/Index";
 export default function CadastrarUsuario(props) {
   const [openDialogListarUsuarios, setOpenDialogListarUsuarios] =
     useState(false);
-  const [isGrupoVazio, setIsGrupoVazio] = useState(false);
   const [nomeGrupo, setNomeGrupo] = useState("");
   const [colaboradores, setColaboradores] = useState([]);
 
@@ -41,6 +38,7 @@ export default function CadastrarUsuario(props) {
     };
 
     getGrupo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     props.idGrupo,
     props.openEditarGrupo,
@@ -107,7 +105,7 @@ export default function CadastrarUsuario(props) {
         {colaboradores.length !== 0 ? (
           colaboradores.map((colab) => (
             <>
-              <ListItemButton onClick={() => alert(colab.id)}>
+              <ListItemButton>
                 <PersonIcon sx={{ marginRight: "10px" }} />{" "}
                 <p>Desenvolvimento - {colab.name}</p>
               </ListItemButton>

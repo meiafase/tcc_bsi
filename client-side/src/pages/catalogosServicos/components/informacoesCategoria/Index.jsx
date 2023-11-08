@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Axios from 'axios';
+import SnackbarError from "../../../components/snackBarError/Index";
 
 export default function InformacoesCategoria (props) { 
     const [prioridade, setPrioridade] = useState();
@@ -30,9 +31,12 @@ export default function InformacoesCategoria (props) {
     const [responsavel, setResponsavel] = useState(null);
     const [grupoResponsavel, setGrupoResponsavel] = useState(null);
     const [nomeCategoria, setNomeCategoria] = useState("");
+    const [openSnackBarError, setOpenSnackBarError] = useState(false)
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("")
+
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      };
+    };
     
     const handleChange = (event) => {
         setPrioridade(event.target.value);
@@ -88,13 +92,16 @@ export default function InformacoesCategoria (props) {
                 if(descricao) {
                     handleSaveCategoria()
                 } else {
-                    alert('preencha a descricao')
+                    setMensagemSnackBarError("Preencha a descrição!")
+                    setOpenSnackBarError(true)
                 }
             } else {
-                alert('preencha prioridade')
+                setMensagemSnackBarError("Preencha a Prioridade!")
+                setOpenSnackBarError(true)
             }
         } else {
-            alert('preencha prazo')
+            setMensagemSnackBarError("Preencha o prazo!")
+            setOpenSnackBarError(true)
         }
     }
 
@@ -189,6 +196,7 @@ export default function InformacoesCategoria (props) {
                     salvar
                 </Button>
             </div>
+            <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
         </>
     )
 }
