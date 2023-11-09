@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Axios from 'axios';
+import SnackbarError from "../../../components/snackBarError/Index";
 
 export default function InformacoesSubcategoria (props) { 
     const [prioridade, setPrioridade] = useState();
@@ -30,6 +31,9 @@ export default function InformacoesSubcategoria (props) {
     const [responsavel, setResponsavel] = useState(null);
     const [grupoResponsavel, setGrupoResponsavel] = useState(null);
     const [nomeSubcategoria, setNomeSubcategoria] = useState("");
+    const [openSnackBarError, setOpenSnackBarError] = useState(false)
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("")
+
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       };
@@ -87,21 +91,21 @@ export default function InformacoesSubcategoria (props) {
                 if(descricao) {
                     handleSaveSubcategoria()
                 } else {
-                    alert('preencha a descricao')
+                    setMensagemSnackBarError("Preencha a descrição!")
+                    setOpenSnackBarError(true)
                 }
             } else {
-                alert('Selecione  prioridade')
+                setMensagemSnackBarError("Preencha a Prioridade!")
+                setOpenSnackBarError(true)
             }
         } else {
-            alert('preencha o prazo')
+            setMensagemSnackBarError("Preencha o prazo!")
+            setOpenSnackBarError(true)
         }
     }
 
     return(
         <>
-        <h2>Informações da Subcategoria</h2>
-        <fieldset>
-        <legend>Assunto e Subcategoria</legend>
             <div
                 style={{
                 width: "100%",
@@ -118,14 +122,11 @@ export default function InformacoesSubcategoria (props) {
                     <b style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{nomeSubcategoria}</b>
                 </p>
             </div>
-            </fieldset>
             <Divider />
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                    <FormControl><InputLabel id="prazo-label">Prazo de Finalização</InputLabel>
-                    <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" variant="outlined"/>
-                    </FormControl>
+                        <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" label="Prazo" variant="outlined"/>
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select
@@ -199,6 +200,8 @@ export default function InformacoesSubcategoria (props) {
                     salvar
                 </Button>
             </div>
+            <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
+
         </>
     )
 }

@@ -23,12 +23,15 @@ import EmailIcon from '@mui/icons-material/Email';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
+import IconButton from '@mui/material/IconButton';
 
 
 import Header from "../../../components/header/Index";
 import BackDrop from "../../../components/backdrop/Index";
 import DialogEditarResponsavel from "../dialogEditarResponsavel/Index";
 import DialogHistorico from "../dialogHistorico/Index";
+import DialogCancelarSolicitacao from "../dialogCancelarSolicitacao/Index";
+import SnackbarError from "../../../components/snackBarError/Index";
 
 export default function MyServiceInfo (props) {
 
@@ -51,14 +54,21 @@ export default function MyServiceInfo (props) {
     const [openDialogHistorico, setOpenDialogHistorico] = useState(false);
     const [solicitacaoFinalizada, setSolicitacaoFinalizada] = useState('');
     const [status, setStatus] = useState("");
+    const [openSnackBarError, setOpenSnackBarError] = useState(false);
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
+    const [enviadoEm, setEnviadoEm] = useState("")
+    const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      };
+    };
 
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
+                // console.log(res.data.dados.mensagens)
+                setStatus(res.data.dados.status.descricao)
+                setEnviadoEm(res.data.dados.created_at)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
                 setNomeResponsavel(res.data.dados.responsavel.name)
@@ -66,24 +76,23 @@ export default function MyServiceInfo (props) {
                 setOrigem(res.data.dados.area.titulo)
                 setAssunto(res.data.dados.assunto.titulo)
                 setCategoria(res.data.dados.categoria.titulo)
-                setSubcategoria(res.data.dados.sub_categoria.titulo)
                 setPrioridade(res.data.dados.prioridade.descricao)
                 setPrazoLimite(res.data.dados.prazo_limite)
                 setMensagens(res.data.dados.mensagens)
                 setStartedAt(res.data.dados.inicio_atendimento)
                 setSolicitacaoFinalizada(res.data.dados.justificativa_cancelar)
-                setStatus(res.data.dados.status.descricao)
+                setSubcategoria(res.data.dados.sub_categoria.titulo)
             }).catch(err => {})
         }
 
         getSolicitacao()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop])
+    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop, openDialogCancelarSolicitacao])
 
     const handleSaveInfos = async () => {
         setOpenBackdrop(true)
         let formData = new FormData();
-        formData.append("mensagem", novaMensagem);
+        formData.append("mensagem", novaMensagem); 
         if(upload) {
             formData.append("anexo[0]", upload[0]);
         }
@@ -98,19 +107,40 @@ export default function MyServiceInfo (props) {
     }
 
     const handleValidateInputs = () => {
-        if(novaMensagem) {
+        if(novaMensagem) { 
             handleSaveInfos()
         } else {
-            alert('insira uma mensagem')
+            setMensagemSnackBarError("Insira uma mensagem!")
+            setOpenSnackBarError(true);
         }
     }
 
     const handleStartService = async () => {
         setOpenBackdrop(true)
         await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/iniciar-atendimento`, {}, config).then(res => {
-            console.log(res.data);
             setOpenBackdrop(false)
         }).catch(err => {})
+    }
+
+    const handleFinishService = async () => {
+        setOpenBackdrop(true)
+        await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/alterar-status`, {
+            status_id: 3 
+        }, config).then(res => {
+            setOpenBackdrop(false)
+        }).catch(err => {})
+    }
+
+    const handleDownloadAnexo = async (idMensagem, idAnexo) => {
+        setOpenBackdrop(true)
+        await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/mensagem/${idMensagem}/anexo/${idAnexo}/baixar`, config).then(res => {
+            console.log(res.data)
+            setOpenBackdrop(false)
+        }).catch(err => {
+            setOpenBackdrop(false)
+            setMensagemSnackBarError("Arquivo não encontrado!")
+            setOpenSnackBarError(true);
+        })
     }
 
     return(
@@ -135,11 +165,11 @@ export default function MyServiceInfo (props) {
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        {solicitacaoFinalizada === 'xxxx' ? (
+                        {solicitacaoFinalizada === 'xxxx' || status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? (
                             ""
                         ) : (
                             startedAt ? (
-                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento">Concluir atendimento </Button>
+                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleFinishService}>Concluir atendimento </Button>
                             ) : (
                                 <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
                             )
@@ -172,7 +202,7 @@ export default function MyServiceInfo (props) {
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
-                        <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px'}}>
+                        <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                             <div style={{padding: '10px'}}>
                                 <p style={{fontWeight: 'bold', fontSize: '20px'}}>Atendente</p>
                                 <ListItem disablePadding>
@@ -187,7 +217,7 @@ export default function MyServiceInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
+                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -207,26 +237,25 @@ export default function MyServiceInfo (props) {
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
                             <div style={{padding: '10px'}}>
-                                <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary="**Data" />
+                                <ListItemText sx={{padding: '5px'}} primary="Enviado em:" secondary={enviadoEm.slice(8, 10)+"/"+enviadoEm.slice(5, 7)+"/"+enviadoEm.slice(0, 4)+" "+enviadoEm.slice(11, 19)} />
                                 <ListItemText sx={{padding: '5px'}} primary="Prioridade:" secondary={prioridade} />
-                                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
+                                <div style={{width: '100%', justifyContent: 'space-between', marginTop: '20px', display: status === 'CANCELADO' || status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? 'none' : 'flex'}}>
                                     <b style={{fontSize: '18px', color: 'orange'}}>Expira em:</b>
-                                    <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite}</b>
+                                    <b style={{fontSize: '18px', color: 'orange'}}>{prazoLimite.slice(8, 10)+"/"+prazoLimite.slice(5, 7)+"/"+prazoLimite.slice(0, 4)+" "+prazoLimite.slice(11, 20)}</b>
                                 </div>
-                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px'}}></div>
+                                <div style={{width: '100%', height: '5px', backgroundColor: 'orange', borderRadius: '5px', marginBottom: '20px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}></div>
                             </div>
                         <Divider />
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />}>Cancelar solicitação</Button>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : 'flex'}}>Cancelar solicitação</Button>
                         </div>
                     </div>
                 </div>
                 <div style={{width: '74%', height: '100vh', display: 'flex', justifyContent: 'center', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '80%'}}>
-
                         {mensagens.map(mensagem => (
                             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                 <ListItem alignItems="flex-start">
@@ -255,7 +284,9 @@ export default function MyServiceInfo (props) {
                                 <div style={{width: '100%', padding: '25px', backgroundColor: '#87d3f8', marginTop: '10px', marginBottom: '10px', display: mensagem.anexos[0] ? "flex" : "none", borderRadius: '5px'}}>
                                     <ListItem >
                                         <ListItemIcon>
-                                            <AttachFileIcon />
+                                            <IconButton onClick={() => handleDownloadAnexo(mensagem.id, mensagem.anexos[0].id)}>
+                                                <AttachFileIcon sx={{color: 'blue'}} />
+                                            </IconButton>
                                         </ListItemIcon>
                                         <ListItemText primary={mensagem.anexos[0] ? mensagem.anexos[0].nome_arquivo_completo : ""} />
                                     </ListItem>
@@ -263,7 +294,8 @@ export default function MyServiceInfo (props) {
                                 <Divider variant="inset" component="li" />
                             </List>
                         ))}
-                        <div style={{marginTop: '30px', paddingBottom: '200px'}}>
+                        
+                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'none' : ''}}>
                         <TextField
                             id="outlined-multiline-static"
                             label="Enviar Mensagem"
@@ -290,12 +322,19 @@ export default function MyServiceInfo (props) {
                             </Button>
                             </div>
                         </div>
+                        <div style={{width: '100%',display: 'flex', justifyContent: 'center', marginTop: '50px', paddingBottom: '100px'}}>
+                            <p style={{display: status === 'CANCELADO' ? 'flex' : 'none', color: 'red', fontWeight: 'bold', fontSize: '20px'}}>Solicitação Cancelada.</p>
+                            <p style={{display: status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? 'flex' : 'none', color: 'green', fontWeight: 'bold', fontSize: '20px'}}>Solicitação Finalizada.</p>
+                        </div>
                     </div>
                 </div>
             </div>
             <BackDrop openBackdrop={openBackdrop} />
-            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} />
+            <DialogEditarResponsavel openDialogEditarResponsavel={openDialogEditarResponsavel} setOpenDialogEditarResponsavel={setOpenDialogEditarResponsavel} idSolicitacao={props.idSolicitacao} setSolicitacaoInfo={props.setSolicitacaoInfo} />
             <DialogHistorico openDialogHistorico={openDialogHistorico} setOpenDialogHistorico={setOpenDialogHistorico} idSolicitacao={props.idSolicitacao} />
+            <DialogCancelarSolicitacao openDialogCancelarSolicitacao={openDialogCancelarSolicitacao} setOpenDialogCancelarSolicitacao={setOpenDialogCancelarSolicitacao} idSolicitacao={props.idSolicitacao} />
+            <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
+
         </>
     )
 }

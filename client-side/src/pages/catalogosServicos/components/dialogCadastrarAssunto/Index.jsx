@@ -7,9 +7,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Axios from 'axios';
+import SnackbarError from '../../../components/snackBarError/Index';
 
 export default function DialogCadastrarAssunto(props) {
     const [assunto, setAssunto] = useState('');
+    const [openSnackBarError, setOpenSnackBarError] = useState(false)
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
 
     const handleClose = () => {
         props.setOpenCadastrarAssunto(false);
@@ -36,7 +39,8 @@ export default function DialogCadastrarAssunto(props) {
     if(assunto) {
         handleSaveAssunto()
     } else {
-        alert('Preencha o campo!')
+        setMensagemSnackBarError("Preencha o campo corretamente!")
+        setOpenSnackBarError(true)
     }
   }
 
@@ -63,6 +67,7 @@ export default function DialogCadastrarAssunto(props) {
           <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar assunto">Cadastrar</Button>
         </DialogActions>
       </Dialog>
+      <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
     </div>
   );
 }

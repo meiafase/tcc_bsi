@@ -41,12 +41,22 @@ export default function DialogEditarResponsavel(props) {
     setAtendente(event.target.value);
   };
 
+  const handleEditraResponsavel = async () => {
+    console.log(atendente)
+    await Axios.patch(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}/atribuir`, {
+      responsavel_id: atendente
+    }, config).then(res => {
+      console.log(res.data)
+      if(res.data.status) {
+        props.setSolicitacaoInfo(false)
+      }
+    }).catch(err => {})
+  }
+
   return (
       <Dialog
         open={props.openDialogEditarResponsavel}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
           {"Editar Atendente"}
@@ -72,7 +82,7 @@ export default function DialogEditarResponsavel(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color='error' variant='contained'>Cancelar</Button>
-          <Button onClick={handleClose} autoFocus color='success' variant='contained'>
+          <Button autoFocus color='success' variant='contained' onClick={handleEditraResponsavel}>
             Editar
           </Button>
         </DialogActions>

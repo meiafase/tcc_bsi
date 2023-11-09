@@ -152,3 +152,9 @@ pedido, se caso tiver, mudar para enviar apenas um anexo, ou uma pasta compactad
 
 ###
 Buscar Historico ----->  /api/pedido/*ID*/historico - esta rota esta retornando o id do usuario, preciso que retorne o nome dele
+
+
+
+minhas solicitações = cancelar / enviar mensagens OK
+
+solicitações da area = se o usuario logado nao tiver vinculo com o chamado, sera possivel apenas visualizar. Porem se for gestor, pode interagir com tudo

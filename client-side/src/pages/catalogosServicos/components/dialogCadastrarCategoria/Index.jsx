@@ -9,10 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Axios from 'axios';
+import SnackbarError from '../../../components/snackBarError/Index';
 
 export default function DialogCadastrarCategoria(props) {
     const [categoria, setCategoria] = useState('');
     const [subcategorias, setSubcategorias] = useState(false);
+    const [openSnackBarError, setOpenSnackBarError] = useState(false)
+    const [mensagemSnackBarError, setMensagemSnackBarError] = useState("")
 
     const handleClose = () => {
         props.setOpenCadastrarCategoria(false);
@@ -38,7 +41,8 @@ export default function DialogCadastrarCategoria(props) {
     if(categoria) {
         handleSaveCategoria()
     } else {
-        alert('Preencha o campo!')
+        setMensagemSnackBarError('Preencha o campo corretamente!')
+        setOpenSnackBarError(true)
     }
   }
 
@@ -66,6 +70,7 @@ export default function DialogCadastrarCategoria(props) {
           <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar categoria">Cadastrar</Button>
         </DialogActions>
       </Dialog>
+      <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />
     </div>
   );
 }

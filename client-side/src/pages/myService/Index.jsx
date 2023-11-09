@@ -34,7 +34,6 @@ export default function MyService () {
     useEffect(() => {
         const getInfos = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/status`, config).then(res => {
-                console.log(res.data.dados)
                 setStatusList(res.data.dados);
             }).catch(err => {});
 
@@ -54,7 +53,7 @@ export default function MyService () {
     useEffect(() => {
         const filterTable = async () => {
             await Axios.post(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/listar-pedidos`, {
-                "tipo": "minhas",
+                "tipo": "atendimentos",
                 status_id: status,
                 prioridade_id: prioridade,
                 solicitante_id: solicitante
@@ -65,7 +64,7 @@ export default function MyService () {
 
         filterTable()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, setStatus, prioridade, setPrioridade, solicitante, setSolicitante])
+    }, [status, setStatus, prioridade, setPrioridade, solicitante, setSolicitante, solicitacaoInfo])
 
     return(
         !solicitacaoInfo ? (
@@ -144,12 +143,13 @@ export default function MyService () {
                                 onClick={e => {setIdSolicitacao(row.id); setSolicitacaoInfo(true)}}
                                 >
                                 <TableCell component="th" scope="row" aria-label="Número da solicitação">{row.id}</TableCell>
-                                <TableCell align="right" aria-label="Enviado Em">{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                                <TableCell align="right" aria-label="Enviado Em">{row.enviado_em ? row.enviado_em.split("-")  : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Área">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Assunto">{row.assunto ? row.assunto : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Responsável">{row.responsavel ? row.responsavel : "---"}</TableCell>
-                                <TableCell align="right" sx={{color: 'orange', fontWeight: 'bold'}} aria-label="Status">{row.status ? row.status : "---"}</TableCell>
-                                <TableCell align="right" sx={{color: 'red', fontWeight: 'bold'}} aria-label="Prazo">{row.prazo ? row.prazo : "---"}</TableCell>
+                                <TableCell align="right" sx={{color: row.status === 'CANCELADO' ? "red" : row.status === "EM ATENDIMENTO" ? 'orange' : row.status === 'FINALIZADO' ? "green" : row.status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? "#6a63df" : 'black', fontWeight: 'bold', width: '150px'}} aria-label={`Status do Pedido: ${row.status}`}>{row.status ? row.status : "---"}</TableCell>
+                                <TableCell align="right" sx={{width: '150px'}} aria-label={`Status do Pedido: ${row.prazo}`}>{row.prazo.slice(8, 10) +"/"+ row.prazo.slice(5, 7) +"/"+ row.prazo.slice(0, 4) +" "+ row.prazo.slice(11, 20)}</TableCell>
+
                                 </TableRow>
                             ))}
                             </TableBody>

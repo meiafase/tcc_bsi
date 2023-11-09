@@ -15,8 +15,8 @@ const Rotas = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/MeusAtendimentos" element={<MyService />} />
         <Route path="/MinhasSolicitacoes" element={<MyRequests />} />
+        <Route path="/MeusAtendimentos" element={<MyService />} />
         <Route path="/SolicitacoesArea" element={<AreaRequests />} />
         <Route path="/Relatorio" element={<Report />} />
         <Route path="/NovaSolicitacao" element={<NewRequest />} />
