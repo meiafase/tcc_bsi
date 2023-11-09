@@ -14,6 +14,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Exception;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
+
 class PedidoService
 {
     protected $repository;
@@ -91,7 +94,7 @@ class PedidoService
                     $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
                 }
             }
-
+            Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "atribuicao" => true)));
             DB::commit();
             return array(
                 'status' => true,
