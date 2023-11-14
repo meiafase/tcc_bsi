@@ -94,7 +94,7 @@ class PedidoService
                     $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
                 }
             }
-            Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "atribuicao" => true)));
+            // Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "atribuicao" => true)));
             DB::commit();
             return array(
                 'status' => true,
@@ -293,7 +293,7 @@ class PedidoService
         try {
             DB::beginTransaction();
 
-            $with = array("solicitante", "responsavel", "mensagens", "area", "categoria", "subCategoria", "prioridade", "status", "assunto");
+            $with = array("solicitante", "responsavel", "mensagens", "area", "categoria", "subCategoria", "prioridade", "status", "assunto", "avaliacao");
 
             $pedido = $this->repository->obter($pedido_id, $with);
 

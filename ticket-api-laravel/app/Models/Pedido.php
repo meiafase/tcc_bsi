@@ -67,14 +67,9 @@ class Pedido extends Model
         return $this->hasMany(Historico::class, "pedido_id", "id");
     }
 
-    public function avaliacaoSolicitante()
+    public function avaliacao()
     {
-        return $this->hasOne(Avaliacao::class, "pedido_id", "id")->where('avaliacao_gestor', false)->with('usuario');
-    }
-
-    public function avaliacaoGestor()
-    {
-        return $this->hasOne(Avaliacao::class, "pedido_id", "id")->where('avaliacao_gestor', true)->with('usuario');
+        return $this->hasOne(Avaliacao::class, "pedido_id", "id");
     }
 
     public function adicionais()
