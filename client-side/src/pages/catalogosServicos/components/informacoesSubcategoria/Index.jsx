@@ -12,12 +12,12 @@ import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
-import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Axios from 'axios';
 import SnackbarError from "../../../components/snackBarError/Index";
+import { MaskPrazo } from "../../../../utils/mask/MascaraPrazo";
 
 export default function InformacoesSubcategoria (props) { 
     const [prioridade, setPrioridade] = useState();
@@ -46,11 +46,14 @@ export default function InformacoesSubcategoria (props) {
         const getUsersAndGroup = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, config).then(res => {
                 setNomeSubcategoria(res.data.dados.titulo);
-                setPrazo(res.data.dados.prazo_horas);
+                setPrazo(res.data.dados.prazo_horas)
                 setPrioridade(res.data.dados.prioridade_id);
                 setRestricao(res.data.dados.restricao);
                 setDescricao(res.data.dados.descricao);
-                console.log(res.data.dados);
+                setAtivarGrupoAtendente(res.data.dados.responsavel_id === null ? res.data.dados.equipe_id  : res.data.dados.responsavel_id)
+                setAtivarGrupoResponsavel(res.data.dados.responsavel_id ? "responsavel" : "grupo")
+                setGrupoResponsavel(res.data.dados.grupo[0] ? res.data.dados.grupo[0].id : "")
+                setResponsavel(res.data.dados.responsavel[0].id)
             }).catch(err => {})
 
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
@@ -71,9 +74,10 @@ export default function InformacoesSubcategoria (props) {
     }, [])
 
     const handleSaveSubcategoria = async () => {
+        let prazoSlited = prazo.split(":")[0] + prazo.split(":")[1] + prazo.split(":")[2]
         await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, {
             descricao,
-            prazo_horas: prazo,
+            prazo_horas: prazoSlited,
             prioridade_id: prioridade,
             equipe_id: grupoResponsavel,
             responsavel_id: responsavel,
@@ -104,6 +108,14 @@ export default function InformacoesSubcategoria (props) {
         }
     }
 
+    const handleChangeResponsavel = (event) => {
+        setResponsavel(event.target.value);
+      };
+
+      const handleChangeGrupo = (event) => {
+        setGrupoResponsavel(event.target.value);
+    }
+
     return(
         <>
             <div
@@ -126,7 +138,7 @@ export default function InformacoesSubcategoria (props) {
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                        <TextField sx={{ width: '49%' }} value={prazo} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" label="Prazo" variant="outlined"/>
+                        <TextField sx={{ width: '49%' }} value={MaskPrazo(prazo)} onChange={e => setPrazo(e.target.value)} id="prazo" labelId="prazo-label" label="Prazo" variant="outlined"/>
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select
@@ -161,35 +173,43 @@ export default function InformacoesSubcategoria (props) {
                         /> 
                     </div>
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox onChange={e => {setAtivarGrupoAtendente(e.target.checked)}} />} label="Ativar Grupo ou Atendente responsável" />
+                        <FormControlLabel control={<Checkbox onChange={e => {setAtivarGrupoAtendente(e.target.checked)}} checked={ativarGrupoAtendente} />}label="Ativar Grupo ou Atendente responsável" />
                     </FormGroup>    
                     <Paper elevation={3} sx={{padding: '20px', marginTop: '10px', display: ativarGrupoAtendente === false ? "none" : "in-line"}}>
                         <FormControl>
                             <FormLabel>Selecione</FormLabel>
                                 <RadioGroup row >
-                                    <FormControlLabel value="responsavel" onChange={e => {setAtivarGrupoResponsavel('responsavel'); setGrupoResponsavel('')}} control={<Radio />} label="Responsável" />
-                                    <FormControlLabel value="grupo" onChange={e => {setAtivarGrupoResponsavel('grupo'); setResponsavel('')}} control={<Radio />} label="Grupo" />
+                                <FormControlLabel value="responsavel" checked={ativarGrupoResponsavel === 'responsavel' ? true : false} onChange={e => {setAtivarGrupoResponsavel('responsavel'); setGrupoResponsavel('')}} control={<Radio />} label="Responsável" />
+                                    <FormControlLabel value="grupo" checked={ativarGrupoResponsavel === 'grupo' ? true : false} onChange={e => {setAtivarGrupoResponsavel('grupo'); setResponsavel('')}} control={<Radio />} label="Grupo" />
                             </RadioGroup>
                         </FormControl>
                         <div style={{display: ativarGrupoResponsavel === "responsavel" ? 'flex': 'none'}}>
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                onChange={(e, newValue) =>  setResponsavel(newValue.id)}
-                                id="combo-box-demo"
-                                options={users}
-                                renderInput={(params) => <TextField {...params} label="Selecione o responsável"/>}
-                            />
+                        <FormControl margin="dense" fullWidth>
+                            <InputLabel id="demo-simple-select-label">Responsável</InputLabel>
+                            <Select
+                                value={responsavel}
+                                label="Responsável"
+                                onChange={handleChangeResponsavel}
+                            >
+                                {users.map(user => (
+                                    <MenuItem value={user.id}>{user.label}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                         </div>
                         <div style={{display: ativarGrupoResponsavel === "grupo" ? 'flex': 'none'}}>
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                onChange={(e, newValue) => setGrupoResponsavel(newValue.id)}
-                                id="combo-box-demo"
-                                options={grupos}
-                                renderInput={(params) => <TextField {...params} label="Selecione o grupo"/>}
-                            />
+                        <FormControl margin="dense" fullWidth>
+                                <InputLabel id="demo-simple-select-label">Grupos</InputLabel>
+                                <Select
+                                    value={grupoResponsavel}
+                                    label="Grupo"
+                                    onChange={handleChangeGrupo}
+                                >
+                                    {grupos.map(grupo => (
+                                        <MenuItem value={grupo.id}>{grupo.label}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </div>
                     </Paper>
                 </div>

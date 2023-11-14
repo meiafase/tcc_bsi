@@ -57,7 +57,7 @@ export default function MyRequestsInfo (props) {
     const [openSnackBarError, setOpenSnackBarError] = useState(false);
     const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
     const [enviadoEm, setEnviadoEm] = useState("")
-    const [justificativa, setJustificativa] = useState("!!!!!!!!!!!!!!!!!!!Pegar na requisição do back!!!!!!!!!!!!!!!!!");
+    const [justificativa, setJustificativa] = useState("");
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -66,7 +66,6 @@ export default function MyRequestsInfo (props) {
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
-                console.log(res.data.dados.status.descricao)
                 setStatus(res.data.dados.status.descricao)
                 setEnviadoEm(res.data.dados.created_at)
                 setNomeSolicitante(res.data.dados.solicitante.name)
@@ -80,13 +79,14 @@ export default function MyRequestsInfo (props) {
                 setPrazoLimite(res.data.dados.prazo_limite)
                 setMensagens(res.data.dados.mensagens)
                 setNota(res.data.dados.nota_solicitante.split(".")[0])
-                setSubcategoria(res.data.dados.sub_categoria.titulo)
+                setSubcategoria(res.data.dados.sub_categoria ? res.data.dados.sub_categoria.titulo : false)
+                setJustificativa(res.data.dados.avaliacao.justificativa)
             }).catch(err => {})
         }
 
         getSolicitacao()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop, openDialogCancelarSolicitacao])
+    }, [props.idSolicitacao, setOpenBackdrop, openBackdrop, openDialogCancelarSolicitacao, openDialogHistorico])
 
     const handleSaveInfos = async () => {
         setOpenBackdrop(true)
@@ -272,7 +272,8 @@ export default function MyRequestsInfo (props) {
                                     <ListItemText
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
-                                            {mensagem.usuario.name + " / " + mensagem.created_at.split(".")[0].split("T")}
+                                            {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
+
                                         </Typography>
                                     }
                                     secondary={

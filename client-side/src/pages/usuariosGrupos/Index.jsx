@@ -110,7 +110,7 @@ export default function Index() {
                   <CircleIcon
                     sx={{
                       fontSize: "15px",
-                      color: grupo.ativo ? "cyan" : "red",
+                      color: grupo.ativo ? "green" : "red",
                     }}
                   />{" "}
                   {grupo.titulo}

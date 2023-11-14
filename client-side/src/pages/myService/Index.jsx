@@ -143,7 +143,7 @@ export default function MyService () {
                                 onClick={e => {setIdSolicitacao(row.id); setSolicitacaoInfo(true)}}
                                 >
                                 <TableCell component="th" scope="row" aria-label="Número da solicitação">{row.id}</TableCell>
-                                <TableCell align="right" aria-label="Enviado Em">{row.enviado_em ? row.enviado_em.split("-")  : "---"}</TableCell>
+                                <TableCell align="right" aria-describedby={`pedidoEnviadoEm${row.id}`}>{row.enviado_em ? row.enviado_em.slice(8, 10) + "/" + row.enviado_em.slice(5, 7) + "/" + row.enviado_em.slice(0, 4) + " " + row.enviado_em.slice(11, 19) : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Área">{row.area_pedido ? row.area_pedido : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Assunto">{row.assunto ? row.assunto : "---"}</TableCell>
                                 <TableCell align="right" aria-label="Responsável">{row.responsavel ? row.responsavel : "---"}</TableCell>
