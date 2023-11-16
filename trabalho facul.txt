@@ -162,14 +162,9 @@ solicitações da area = se o usuario logado nao tiver vinculo com o chamado, se
 
 Configuração de email:
 	.env
-		MAIL_MAILER=mailgun
-		MAILGUN_DOMAIN=sandbox8c8b11fd9c4845ff8e341903d90ba603.mailgun.org
-		MAILGUN_SECRET=05f76a12cb0e6dc33e3f8880af5f7e5f-1c7e8847-bd3102f1
-		MAILGUN_ENDPOINT=api.mailgun.net
-		MAIL_FROM_ADDRESS="naoresponda@teste.com"
-		MAIL_FROM_NAME="${APP_NAME}"
+		ver no whats confgs
 		
 	rodar comando: composer install
 	
-	Acesso servidor email: app.mailgun.com us: faculdade.anavargas@gmail.com senha: Sapoboi2398*
+	Acesso servidor email: app.mailgun.com us: faculdade.anavargas@gmail.com senha: *******
 
