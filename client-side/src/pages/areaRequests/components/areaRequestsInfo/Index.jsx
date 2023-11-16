@@ -168,13 +168,15 @@ export default function AreaRequestsInfo (props) {
             <div style={{width: '100%', height: '80vh', marginTop: '30px', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '25%', height: '80vh', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                        {coord === "S" ? (
-                            startedAt ? (
-                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleFinishService}>Concluir atendimento </Button>
-                            ) : (
-                                <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
-                            )
-                        ) : ("") }
+                        {status === 'FINALIZADO' || status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? ("") : (
+                            coord === 'S' ? (
+                                startedAt ? (
+                                    <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleFinishService}>Concluir atendimento </Button>
+                                ) : (
+                                    <Button sx={{width: '80%'}} variant="contained" endIcon={<EastIcon />} aria-label="Iniciar Atendimento" onClick={handleStartService}>iniciar atendimento </Button>
+                                )
+                            ) : ("")
+                        ) }
                         
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
@@ -218,7 +220,7 @@ export default function AreaRequestsInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' || coord !== 'S' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
+                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' || status === 'FINALIZADO' || coord !== 'S' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
                             </div>
                         </div>
                     </div>
@@ -251,7 +253,7 @@ export default function AreaRequestsInfo (props) {
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content'}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || coord !== "S" ? 'none' : 'flex'}}>Cancelar solicitação</Button>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setOpenDialogCancelarSolicitacao(true)} sx={{ display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'FINALIZADO' || coord !== "S" ? 'none' : 'flex'}}>Cancelar solicitação</Button>
                         </div>
                     </div>
                 </div>
@@ -266,7 +268,7 @@ export default function AreaRequestsInfo (props) {
                                     <ListItemText
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
-                                            {mensagem.usuario.name + " / " + mensagem.created_at.split(".")[0].split("T")}
+                                            {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
                                         </Typography>
                                     }
                                     secondary={
@@ -296,7 +298,7 @@ export default function AreaRequestsInfo (props) {
                             </List>
                         ))}
                         
-                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || coord !== 'S' ? 'none' : ''}}>
+                        <div style={{marginTop: '30px', paddingBottom: '200px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === "FINALIZADO" || coord !== 'S' ? 'none' : ''}}>
                         <TextField
                             id="outlined-multiline-static"
                             label="Enviar Mensagem"

@@ -42,11 +42,10 @@ export default function MyRequests () {
     useEffect(() => {
         const getInfos = async () => {
             let id = localStorage.getItem("id");
-    Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${id}`, config).then(
-      (res) => {
-        if(res.data.dados.primeiro_acesso === 1) setOpenDialogFirstLogin(true)
-      }
-    );
+            Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${id}`, config).then((res) => {
+                if(res.data.dados.primeiro_acesso === 1) setOpenDialogFirstLogin(true)
+            }
+            );
 
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/status`, config).then(res => {
                 console.log(res.data.dados)
@@ -64,7 +63,7 @@ export default function MyRequests () {
 
         getInfos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [solicitacaoInfo])
 
     useEffect(() => {
         const filterTable = async () => {
@@ -163,7 +162,7 @@ export default function MyRequests () {
                                     >
 
                                     <TableCell component="th" scope="row" aria-describedby={`pedidoNumero${row.id}`}>{row.id ? row.id : "---"}</TableCell>
-                                    <TableCell align="right" aria-describedby={`pedidoEnviadoEm${row.id}`}>{row.enviado_em ? row.enviado_em : "---"}</TableCell>
+                                    <TableCell align="right" aria-describedby={`pedidoEnviadoEm${row.id}`}>{row.enviado_em ? row.enviado_em.slice(8, 10) + "/" + row.enviado_em.slice(5, 7) + "/" + row.enviado_em.slice(0, 4) + " " + row.enviado_em.slice(11, 19) : "---"}</TableCell>
                                     <TableCell align="right" aria-describedby={`pedidoAreaPedido${row.id}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
                                     <TableCell align="right" aria-describedby={`pedidoAssunto${row.id}`}>{row.assunto ? row.assunto : "---"}</TableCell>
                                     <TableCell align="right" aria-describedby={`pedidoResponsavel${row.id}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>

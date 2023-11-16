@@ -32,6 +32,9 @@ export default function Header(props) {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [openDrawer, setOpenDrawer] = useState(false);
   const [nomeUser, setNomeUser] = useState("");
+  const [manterCatalogo, setManterCatalogo] = useState("");
+  const [manterPermissoes, setManterPermissoes] = useState("");
+  const [abrirChamados, setAbrirChamados] = useState("");
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -41,6 +44,9 @@ export default function Header(props) {
     const getUser = async () => {
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${localStorage.getItem("id")}`, config).then(res => {
         setNomeUser(res.data.dados.name);
+        setManterCatalogo(res.data.dados.permissoes.manter_catalogo);
+        setManterPermissoes(res.data.dados.permissoes.manter_permissoes)
+        setAbrirChamados(res.data.dados.permissoes.abrir_chamados)
       }).catch(err => {})
     }
 
@@ -68,7 +74,7 @@ export default function Header(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem key="novaSolicitacao" disablePadding>
+        <ListItem key="novaSolicitacao" disablePadding  sx={{display: abrirChamados ? "flex" : "none"}}>
           <ListItemButton>
             <ListItemIcon>
               <AddIcon sx={{ color: "black" }} />
@@ -114,7 +120,7 @@ export default function Header(props) {
       </List>
       <Divider />
       <List>
-        <ListItem key="usuariosGrupos" disablePadding>
+        <ListItem key="usuariosGrupos" disablePadding sx={{display: manterPermissoes? "flex" : "none"}}>
           <ListItemButton
             onClick={() => navigate("../Configuracoes/Permissoes")} aria-label="Usuários e Grupos"
           >
@@ -124,7 +130,7 @@ export default function Header(props) {
             <ListItemText primary="Usuários e Grupos" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="catalogoServico" disablePadding>
+        <ListItem key="catalogoServico" disablePadding sx={{display: manterCatalogo? 'flex' : 'none'}}>
           <ListItemButton onClick={() => navigate("../Configuracoes/Catalogo")} aria-label="Catálogos de Serviços">
             <ListItemIcon>
               <AccountTreeIcon sx={{ color: "black" }} />
@@ -132,7 +138,7 @@ export default function Header(props) {
             <ListItemText primary="Catálogos de Serviços" />
           </ListItemButton>
         </ListItem>
-        <Divider />
+        <Divider sx={{display: manterPermissoes && manterCatalogo ? "flex" : "none"}} />
         <ListItem key="sair" disablePadding>
           <ListItemButton
             onClick={() => {

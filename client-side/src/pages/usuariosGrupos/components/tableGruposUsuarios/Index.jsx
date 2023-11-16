@@ -19,6 +19,7 @@ export default function TableGruposUsuarios() {
 
   useEffect(() => {
     Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res =>{
+      console.log(res.data)
       setUsers(res.data);
     }).catch(err => {})
   }, [attUser, setAttUser])
@@ -87,11 +88,9 @@ export default function TableGruposUsuarios() {
               user.permissoes? (
                 <TableRow
                 key={user.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 }, display: user.tp_coord === 'S' ? "none" : "row" }}
               >
-                <TableCell component="th" scope="row">
-                  {user.name}
-                </TableCell>
+                <TableCell component="th" scope="row">{user.name}</TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleAbrirChamados(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.abrir_chamados === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleAbrirChamadosRestritos(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.abrir_chamados_restritos === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleAtenderChamados(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.atender_chamados === 1? true: false} /></TableCell>

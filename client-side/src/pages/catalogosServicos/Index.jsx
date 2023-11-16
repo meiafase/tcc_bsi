@@ -84,7 +84,7 @@ export default function CatalogoServico() {
                   <CircleIcon
                     sx={{
                       fontSize: "15px",
-                      color: assunto.ativo ? "cyan" : "red",
+                      color: assunto.ativo ? "green" : "red",
                     }}
                   />{" "}
                   {assunto.titulo}

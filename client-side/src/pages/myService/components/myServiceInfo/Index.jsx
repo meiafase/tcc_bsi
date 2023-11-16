@@ -58,6 +58,7 @@ export default function MyServiceInfo (props) {
     const [mensagemSnackBarError, setMensagemSnackBarError] = useState("");
     const [enviadoEm, setEnviadoEm] = useState("")
     const [openDialogCancelarSolicitacao, setOpenDialogCancelarSolicitacao] = useState(false)
+    const [coord, setCoord] = useState("")
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -65,6 +66,10 @@ export default function MyServiceInfo (props) {
 
     useEffect(() => {
         const getSolicitacao = async () => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/${localStorage.getItem("id")}`, config).then(res => {
+                setCoord(res.data.dados.tp_coord);
+            }).catch(err => {})
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
                 // console.log(res.data.dados.mensagens)
                 setStatus(res.data.dados.status.descricao)
@@ -217,8 +222,8 @@ export default function MyServiceInfo (props) {
                                     </ListItemIcon>
                                     <ListItemText primary={emailResponsavel} />
                                 </ListItem>
-                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
-                            </div>
+                                <Button sx={{marginTop: '10px', display: status === 'CANCELADO' || status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' || status === 'EM ATENDIMENTO' || coord !== 'S' ? 'none' : 'flex'}} variant="contained" onClick={() => setOpenDialogEditarResponsavel(true)} endIcon={<EditIcon />}>editar Atendente </Button>
+                            </div>asd
                         </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
@@ -265,7 +270,8 @@ export default function MyServiceInfo (props) {
                                     <ListItemText
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
-                                            {mensagem.usuario.name + " / " + mensagem.created_at.split(".")[0].split("T")}
+                                            {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
+
                                         </Typography>
                                     }
                                     secondary={

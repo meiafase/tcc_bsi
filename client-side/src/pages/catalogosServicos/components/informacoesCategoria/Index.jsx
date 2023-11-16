@@ -12,12 +12,12 @@ import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
-import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Axios from 'axios';
 import SnackbarError from "../../../components/snackBarError/Index";
+import { MaskPrazo } from "../../../../utils/mask/MascaraPrazo";
 
 export default function InformacoesCategoria (props) { 
     const [prioridade, setPrioridade] = useState();
@@ -28,7 +28,7 @@ export default function InformacoesCategoria (props) {
     const [prazo, setPrazo] = useState("");
     const [restricao, setRestricao] = useState(false);
     const [descricao, setDescricao] = useState('');
-    const [responsavel, setResponsavel] = useState(null);
+    const [responsavel, setResponsavel] = useState("");
     const [grupoResponsavel, setGrupoResponsavel] = useState(null);
     const [nomeCategoria, setNomeCategoria] = useState("");
     const [openSnackBarError, setOpenSnackBarError] = useState(false)
@@ -44,6 +44,7 @@ export default function InformacoesCategoria (props) {
 
     useEffect(() => {
         const getUsersAndGroup = async () => {
+            
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, config).then(res => {
                 setNomeCategoria(res.data.dados.titulo)
                 setPrazo(res.data.dados.prazo_horas)
@@ -51,15 +52,15 @@ export default function InformacoesCategoria (props) {
                 setRestricao(res.data.dados.restricao);
                 setDescricao(res.data.dados.descricao);
                 setAtivarGrupoAtendente(res.data.dados.responsavel_id === null ? res.data.dados.equipe_id  : res.data.dados.responsavel_id)
-                setResponsavel(res.data.dados.responsavel_id);
-                setAtivarGrupoResponsavel(res.data.dados.responsavel_id ? "responsavel" : "")
+                setAtivarGrupoResponsavel(res.data.dados.responsavel_id ? "responsavel" : "grupo")
+                setGrupoResponsavel(res.data.dados.grupo[0] ? res.data.dados.grupo[0].id : "")
+                setResponsavel(res.data.dados.responsavel[0].id)
             }).catch(err => {})
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
                 res.data.map(us => (
                     setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id}])
-                ))
-            }).catch(err => {});
-
+                    ))
+                }).catch(err => {});
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/12`, config).then(res => {
                 res.data.dados.map(gp => (
                     setGrupos(grupos => [...grupos, {label: "Grupo - " + gp.titulo, id: gp.id}])
@@ -72,9 +73,10 @@ export default function InformacoesCategoria (props) {
     }, [])
 
     const handleSaveCategoria = async () => {
+        let prazoSlited = prazo.split(":")[0] + prazo.split(":")[1] + prazo.split(":")[2]
         await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, {
             descricao,
-            prazo_horas: prazo,
+            prazo_horas: prazoSlited,
             prioridade_id: prioridade,
             equipe_id: grupoResponsavel,
             responsavel_id: responsavel,
@@ -105,6 +107,14 @@ export default function InformacoesCategoria (props) {
         }
     }
 
+    const handleChangeResponsavel = (event) => {
+      setResponsavel(event.target.value);
+    };
+
+    const handleChangeGrupo = (event) => {
+        setGrupoResponsavel(event.target.value);
+    }
+
     return(
         <>
             <div
@@ -122,14 +132,14 @@ export default function InformacoesCategoria (props) {
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                        <TextField sx={{width: '49%'}} value={prazo} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" variant="outlined" />
+                        <TextField sx={{width: '49%'}} value={MaskPrazo(prazo)} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" placeholder="01:00:00" variant="outlined" />
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={Number(prioridade)}
-                            label="Selecione a prioridade da categoria"
+                            label="Prioridade"
                             onChange={handleChange}
                             >
                             <MenuItem value={1} aria-label="Prioridade Baixa">Baixa</MenuItem>
@@ -168,24 +178,32 @@ export default function InformacoesCategoria (props) {
                             </RadioGroup>
                         </FormControl>
                         <div style={{display: ativarGrupoResponsavel === "responsavel" ? 'flex': 'none'}}>
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                onChange={(e, newValue) =>  console.log(newValue)} //setResponsavel(newValue.id)
-                                id="combo-box-demo"
-                                options={users}
-                                renderInput={(params) => <TextField {...params} label="Selecione o responsável"/>}
-                            />
+                        <FormControl margin="dense" fullWidth>
+                            <InputLabel id="demo-simple-select-label">Responsável</InputLabel>
+                            <Select
+                                value={responsavel}
+                                label="Responsavel"
+                                onChange={handleChangeResponsavel}
+                            >
+                                {users.map(user => (
+                                    <MenuItem value={user.id}>{user.label}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                         </div>
                         <div style={{display: ativarGrupoResponsavel === "grupo" ? 'flex': 'none'}}>
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                onChange={(e, newValue) => setGrupoResponsavel(newValue.id)}
-                                id="combo-box-demo"
-                                options={grupos}
-                                renderInput={(params) => <TextField {...params} label="Selecione o grupo"/>}
-                            />
+                            <FormControl margin="dense" fullWidth>
+                                <InputLabel id="demo-simple-select-label">Grupos</InputLabel>
+                                <Select
+                                    value={grupoResponsavel}
+                                    label="Grupo"
+                                    onChange={handleChangeGrupo}
+                                >
+                                    {grupos.map(grupo => (
+                                        <MenuItem value={grupo.id}>{grupo.label}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </div>
                     </Paper>
                 </div>

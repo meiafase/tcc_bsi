@@ -24,7 +24,7 @@ export default function DialogHistorico(props) {
 
         getHistorico()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.idSolicitacao])
+    }, [props.idSolicitacao, props.openDialogHistorico])
 
   const handleClose = () => {
     props.setOpenDialogHistorico(false);
@@ -40,7 +40,7 @@ export default function DialogHistorico(props) {
             {historicoList.map(historico => (
                 <div style={{width: '100%', padding: '5px', backgroundColor: '#87d3f8', marginBottom: '7px', borderRadius: '4px'}}>
                     <div>
-                    <b>Data:</b> {historico.created_at.split('.')[0]} <b>Usuário: </b> {historico.usuario_id}
+                    <b>Data:</b> {historico.created_at.split('.')[0]} <b>Usuário: </b> {historico.usuario.name}
                     </div>
                     <b>Ação:</b> {historico.descricao}
                 </div>
