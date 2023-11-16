@@ -13,55 +13,10 @@ class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($assunto, $conteudo)
-    {
-        $this->conteudo = $conteudo;
-        $this->assunto = $assunto;
-    }
-
-    // /**
-    //  * Get the message envelope.
-    //  *
-    //  * @return \Illuminate\Mail\Mailables\Envelope
-    //  */
-    // public function envelope()
-    // {
-    //     return new Envelope(
-    //         subject: 'Test Mail',
-    //     );
-    // }
-
-    // /**
-    //  * Get the message content definition.
-    //  *
-    //  * @return \Illuminate\Mail\Mailables\Content
-    //  */
-    // public function content()
-    // {
-    //     return new Content(
-    //         view: 'view.name',
-    //     );
-    // }
-
-    // /**
-    //  * Get the attachments for the message.
-    //  *
-    //  * @return array
-    //  */
-    // public function attachments()
-    // {
-    //     return [];
-    // }
-
     public function build()
     {
-        $message = $this->markdown('solicitacao')->with('conteudo', $this->conteudo)->subject($this->assunto);
-        // dd($message);
-        return $message;
+        return $this->view('solicitacao')
+            ->subject('Assunto do Email');
     }
+
 }
