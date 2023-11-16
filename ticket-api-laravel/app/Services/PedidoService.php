@@ -94,13 +94,9 @@ class PedidoService
                     $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
                 }
             }
-<<<<<<< HEAD
             // Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "avaliacao" => true)));
             Mail::to('aninha_vargas@hotmail.com')->send(new TestMail());
 
-=======
-            // Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "atribuicao" => true)));
->>>>>>> 7ae02d778940ea3a7bcd3f25bd327acf4a8f3b2f
             DB::commit();
             return array(
                 'status' => true,
