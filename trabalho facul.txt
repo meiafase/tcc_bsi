@@ -166,5 +166,3 @@ Configuração de email:
 		
 	rodar comando: composer install
 	
-	Acesso servidor email: app.mailgun.com us: faculdade.anavargas@gmail.com senha: *******
-

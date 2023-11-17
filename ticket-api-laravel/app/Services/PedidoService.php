@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Http;
 use Exception;
 
 use Illuminate\Support\Facades\Mail;
-use App\Mail\TestMail;
+use App\Mail\SolicitacaoMail;
 
 class PedidoService
 {
@@ -94,8 +94,12 @@ class PedidoService
                     $this->anexoService->cadastrar(array_merge(array("mensagem_id" => $mensagem->id), $envioArquivo['info']));
                 }
             }
-            // Mail::to('aninha_vargas@hotmail.com')->send(new TestMail("Nova solicitação atribuída para você", array("pedido_id" => $pedido->id, "avaliacao" => true)));
-            Mail::to('aninha_vargas@hotmail.com')->send(new TestMail());
+
+            //Envio de email
+            $solicitante = $dados['usuario']['email'];
+            $conteudo = array("pedido_id" => $pedido->id, "mensagem" => $descricaoHist);
+            Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
+
 
             DB::commit();
             return array(
