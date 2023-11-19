@@ -82,6 +82,9 @@ class PedidoService
                 $responsavel = $this->usuarioService->buscar($pedido->responsavel_id);
                 $responsavel = $responsavel['dados'];
                 $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada e atribuída automaticamente para {$responsavel->name}";
+                //Envio de email ao responsavel
+                $conteudo = array("pedido_id" => $pedido->id, "atribuicao" => true);
+                Mail::to($responsavel['email'])->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
             } else {
                 $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada";
             }
@@ -95,11 +98,10 @@ class PedidoService
                 }
             }
 
-            //Envio de email
+            //Envio de email ao solicitante
             $solicitante = $dados['usuario']['email'];
             $conteudo = array("pedido_id" => $pedido->id, "mensagem" => $descricaoHist);
             Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
-
 
             DB::commit();
             return array(
@@ -193,8 +195,6 @@ class PedidoService
                     }
                 }
             }
-
-
             $data_hora->addDay()->setTime(8, 0, 0);
             $inicio_almoco->addDay()->setTime(12, 0, 0);
             $fim_almoco->addDay()->setTime(13, 30, 0);
@@ -273,6 +273,23 @@ class PedidoService
             $descricaoHist = "Solicitação nº " . str_pad($pedido_id, 6, 0, STR_PAD_LEFT) . " foi atualizada";
             $this->historicoService->cadastrar($dados['usuario_id'], $pedido_id, $descricaoHist);
 
+            //Envio de email
+            $pedido = $this->repository->obter($pedido_id);
+            if ($pedido->solicitante_id == $dados['usuario_id'] && $pedido->responsavel_id > 0) {
+                $destinatario_id = $pedido->responsavel_id;
+            } elseif ($pedido->responsavel_id == $dados['usuario_id']) {
+                $destinatario_id = $pedido->solicitante_id;
+            } elseif ($dados['usuario_id'] != $pedido->solicitante_id && $dados['usuario_id'] != $pedido->responsavel_id) {
+                $destinatario_id = $pedido->solicitante_id;
+            } else {
+                $destinatario_id = '';
+            }
+            if ($destinatario_id) {
+                $destinatario = $this->usuarioService->buscar($destinatario_id);
+                $conteudo = array("pedido_id" => $pedido_id, "atualizacao" => true);
+                Mail::to($destinatario['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
+            }
+
             DB::commit();
             return array(
                 'status' => true,
@@ -342,6 +359,11 @@ class PedidoService
 
             $this->repository->atualizarColuna($pedido_id, $arrAlteracao);
             $this->historicoService->cadastrar($usuario_id, $pedido_id, $descricaoHist);
+
+            //Envio de email ao solicitante
+            $solicitante = $this->usuarioService->buscar($pedido->solicitante_id);
+            $conteudo = array("pedido_id" => $pedido_id, "atualizacao" => true);
+            Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
 
             DB::commit();
             return array(
@@ -415,6 +437,7 @@ class PedidoService
             $status = $this->statusService->obter($dados['status_id']);
             $descricaoHist = "Status da solicitação alterada: {$status->descricao}";
             $pedido = $this->repository->obter($pedido_id);
+            $solicitante = $this->usuarioService->buscar($pedido['solicitante_id']);
 
             $dados['status_id'] != 5 ? @$dados['justificativa'] = NULL : NULL;
             $arrAlteracao = array('status_id' => $dados['status_id'], 'justificativa_cancelar' => @$dados['justificativa']);
@@ -426,6 +449,16 @@ class PedidoService
 
                 $arrAlteracao = array_merge(array("fim_atendimento" => $fim_atendimento, "tempo_total_atendimento" => $tempo_atendimento), $arrAlteracao);
                 $descricaoHist = "Atendimento concluído, aguardando avaliação do solicitante";
+
+                //Envio de email ao solicitante - concluído
+                $conteudo = array("pedido_id" => $pedido_id, "atendimento_concluido" => true);
+                Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação - Atendimento Concluído', $conteudo));
+            }
+
+            if ($dados['status_id'] == 5) {
+                //Envio de email ao solicitante - cancelado
+                $conteudo = array("pedido_id" => $pedido_id, "justificativa" => $dados['justificativa']);
+                Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação cancelada', $conteudo));
             }
 
             $this->repository->atualizarColuna($pedido_id, $arrAlteracao);
@@ -459,6 +492,12 @@ class PedidoService
 
             //Atualiza Pedido
             $this->repository->atualizarColuna($pedido_id, array('nota_solicitante' => $dados['nota'], 'status_id' => 4));
+
+            //Envio de email ao responsavel - avaliado
+            $pedido = $this->repository->obter($pedido_id);
+            $responsavel = $this->usuarioService->buscar($pedido->responsavel_id);
+            $conteudo = array("pedido_id" => $pedido_id, "avaliacao" => true);
+            Mail::to($responsavel['dados']['email'])->send(new SolicitacaoMail('Seu atendimento foi avaliado', $conteudo));
 
             DB::commit();
 
@@ -586,6 +625,11 @@ class PedidoService
             $nome = $novo_responsavel['dados']['name'];
 
             $this->historicoService->cadastrar($usuario_id, $pedido_id, "Pedido atribuído para {$nome}");
+
+            //Envio de email ao responsavel
+            $responsavel = $novo_responsavel['dados']['email'];
+            $conteudo = array("pedido_id" => $pedido_id, "atribuicao" => true);
+            Mail::to($responsavel)->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
 
             DB::commit();
 

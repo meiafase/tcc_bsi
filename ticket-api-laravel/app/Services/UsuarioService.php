@@ -7,7 +7,8 @@ use App\Repositories\UsuarioRepository;
 use App\Services\RabbitMQService;
 use App\Services\PermissoesService;
 use Exception;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SolicitacaoMail;
 
 class UsuarioService
 {
@@ -19,8 +20,7 @@ class UsuarioService
         UsuarioRepository $repository,
         RabbitMQService $rabbitMQService,
         PermissoesService $permissoesService
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->rabbitMQService = $rabbitMQService;
         $this->permissoesService = $permissoesService;
@@ -44,24 +44,24 @@ class UsuarioService
                         $objeto[$key] = $value;
                     }
                 }
-            // $senha = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-            $password = '12345678';
-            $objeto['password'] = password_hash($password, PASSWORD_DEFAULT);
-            // $objeto['password'] = '12345678';
+                $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
+                // $password = '12345678';
+                $objeto['password'] = password_hash($password, PASSWORD_DEFAULT);
+                // $objeto['password'] = '12345678';
             }
 
             //Salva usuario no BD Laravel
             $usuario = $this->repository->criar($objeto);
 
             //enviar email usuario e senha.
-
+            $conteudo = array("usuario" => $usuario->name, "senha" => $password, 'email' => $usuario->email);
+            Mail::to($usuario->email)->send(new SolicitacaoMail('Usuario Cadastrado', $conteudo));
 
             return array(
                 'status' => true,
                 'mensagem' => "Usuário cadastrado com sucesso.",
                 'dados' =>  $usuario
             );
-
         } catch (Exception $ex) {
             return array(
                 'status' => false,
@@ -102,7 +102,6 @@ class UsuarioService
                 'mensagem' => "Usuário retornado com sucesso.",
                 'dados' =>  $this->repository->obter($id, ['permissoes'])
             );
-
         } catch (Exception $ex) {
             return array(
                 'status' => false,
