@@ -46,11 +46,11 @@ export default function InformacoesSubcategoria (props) {
         const getUsersAndGroup = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, config).then(res => {
                 setNomeSubcategoria(res.data.dados.titulo);
-                setPrazo(res.data.dados.prazo_horas)
+                setPrazo(res.data.dados.prazo_horas ? res.data.dados.prazo_horas : "")
                 setPrioridade(res.data.dados.prioridade_id);
                 setRestricao(res.data.dados.restricao);
                 setDescricao(res.data.dados.descricao);
-                setAtivarGrupoAtendente(res.data.dados.responsavel_id === null ? res.data.dados.equipe_id  : res.data.dados.responsavel_id)
+                setAtivarGrupoAtendente(res.data.dados.responsavel_id ? true : res.data.dados.equipe_id ? true : false)
                 setAtivarGrupoResponsavel(res.data.dados.responsavel_id ? "responsavel" : "grupo")
                 setGrupoResponsavel(res.data.dados.grupo[0] ? res.data.dados.grupo[0].id : "")
                 setResponsavel(res.data.dados.responsavel[0].id)
@@ -74,10 +74,9 @@ export default function InformacoesSubcategoria (props) {
     }, [])
 
     const handleSaveSubcategoria = async () => {
-        let prazoSlited = prazo.split(":")[0] + prazo.split(":")[1] + prazo.split(":")[2]
         await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/sub_categoria/${props.idSubcategoria}`, {
             descricao,
-            prazo_horas: prazoSlited,
+            prazo_horas: prazo,
             prioridade_id: prioridade,
             equipe_id: grupoResponsavel,
             responsavel_id: responsavel,

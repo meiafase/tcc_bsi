@@ -101,7 +101,7 @@ class PedidoService
             //Envio de email ao solicitante
             $solicitante = $dados['usuario']['email'];
             $conteudo = array("pedido_id" => $pedido->id, "mensagem" => $descricaoHist);
-            Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
+            // Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
 
             DB::commit();
             return array(

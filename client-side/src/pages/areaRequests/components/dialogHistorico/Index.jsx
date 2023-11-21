@@ -40,7 +40,7 @@ export default function DialogHistorico(props) {
             {historicoList.map(historico => (
                 <div style={{width: '100%', padding: '5px', backgroundColor: '#87d3f8', marginBottom: '7px', borderRadius: '4px'}}>
                     <div>
-                    <b>Data:</b> {historico.created_at.split('.')[0]} <b>Usuário: </b> {historico.usuario.name}
+                    <b>Data:</b> {historico.created_at.split('.')[0].slice(8, 10)+"/"+historico.created_at.split('.')[0].slice(5, 7)+"/"+historico.created_at.split('.')[0].slice(0, 4)+" "+historico.created_at.split('.')[0].slice(11, 19)} <b>Usuário: </b> {historico.usuario.name}
                     </div>
                     <b>Ação:</b> {historico.descricao}
                 </div>
