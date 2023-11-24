@@ -19,9 +19,9 @@ class AvaliacaoService
             "usuario_id" => $dados['usuario']->id,
             "nota" => $dados['nota'],
             "justificativa" => @$dados['justificativa'],
+            "data_criacao" => now()
         );
 
         return $this->repository->criar($avaliacao);
-
     }
 }

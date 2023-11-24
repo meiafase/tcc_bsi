@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('avaliacao_gestor')->nullable();
             $table->boolean('util')->nullable();
             $table->longText('justificativa')->nullable();
+            $table->dateTime('data_criacao');
             $table->timestamps();
         });
     }

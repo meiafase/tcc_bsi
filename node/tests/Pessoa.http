@@ -3,9 +3,9 @@ POST http://localhost:4000/newPessoa
 Content-Type: application/json
 
 {
-    "name": "Rafael Romig",
-    "email": "rafael@gmail.com",
-    "area_id": 12,
+    "name": "Xpass Projeto",
+    "email": "xpass.projeto@gmail.com",
+    "area_id": 7,
     "tp_coord": "",
     "coord_id": 1
 }

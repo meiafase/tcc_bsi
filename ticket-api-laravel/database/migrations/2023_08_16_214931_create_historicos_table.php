@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('usuario_id')->index();
             $table->foreignId('pedido_id')->index();
             $table->longText('descricao');
+            $table->dateTime('data_criacao');
             $table->timestamps();
         });
     }

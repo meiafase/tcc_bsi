@@ -18,6 +18,7 @@ class HistoricoService
             "usuario_id" => $usuario_id,
             "pedido_id" => $pedido_id,
             "descricao" => $descricao,
+            "data_criacao" => now()
         );
         return $this->repository->criar($dadosHistorico);
     }

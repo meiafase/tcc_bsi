@@ -69,6 +69,7 @@ class PedidoService
                 "status_id" => 1,
                 "prazo_limite" => $dadosPedido['prazo_limite'],
                 "prioridade_id" => $dados['dadosPedido']->prioridade_id,
+                "data_criacao" => now()
             );
 
             $dadosPedido['responsavel_id'] = $this->definirResponsavel($dados['dadosPedido']);
@@ -101,7 +102,7 @@ class PedidoService
             //Envio de email ao solicitante
             $solicitante = $dados['usuario']['email'];
             $conteudo = array("pedido_id" => $pedido->id, "mensagem" => $descricaoHist);
-            // Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
+            Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
 
             DB::commit();
             return array(

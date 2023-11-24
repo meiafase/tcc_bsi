@@ -29,7 +29,8 @@ return new class extends Migration
             $table->BigInteger('tempo_total_atendimento')->nullable()->default(NULL);
             $table->decimal('nota_solicitante', 2, 1)->nullable();
             $table->decimal('nota_gestor', 2, 1)->nullable();
-            $table->string('justificativa_cancelar',500)->nullable();
+            $table->string('justificativa_cancelar', 500)->nullable();
+            $table->dateTime('data_criacao');
             $table->timestamps();
         });
     }

@@ -47,7 +47,6 @@ class UsuarioService
                 $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
                 // $password = '12345678';
                 $objeto['password'] = password_hash($password, PASSWORD_DEFAULT);
-                // $objeto['password'] = '12345678';
             }
 
             //Salva usuario no BD Laravel
