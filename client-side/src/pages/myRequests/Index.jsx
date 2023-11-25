@@ -166,7 +166,7 @@ export default function MyRequests () {
                                     <TableCell align="right" aria-describedby={`pedidoAreaPedido${row.id}`}>{row.area_pedido ? row.area_pedido : "---"}</TableCell>
                                     <TableCell align="right" aria-describedby={`pedidoAssunto${row.id}`}>{row.assunto ? row.assunto : "---"}</TableCell>
                                     <TableCell align="right" aria-describedby={`pedidoResponsavel${row.id}`}>{row.responsavel ? row.responsavel : "---"}</TableCell>
-                                    <TableCell align="right" sx={{color: row.status === 'CANCELADO' ? "red" : row.status === "EM ATENDIMENTO" ? 'orange' : row.status === 'FINALIZADO' ? "green" : row.status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? "#6a63df" : 'black', fontWeight: 'bold', width: '150px'}} aria-label={`Status do Pedido: ${row.status}`}>{row.status ? row.status : "---"}</TableCell>
+                                    <TableCell align="right" sx={{color: row.status === 'CANCELADO' ? "red" : row.status === "EM ATENDIMENTO" ? 'orange' : row.status === 'FINALIZADO' ? "green" : row.status === 'AGUARDANDO AVALIAÇÃO DO SOLICITANTE' ? "#6a63df" : 'black', fontWeight: 'bold', width: '150px'}} aria-label={`Status do Pedido: ${row.status}`}>{row.status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE" ? "AGUARDANDO AVALIAÇÃO" : row.status}</TableCell>
                                     <TableCell align="right" sx={{width: '150px'}} aria-label={`Status do Pedido: ${row.prazo}`}>{row.prazo.slice(8, 10) +"/"+ row.prazo.slice(5, 7) +"/"+ row.prazo.slice(0, 4) +" "+ row.prazo.slice(11, 20)}</TableCell>
                                     </TableRow>
                                 ))}
