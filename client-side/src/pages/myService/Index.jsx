@@ -41,7 +41,7 @@ export default function MyService () {
                 setPrioridadeList(res.data.dados);
             }).catch(err => {});
 
-            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/filtrar/1`, config).then(res => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/filtrar/2`, config).then(res => {
                 setSolicitanteList(res.data.dados);
             }).catch(err => {});
         }

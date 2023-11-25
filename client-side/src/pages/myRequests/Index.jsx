@@ -48,7 +48,6 @@ export default function MyRequests () {
             );
 
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/status`, config).then(res => {
-                console.log(res.data.dados)
                 setStatusList(res.data.dados);
             }).catch(err => {});
 
@@ -56,7 +55,8 @@ export default function MyRequests () {
                 setPrioridadeList(res.data.dados);
             }).catch(err => {});
 
-            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/filtrar/2`, config).then(res => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/filtrar/1`, config).then(res => {
+                console.log(res.data.dados)
                 setResponsavelList(res.data.dados);
             }).catch(err => {});
         }

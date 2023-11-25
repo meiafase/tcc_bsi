@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Paper from "@mui/material/Paper";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Divider from "@mui/material/Divider";
 import { ValidateEmail } from "../../utils/email/ValidateEmail";
 import SnackbarSuccess from "../components/snackBarError/Index";
@@ -158,17 +157,6 @@ export default function Index() {
             }}
           >
             <Divider />
-            <p style={{ fontSize: "20px" }}>
-              Esqueceu sua senha?{" "}
-              <Button
-                aria-label="esqueceu sua senha? clique aqui"
-                variant="contained"
-                size="small"
-                startIcon={<OpenInNewIcon />}
-              >
-                Clique aqui
-              </Button>
-            </p>
           </div>
         </Paper>
       </div>

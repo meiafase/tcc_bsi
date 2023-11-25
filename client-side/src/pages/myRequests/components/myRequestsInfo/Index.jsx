@@ -116,15 +116,16 @@ export default function MyRequestsInfo (props) {
 
     const handleDownloadAnexo = async (idMensagem, idAnexo) => {
         setOpenBackdrop(true)
-        await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/mensagem/${idMensagem}/anexo/${idAnexo}/baixar`, config).then(res => {
-            // let url = URL.createObjectURL(res.data)
-            console.log(typeof res.data)
-            setOpenBackdrop(false)
-        }).catch(err => {
-            setOpenBackdrop(false)
-            setMensagemSnackBarError("Arquivo não encontrado!")
-            setOpenSnackBarError(true);
+        await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/mensagem/${idMensagem}/anexo/${idAnexo}/baixar`, config).then(async res => {
+            const blob = new Blob([res.data], {type: "image/png"}) 
+            const url = URL.createObjectURL(blob);
+            console.log(url)
         })
+        // .catch(err => {
+        //     setOpenBackdrop(false)
+        //     setMensagemSnackBarError("Arquivo não encontrado!")
+        //     setOpenSnackBarError(true);
+        // })
     }
 
     const handleAvaliar = async () => {
@@ -273,7 +274,6 @@ export default function MyRequestsInfo (props) {
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
                                             {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
-
                                         </Typography>
                                     }
                                     secondary={

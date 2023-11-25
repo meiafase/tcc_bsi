@@ -46,7 +46,6 @@ export default function InformacoesCategoria (props) {
         const getUsersAndGroup = async () => {
             
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, config).then(res => {
-                console.log(res.data.dados.responsavel_id, res.data.dados.equipe_id)
                 setNomeCategoria(res.data.dados.titulo)
                 setPrazo(res.data.dados.prazo_horas ? res.data.dados.prazo_horas : "")
                 setPrioridade(res.data.dados.prioridade_id);
@@ -59,7 +58,7 @@ export default function InformacoesCategoria (props) {
             }).catch(err => {})
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
                 res.data.map(us => (
-                    setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id}])
+                    setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id, tp_coord: us.tp_coord, permissoes: us.permissoes ? us.permissoes.atender_chamados : "S"}])
                     ))
                 }).catch(err => {});
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/12`, config).then(res => {
@@ -187,7 +186,9 @@ export default function InformacoesCategoria (props) {
                                 onChange={handleChangeResponsavel}
                             >
                                 {users.map(user => (
-                                    <MenuItem value={user.id}>{user.label}</MenuItem>
+                                    user.tp_coord === "S" || user.permissoes === "S" || user.permissoes ? (
+                                            <MenuItem value={user.id}>{user.label}</MenuItem>
+                                    ) : ""
                                 ))}
                             </Select>
                         </FormControl>

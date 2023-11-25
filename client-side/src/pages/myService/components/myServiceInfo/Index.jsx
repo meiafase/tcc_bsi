@@ -271,7 +271,6 @@ export default function MyServiceInfo (props) {
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
                                             {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
-
                                         </Typography>
                                     }
                                     secondary={

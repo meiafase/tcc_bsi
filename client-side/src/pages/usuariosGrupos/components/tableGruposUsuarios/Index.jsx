@@ -78,7 +78,6 @@ export default function TableGruposUsuarios() {
               <TableCell align="right">Abrir Chamados</TableCell>
               <TableCell align="right">Abrir Chamados Restritos</TableCell>
               <TableCell align="right">Atender Chamados</TableCell>
-              <TableCell align="right">Relatórios</TableCell>
               <TableCell align="right">Manter Catálogo</TableCell>
               <TableCell align="right">Manter Permissões</TableCell>
             </TableRow>
@@ -94,7 +93,6 @@ export default function TableGruposUsuarios() {
                 <TableCell align="right"><Checkbox onChange={e => handleAbrirChamados(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.abrir_chamados === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleAbrirChamadosRestritos(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.abrir_chamados_restritos === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleAtenderChamados(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.atender_chamados === 1? true: false} /></TableCell>
-                <TableCell align="right"><Checkbox onChange={e => handleRelatorios(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.relatorios === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleManterCatalogo(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.manter_catalogo === 1? true: false} /></TableCell>
                 <TableCell align="right"><Checkbox onChange={e => handleManterPermissoes(e.target.checked, user.id, user.area_id)} defaultChecked={user.permissoes.manter_permissoes === 1? true: false} /></TableCell>
               </TableRow>
