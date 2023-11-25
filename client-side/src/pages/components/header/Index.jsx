@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
+
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -10,6 +11,10 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import KeyboardIcon from "@mui/icons-material/Keyboard";
+import Modal from "@mui/material/Modal";
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -29,15 +34,36 @@ import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 export default function Header(props) {
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [showKeyboardMessage, setShowKeyboardMessage] = useState(false);
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [openDrawer, setOpenDrawer] = useState(false);
   const [nomeUser, setNomeUser] = useState("");
   const [manterCatalogo, setManterCatalogo] = useState("");
   const [manterPermissoes, setManterPermissoes] = useState("");
   const [abrirChamados, setAbrirChamados] = useState("");
+  
 
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    
+  };
+  
+  const handleZoomIn = () => {
+    setZoomLevel(prevZoom => prevZoom + 10);
+    document.body.style.zoom = `${zoomLevel}%`;
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prevZoom => prevZoom - 10);
+    document.body.style.zoom = `${zoomLevel}%`;
+  };
+
+  const handleOpenKeyboardTutorial = () => {
+    setShowKeyboardMessage(true);
+    setTimeout(() => {
+      setShowKeyboardMessage(false);
+    }, 15000);
   };
 
   useEffect(() => {
@@ -190,6 +216,51 @@ export default function Header(props) {
               Sistema de Solicitações{" "}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton size="large" aria-label="Aumentar Zoom" color="inherit" onClick={handleZoomIn}>
+                <ZoomInIcon />
+              </IconButton>
+              <IconButton size="large" aria-label="Diminuir Zoom" color="inherit" onClick={handleZoomOut}>
+                <ZoomOutIcon />
+              </IconButton>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                size="large"
+                aria-label="Precisa de Teclado Virtual?"
+                color="inherit"
+                onClick={handleOpenKeyboardTutorial}
+              >
+                <KeyboardIcon />
+              </IconButton>
+              <Modal
+        open={showKeyboardMessage}
+        onClose={() => setShowKeyboardMessage(false)}
+        aria-labelledby="Precisa de Teclado Virtual?"
+        aria-describedby="Precisa de Teclado Virtual?"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 600,
+            backgroundColor: "black",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography id="Caso necessário recomendamos a abertura do Teclado Virtual do Sistema" variant="h6" component="h2" sx={{ color: "white" }}>
+            Caso necessário recomendamos a abertura do Teclado Virtual do Sistema.
+          </Typography>
+          <Typography id="1. Clique no ícone de Pesquisa e pesquise por 'Teclado Virtual'. 2. Selecione 'Teclado Virtual'." sx={{ mt: 2, color: "white" }}>
+            1. Clique no ícone de Pesquisa e pesquise por 'Teclado Virtual'.
+            <br />
+            2. Selecione 'Teclado Virtual'.
+          </Typography>
+        </Box>
+      </Modal>
             <Box sx={{ display: nomeUser ? "flex" : "none"}}>
               <IconButton disabled>
                 <Chip
@@ -199,6 +270,8 @@ export default function Header(props) {
                   aria-label={`Nome do usuário: ${nomeUser}`}
                 />
               </IconButton>
+              </Box>
+              </Box>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
