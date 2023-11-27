@@ -66,8 +66,9 @@ export default function MyRequestsInfo (props) {
     useEffect(() => {
         const getSolicitacao = async () => {
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
+                console.log(res.data)
                 setStatus(res.data.dados.status.descricao)
-                setEnviadoEm(res.data.dados.created_at)
+                setEnviadoEm(res.data.dados.data_criacao)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
                 setNomeResponsavel(res.data.dados.responsavel.name)
@@ -117,15 +118,16 @@ export default function MyRequestsInfo (props) {
     const handleDownloadAnexo = async (idMensagem, idAnexo) => {
         setOpenBackdrop(true)
         await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/mensagem/${idMensagem}/anexo/${idAnexo}/baixar`, config).then(async res => {
-            const blob = new Blob([res.data], {type: "image/png"}) 
+            const blob = new Blob([res.data], {type: "application/octet-stream"}) 
             const url = URL.createObjectURL(blob);
-            console.log(url)
+            window.open(url)
+            setOpenBackdrop(false)
         })
-        // .catch(err => {
-        //     setOpenBackdrop(false)
-        //     setMensagemSnackBarError("Arquivo não encontrado!")
-        //     setOpenSnackBarError(true);
-        // })
+        .catch(err => {
+            setOpenBackdrop(false)
+            setMensagemSnackBarError("Arquivo não encontrado!")
+            setOpenSnackBarError(true);
+        })
     }
 
     const handleAvaliar = async () => {
@@ -273,7 +275,7 @@ export default function MyRequestsInfo (props) {
                                     <ListItemText
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
-                                            {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
+                                            {mensagem.usuario.name + "  " + mensagem.data_criacao.slice(8, 10) + "/" + mensagem.data_criacao.slice(5, 7) + "/" + mensagem.data_criacao.slice(0, 4) + " " + mensagem.data_criacao.slice(11, 19)}
                                         </Typography>
                                     }
                                     secondary={
@@ -293,6 +295,9 @@ export default function MyRequestsInfo (props) {
                                     <ListItem >
                                         <ListItemIcon>
                                             <IconButton onClick={() => handleDownloadAnexo(mensagem.id, mensagem.anexos[0].id)}>
+                                                <div id="teste">
+
+                                                </div>
                                                 <AttachFileIcon sx={{color: 'blue'}} />
                                             </IconButton>
                                         </ListItemIcon>

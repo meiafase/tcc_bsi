@@ -71,9 +71,8 @@ export default function MyServiceInfo (props) {
             }).catch(err => {})
 
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/pedido/${props.idSolicitacao}`, config).then(res => {
-                // console.log(res.data.dados.mensagens)
                 setStatus(res.data.dados.status.descricao)
-                setEnviadoEm(res.data.dados.created_at)
+                setEnviadoEm(res.data.dados.data_criacao)
                 setNomeSolicitante(res.data.dados.solicitante.name)
                 setEmailSolicitante(res.data.dados.solicitante.email)
                 setNomeResponsavel(res.data.dados.responsavel.name)
@@ -270,7 +269,7 @@ export default function MyServiceInfo (props) {
                                     <ListItemText
                                     primary={
                                         <Typography sx={{fontWeight: 'bold'}}>
-                                            {mensagem.usuario.name + "  " + mensagem.created_at.slice(8, 10) + "/" + mensagem.created_at.slice(5, 7) + "/" + mensagem.created_at.slice(0, 4) + " " + mensagem.created_at.slice(11, 19)}
+                                            {mensagem.usuario.name + "  " + mensagem.data_criacao.slice(8, 10) + "/" + mensagem.data_criacao.slice(5, 7) + "/" + mensagem.data_criacao.slice(0, 4) + " " + mensagem.data_criacao.slice(11, 19)}
                                         </Typography>
                                     }
                                     secondary={

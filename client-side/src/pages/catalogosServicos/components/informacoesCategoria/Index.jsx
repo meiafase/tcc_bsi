@@ -132,7 +132,7 @@ export default function InformacoesCategoria (props) {
             <div style={{marginTop: '20px', width: '100%', display: 'flex', marginBottom: '20px'}}>
                 <div style={{width: '50%', height: 'fit-content', padding: '10px'}}>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-                        <TextField sx={{width: '49%'}} value={MaskPrazo(prazo)} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" placeholder="01:00:00" variant="outlined" />
+                        <TextField sx={{width: '49%'}} value={MaskPrazo(prazo)} onChange={e => setPrazo(e.target.value)} id="outlined-basic" label="Prazo de Finalização" placeholder="01:00" variant="outlined" />
                         <FormControl sx={{width: '49%'}}>
                             <InputLabel id="demo-simple-select-label">Prioridade</InputLabel>
                             <Select

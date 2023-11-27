@@ -44,10 +44,11 @@ export default function NewRequest() {
   useEffect(() => {
     const getInfos = async () => {
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/`, config).then(res => {
+        console.log(res.data.dados)
         setAreaList(res.data.dados);
       }).catch(err => {});
 
-      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/12/assuntoAtivo`, config).then(res => {
+      await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/${area}/assuntoAtivo`, config).then(res => {
         setAssuntoList(res.data.dados);
       }).catch(err => {});
 
@@ -69,7 +70,7 @@ export default function NewRequest() {
     
     getInfos();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setAssuntoList, assunto, setCategoria, categoria])
+  }, [setAssuntoList, assunto, setCategoria, categoria, area])
 
   const handleChangeSetor = (event) => {
     setArea(event.target.value);

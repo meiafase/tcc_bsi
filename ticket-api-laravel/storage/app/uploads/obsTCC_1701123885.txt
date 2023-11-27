@@ -1,0 +1,22 @@
+-- botao de catalogo de serviço disponivel apenas para quem a permissao "manter_catalogo" ou se a pessoa logada for tp_coord = S OK
+-- botao usuarios e grupos disponivel apenas para quem tem a permissao "manter_permissoes" ou se a pessoa logada for tp_coord = S OK
+-- verificar o "cadastrar assunto", só esta permitindo gestor, quem tem a  permissao "manter_catalogo" pode cadastrar assunto OK
+-- editar categoria e sub, adicionar mask nos inputs OK
+-- verificar se o editar categoria e sub esta gravando o responsavel OK
+-- ao terminar a avaliação do pedido atualizar o historico OK
+-- trazer o nome do usuario no historioco OK
+-- ajsutar datas do sistema dentro do Histórico de Interações esta pendente OK
+-- colocar state no "Ativar Grupo ou Atendente responsável" OK
+-- remover o esquecer senha OK
+-- no status da tabela, colocar apenas o aguardando, no status "aguardando avalização" OK
+
+
+
+-- verificar as configurações do npm e deixar a aplicação na linguagem portugues
+-- verificar o locale das datas
+
+
+
+
+
+-- colocar o fundo do status da tabela colorido !!!!!! Não deu pra fazer !!!!!!

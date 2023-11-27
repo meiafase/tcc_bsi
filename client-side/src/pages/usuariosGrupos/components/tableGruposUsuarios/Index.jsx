@@ -47,13 +47,6 @@ export default function TableGruposUsuarios() {
     }, config).then(res => {setAttUser(true)}).catch(err =>{})
     setAttUser(false)
   }
-  const handleRelatorios = async (event, id, area_id) => {
-    await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/permissoes/${id}`, {
-      area_id,
-      relatorios: event
-    }, config).then(res => {setAttUser(true)}).catch(err =>{})
-    setAttUser(false)
-  }
   const handleManterCatalogo = async (event, id, area_id) => {
     await Axios.put(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/permissoes/${id}`, {
       area_id,
