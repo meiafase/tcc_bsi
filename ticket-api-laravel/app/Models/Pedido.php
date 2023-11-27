@@ -59,7 +59,7 @@ class Pedido extends Model
 
     public function mensagens()
     {
-        return $this->hasMany(Mensagem::class, "pedido_id", "id")->select("id", "usuario_id", "mensagem", "pedido_id", "created_at")->with('usuario', 'anexos');
+        return $this->hasMany(Mensagem::class, "pedido_id", "id")->select("id", "usuario_id", "mensagem", "pedido_id", "data_criacao")->with('usuario', 'anexos');
     }
 
     public function historico()
