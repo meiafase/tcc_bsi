@@ -33,7 +33,6 @@ export default function InformacoesCategoria (props) {
     const [nomeCategoria, setNomeCategoria] = useState("");
     const [openSnackBarError, setOpenSnackBarError] = useState(false)
     const [mensagemSnackBarError, setMensagemSnackBarError] = useState("")
-    const [areaId, setAreaId] = useState("");
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -45,11 +44,6 @@ export default function InformacoesCategoria (props) {
 
     useEffect(() => {
         const getUsersAndGroup = async () => {
-            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}api/usuario/${localStorage.getItem("id")}`, config).then(res => {
-                console.log(res.data.dados)
-                setAreaId(res.data.dados.area_id);
-            }).catch(err => {})
-
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, config).then(res => {
                 setNomeCategoria(res.data.dados.titulo)
                 setPrazo(res.data.dados.prazo_horas ? res.data.dados.prazo_horas : "")
