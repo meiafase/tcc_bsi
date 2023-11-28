@@ -44,7 +44,6 @@ export default function NewRequest() {
   useEffect(() => {
     const getInfos = async () => {
       await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/area/`, config).then(res => {
-        console.log(res.data.dados)
         setAreaList(res.data.dados);
       }).catch(err => {});
 

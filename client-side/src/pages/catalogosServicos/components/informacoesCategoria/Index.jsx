@@ -33,6 +33,7 @@ export default function InformacoesCategoria (props) {
     const [nomeCategoria, setNomeCategoria] = useState("");
     const [openSnackBarError, setOpenSnackBarError] = useState(false)
     const [mensagemSnackBarError, setMensagemSnackBarError] = useState("")
+    const [areaId, setAreaId] = useState("");
 
     const config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -44,7 +45,11 @@ export default function InformacoesCategoria (props) {
 
     useEffect(() => {
         const getUsersAndGroup = async () => {
-            
+
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}api/usuario/${localStorage.getItem("id")}`, config).then(res => {
+                setAreaId(res.data.dados.area_id);
+            }).catch(err => {})
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/categoria/${props.idCategoria}`, config).then(res => {
                 setNomeCategoria(res.data.dados.titulo)
                 setPrazo(res.data.dados.prazo_horas ? res.data.dados.prazo_horas : "")
@@ -61,7 +66,7 @@ export default function InformacoesCategoria (props) {
                     setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id, tp_coord: us.tp_coord, permissoes: us.permissoes ? us.permissoes.atender_chamados : "S"}])
                     ))
                 }).catch(err => {});
-            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/12`, config).then(res => {
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/${areaId}`, config).then(res => {
                 res.data.dados.map(gp => (
                     setGrupos(grupos => [...grupos, {label: "Grupo - " + gp.titulo, id: gp.id}])
                 ))
@@ -70,7 +75,7 @@ export default function InformacoesCategoria (props) {
 
         getUsersAndGroup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [areaId])
 
     const handleSaveCategoria = async () => {
         console.log(prazo)
