@@ -45,8 +45,8 @@ export default function InformacoesCategoria (props) {
 
     useEffect(() => {
         const getUsersAndGroup = async () => {
-
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}api/usuario/${localStorage.getItem("id")}`, config).then(res => {
+                console.log(res.data.dados)
                 setAreaId(res.data.dados.area_id);
             }).catch(err => {})
 
@@ -61,21 +61,24 @@ export default function InformacoesCategoria (props) {
                 setGrupoResponsavel(res.data.dados.grupo[0] ? res.data.dados.grupo[0].id : "")
                 setResponsavel(res.data.dados.responsavel[0].id)
             }).catch(err => {})
+
             await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/usuario/equipe`, config).then(res => {
                 res.data.map(us => (
                     setUsers(user => [...user, {label: "Desenvolvimento - " + us.name, id: us.id, tp_coord: us.tp_coord, permissoes: us.permissoes ? us.permissoes.atender_chamados : "S"}])
                     ))
                 }).catch(err => {});
-            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/${areaId}`, config).then(res => {
+
+            await Axios.get(`${process.env.REACT_APP_DEFAULT_ROUTE}/api/grupo/listar/7`, config).then(res => {
                 res.data.dados.map(gp => (
                     setGrupos(grupos => [...grupos, {label: "Grupo - " + gp.titulo, id: gp.id}])
                 ))
+
             }).catch(err => {})
         }
 
         getUsersAndGroup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaId])
+    }, [])
 
     const handleSaveCategoria = async () => {
         console.log(prazo)
