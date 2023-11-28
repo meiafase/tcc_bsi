@@ -82,13 +82,14 @@ export default function EditarGrupo(props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant="contained" color="error">
+        <Button onClick={handleClose} variant="contained" color="error" aria-label="Cancelar">
           Cancelar
         </Button>
         <Button
           onClick={handleValidateInfo}
           variant="contained"
           color="success"
+          aria-label="Editar Grupo"
         >
           Editar Grupo
         </Button>

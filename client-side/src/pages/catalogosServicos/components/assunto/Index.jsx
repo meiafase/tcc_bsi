@@ -78,6 +78,7 @@ export default function Assunto(props) {
           <b
             style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
             aria-labelledby="assuntoLabel"
+            aria-label={`Assunto selecionado: ${props.nomeAssunto}`}
           >
             {props.nomeAssunto}
           </b>

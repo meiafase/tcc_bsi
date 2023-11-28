@@ -105,7 +105,7 @@ export default function CatalogoServico() {
           ) : (
             <div style={{ padding: "10px" }} aria-label="Seção de Aviso de Seleção de Assunto">
               <Alert severity="warning">
-                <b>Aviso!</b> Selecione algum assunto para prosseguir.
+                <b aria-label="Aviso: Selecione algum assunto para prosseguir.">Aviso!</b> Selecione algum assunto para prosseguir.
               </Alert>
             </div>
           )}

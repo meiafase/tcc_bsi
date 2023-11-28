@@ -88,7 +88,7 @@ export default function Index() {
             }}
           >
             <h3>Grupos</h3>
-            <IconButton onClick={() => setOpenCadastrarGrupo(true)}>
+            <IconButton onClick={() => setOpenCadastrarGrupo(true)} aria-label="Adicionar Grupo">
               <AddIcon sx={{ color: "green", fontSize: "40px" }} />
             </IconButton>
           </div>
@@ -124,6 +124,7 @@ export default function Index() {
               variant="contained"
               endIcon={<FormatListNumberedIcon />}
               onClick={() => setGrupoOrUsuario("usuario")}
+              aria-label="Selecionar todos os usuários"
             >
               Todos os usuários
             </Button>

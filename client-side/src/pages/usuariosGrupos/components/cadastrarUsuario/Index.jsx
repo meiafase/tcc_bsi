@@ -77,6 +77,7 @@ export default function CadastrarUsuario(props) {
             variant="contained"
             endIcon={<BorderColorIcon />}
             onClick={() => props.setOpenEditarGrupo(true)}
+            aria-label={`Editar Grupo: ${nomeGrupo}`}
           >
             {nomeGrupo}
           </Button>
@@ -97,6 +98,7 @@ export default function CadastrarUsuario(props) {
           variant="contained"
           endIcon={<BorderColorIcon />}
           onClick={() => setOpenDialogListarUsuarios(true)}
+          aria-label="Editar Integrantes"
         >
           Editar integrantes
         </Button>
@@ -105,7 +107,7 @@ export default function CadastrarUsuario(props) {
         {colaboradores.length !== 0 ? (
           colaboradores.map((colab) => (
             <>
-              <ListItemButton>
+              <ListItemButton aria-label={`Colaborador: Desenvolvimento - ${colab.name}`}>
                 <PersonIcon sx={{ marginRight: "10px" }} />{" "}
                 <p>Desenvolvimento - {colab.name}</p>
               </ListItemButton>
@@ -113,7 +115,7 @@ export default function CadastrarUsuario(props) {
             </>
           ))
         ) : (
-          <Alert severity="warning">
+          <Alert severity="warning" aria-label="Aviso: Nenhum integrante adicionado a este grupo.">
             Nenhum integrante adicionado a este grupo.
           </Alert>
         )}

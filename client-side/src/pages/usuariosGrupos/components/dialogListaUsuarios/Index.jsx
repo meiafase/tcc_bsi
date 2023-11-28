@@ -98,7 +98,7 @@ export default function DialogListaUsuarios(props) {
           Integrantes
         </DialogTitle>
         <IconButton
-          aria-label="close"
+          aria-label="Fechar"
           onClick={handleClose}
           sx={{
             position: "absolute",
@@ -144,10 +144,10 @@ export default function DialogListaUsuarios(props) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleClose}>
+          <Button variant="contained" color="error" onClick={handleClose} aria-label="Cancelar">
             Cancelar
           </Button>
-          <Button variant="contained" color="success" onClick={handleSaveIntegrantes}>
+          <Button variant="contained" color="success" onClick={handleSaveIntegrantes} aria-label="Adicionar integrante">
             Adiconar integrante
           </Button>
         </DialogActions>

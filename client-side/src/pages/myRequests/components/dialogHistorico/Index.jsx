@@ -32,7 +32,7 @@ export default function DialogHistorico(props) {
 
   return (
       <Dialog open={props.openDialogHistorico} >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" aria-label="Histórico de Interações">
           {"Histórico de Interações"}
         </DialogTitle>
         <DialogContent>

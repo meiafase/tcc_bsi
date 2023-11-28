@@ -93,7 +93,7 @@ export default function Index() {
           <div
             style={{ width: "100%", textAlign: "center", marginBottom: "20px" }}
           >
-            <h1>LOGIN</h1>
+            <h1 aria-label="Título da Página: Login">LOGIN</h1>
             <Divider />
           </div>
           <TextField
@@ -116,7 +116,7 @@ export default function Index() {
               setSenha(e.target.value);
             }}
           >
-            <InputLabel>Senha</InputLabel>
+            <InputLabel aria-label="Campo de Senha: Insira sua senha">Senha</InputLabel>
             <OutlinedInput
               type={showPassword ? "text" : "password"}
               endAdornment={

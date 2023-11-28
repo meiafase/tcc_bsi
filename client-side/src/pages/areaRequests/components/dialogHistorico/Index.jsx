@@ -32,7 +32,7 @@ export default function DialogHistorico(props) {
 
   return (
       <Dialog open={props.openDialogHistorico} >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" aria-label="Histórico de Interações">
           {"Histórico de Interações"}
         </DialogTitle>
         <DialogContent>
@@ -48,7 +48,7 @@ export default function DialogHistorico(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained'>fechar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Fechar">fechar</Button>
         </DialogActions>
       </Dialog>
   );
