@@ -67,12 +67,12 @@ export default function TableGruposUsuarios() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Colaborador</TableCell>
-              <TableCell align="right">Abrir Chamados</TableCell>
-              <TableCell align="right">Abrir Chamados Restritos</TableCell>
-              <TableCell align="right">Atender Chamados</TableCell>
-              <TableCell align="right">Manter Catálogo</TableCell>
-              <TableCell align="right">Manter Permissões</TableCell>
+              <TableCell aria-label="Colaborador">Colaborador</TableCell>
+              <TableCell align="right" aria-label="Abrir Chamados">Abrir Chamados</TableCell>
+              <TableCell align="right" aria-label="Abrir Chamados Restritos">Abrir Chamados Restritos</TableCell>
+              <TableCell align="right" aria-label="Atender Chamados">Atender Chamados</TableCell>
+              <TableCell align="right" aria-label="Manter Catálogo">Manter Catálogo</TableCell>
+              <TableCell align="right" aria-label="Manter Permissões">Manter Permissões</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

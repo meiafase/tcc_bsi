@@ -81,12 +81,12 @@ export default function FirstLogin(props) {
   return (
     <>
       <Dialog open={props.open} TransitionComponent={Transition} keepMounted>
-        <DialogTitle>{"Primeiro acesso!"}</DialogTitle>
+        <DialogTitle aria-label="Primeiro acesso!">{"Primeiro acesso!"}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText aria-label="Instruções: Altere a sua senha.">
             {"Altere a sua senha."}
             <FormControl margin="dense" fullWidth variant="outlined" sx={{ marginTop: '20px' }}>
-              <InputLabel htmlFor="senha">Senha</InputLabel>
+              <InputLabel htmlFor="senha" aria-label="Campo de senha: Insira sua nova senha">Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
                 onChange={(e) => { setErroSenha(false); setSenha(e.target.value) }}
@@ -107,7 +107,7 @@ export default function FirstLogin(props) {
               />
             </FormControl>
             <FormControl margin="dense" fullWidth variant="outlined">
-              <InputLabel htmlFor="confirmarSenha">Confirmar Senha</InputLabel>
+              <InputLabel htmlFor="confirmarSenha" aria-label="Digite novamente sua nova senha">Confirmar Senha</InputLabel>
               <OutlinedInput
                 error={erroSenha}
                 onChange={(e) => { setErroSenha(false); setConfirmarSenha(e.target.value) }}

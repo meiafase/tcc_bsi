@@ -238,7 +238,7 @@ export default function NewRequest() {
                       <input hidden type="file" onChange={e => setUpload(e.target.files)} aria-label="Selecionar arquivo para envio"/>
                     </Button>
                   </div>
-                  <h3>Envie preferencialmente os arquivos em .zip</h3>
+                  <h3 aria-label="Instrução: Envie preferencialmente os arquivos em formato .zip">Envie preferencialmente os arquivos em .zip</h3>
                 </div>
               </Paper>
               </div>

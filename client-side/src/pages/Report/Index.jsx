@@ -156,7 +156,7 @@ export default function Report() {
                 />
               </div>
               <div style={{ width: "97%", marginTop: "30px" }}>
-                <Button variant="contained" fullWidth size="large">
+                <Button variant="contained" fullWidth size="large" aria-label="Gerar relatório">
                   Gerar relatório
                 </Button>
               </div>

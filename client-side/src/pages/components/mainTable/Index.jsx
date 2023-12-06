@@ -64,7 +64,7 @@ export default function MainTable() {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 650 }}>
-        <Table stickyHeader aria-label="sticky table" summary="Tabela de dados com informações importantes">
+        <Table stickyHeader aria-label="Tabela de Dados Importantes" summary="Tabela de dados com informações importantes">
           <TableHead>
             <TableRow>
               {columns.map((column) => (

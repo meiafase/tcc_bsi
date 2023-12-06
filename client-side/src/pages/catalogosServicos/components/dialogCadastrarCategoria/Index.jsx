@@ -49,9 +49,9 @@ export default function DialogCadastrarCategoria(props) {
   return (
     <div>
       <Dialog open={props.openCadastrarCategoria} onClose={handleClose}>
-        <DialogTitle>Cadastrar Categoria</DialogTitle>
+        <DialogTitle id="cadastrarCategoriaDialogTitle" aria-label="Cadastrar Categoria">Cadastrar Categoria</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText id="cadastrarCategoriaDialogContentText" aria-label="Instruções: Neste campo, insira o nome da categoria a ser cadastrada.">
             Neste campo insira o nome da categoria a ser cadastrada
           </DialogContentText>
           <TextField
@@ -66,8 +66,8 @@ export default function DialogCadastrarCategoria(props) {
           <FormControlLabel control={<Checkbox checked={subcategorias} onChange={e => setSubcategorias(e.target.checked)} aria-label="Ativar subcategorias" />} label="Ativar subcategorias?" />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão de cancelar">Cancelar</Button>
-          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar categoria">Cadastrar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão para cancelar">Cancelar</Button>
+          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão para cadastrar categoria">Cadastrar</Button>
         </DialogActions>
       </Dialog>
       <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />

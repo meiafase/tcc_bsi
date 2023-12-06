@@ -211,7 +211,7 @@ export default function Header(props) {
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
-              aria-label="Título do sistema: Sistema de Solicitações"
+              aria-label="Sistema de Solicitações"
             >
               Sistema de Solicitações{" "}
             </Typography>

@@ -58,7 +58,7 @@ export default function DialogEditarResponsavel(props) {
         open={props.openDialogEditarResponsavel}
         onClose={handleClose}
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" aria-label="Editar Atendente">
           {"Editar Atendente"}
         </DialogTitle>
         <DialogContent sx={{width: '500px'}}>

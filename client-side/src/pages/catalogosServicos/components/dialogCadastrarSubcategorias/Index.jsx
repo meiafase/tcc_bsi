@@ -42,9 +42,9 @@ export default function DialogCadastrarSubcategorias(props) {
   return (
     <div>
       <Dialog open={props.openCadastrarSubcategoria} onClose={handleClose}>
-        <DialogTitle>Cadastrar Subcategoria</DialogTitle>
+        <DialogTitle id="cadastrarCategoriaDialogTitle" aria-label="Cadastrar Categoria">Cadastrar Subcategoria</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText id="cadastrarCategoriaDialogContentText" aria-label="Instruções: Neste campo, insira o nome da categoria a ser cadastrada.">
             Neste campo insira o nome da subcategoria a ser cadastrada
           </DialogContentText>
           <TextField
@@ -59,8 +59,8 @@ export default function DialogCadastrarSubcategorias(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão de cancelar">Cancelar</Button>
-          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar subcategoria">Cadastrar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão para cancelar">Cancelar</Button>
+          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão para cadastrar subcategoria">Cadastrar</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -67,10 +67,10 @@ export default function CadastrarGrupo(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} variant="contained" color="error">
+          <Button onClick={handleClose} variant="contained" color="error" aria-label="Cancelar">
             Cancelar
           </Button>
-          <Button onClick={validateInfo} variant="contained" color="success">
+          <Button onClick={validateInfo} variant="contained" color="success" aria-label="Cadastrar Grupo">
             Cadastrar Grupo
           </Button>
         </DialogActions>

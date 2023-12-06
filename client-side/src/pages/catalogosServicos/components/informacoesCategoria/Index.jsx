@@ -127,7 +127,7 @@ export default function InformacoesCategoria (props) {
                 }}
             >
                 <p style={{ fontSize: "19px" }}>
-                <b>Assunto</b> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}} aria-label={`Categoria: ${nomeCategoria}`}>{nomeCategoria}</b>
+                <b aria-label="Assunto">Assunto</b> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}}>{props.nomeAssunto}</b> <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/> <b role="button" tabIndex={0} onClick={() => props.setShowAssunto('assunto')} style={{cursor: 'pointer', textDecoration: 'underline', color: 'blue'}} aria-label={`Categoria: ${nomeCategoria}`}>{nomeCategoria}</b>
                 </p>
             </div>
             <Divider />

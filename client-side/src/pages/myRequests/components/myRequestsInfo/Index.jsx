@@ -147,9 +147,9 @@ export default function MyRequestsInfo (props) {
                 <div style={{width: '98%', height: 'fit-content'}}>
                     <div style={{ marginLeft: "50px", padding: "10px", display: 'flex' }}>
                         <p style={{ fontSize: "19px" }}>
-                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)}>Minhas Solicitações</b>
+                            <b style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={() => props.setSolicitacaoInfo(false)} >Minhas Solicitações</b>
                             <KeyboardArrowRightIcon sx={{fontSize: '15px', marginRight: '5px', marginLeft: '5px'}}/>
-                            <b style={{marginRight: '20px'}}>Solicitação {props.idSolicitacao}</b>
+                            <b style={{marginRight: '20px'}} aria-label={`Número da Solicitação: ${props.idSolicitacao}`}>Solicitação {props.idSolicitacao}</b>
                         </p>
                         <p style={{marginRight: '20px'}}><Chip label={status} color="warning" /></p>
                         <Button variant="text" startIcon={<AccessTimeIcon />} onClick={() => setOpenDialogHistorico(true)}>
@@ -189,7 +189,7 @@ export default function MyRequestsInfo (props) {
                     <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '15px'}}>
                         <div style={{width: '80%', height: 'fit-content', backgroundColor: '#87d3f8', borderRadius: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                             <div style={{padding: '10px'}}>
-                                <p style={{fontWeight: 'bold', fontSize: '20px'}}>Atendente</p>
+                                <p style={{fontWeight: 'bold', fontSize: '20px'}} aria-label="Atendente">Atendente</p>
                                 <ListItem disablePadding>
                                     <ListItemIcon>
                                         <PersonIcon />
@@ -241,8 +241,8 @@ export default function MyRequestsInfo (props) {
                 <div style={{width: '74%', height: '100vh', display: 'flex', justifyContent: 'center', overflow: 'auto', paddingBottom: "100px"}}>
                     <div style={{width: '80%'}}>
                         <div style={{width: '100%', height: 'fit-content', padding: '20px', backgroundColor: '#87d3f8', borderRadius: '5px', display: status === "AGUARDANDO AVALIAÇÃO DO SOLICITANTE"  ? "" : "none"}}>
-                            <h3>Qual sua nota para este atendimento?</h3>
-                            <p>Atribua uma nota ao atendimento.</p>
+                            <h3 aria-label="Pergunta: Qual sua nota para este atendimento?">Qual sua nota para este atendimento?</h3>
+                            <p aria-label="Instrução: Atribua uma nota ao atendimento.">Atribua uma nota ao atendimento.</p>
                             <Rating
                                 name="simple-controlled"
                                 value={value}
@@ -261,7 +261,7 @@ export default function MyRequestsInfo (props) {
                                 onChange={e => setComentario(e.target.value)}
                             />
                             <div style={{marginTop: '30px'}}>
-                                <Button variant="contained" endIcon={<ArrowRightAltIcon />} onClick={handleAvaliar}>
+                                <Button variant="contained" endIcon={<ArrowRightAltIcon />} onClick={handleAvaliar} aria-label="Enviar avaliação">
                                     enviar
                                 </Button>
                             </div>

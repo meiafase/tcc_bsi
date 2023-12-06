@@ -47,9 +47,9 @@ export default function DialogCadastrarAssunto(props) {
   return (
     <div>
       <Dialog open={props.openCadastrarAssunto} onClose={handleClose}>
-        <DialogTitle>Cadastrar Assunto</DialogTitle>
+        <DialogTitle id="cadastrarAssuntoDialogTitle" aria-label="Cadastrar Assunto">Cadastrar Assunto</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText id="cadastrarAssuntoDialogContentText" aria-label="Instruções: Neste campo, insira o nome do assunto a ser cadastrado.">
             Neste campo insira o nome do assunto a ser cadastrado.
           </DialogContentText>
           <TextField
@@ -63,8 +63,8 @@ export default function DialogCadastrarAssunto(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão de cancelar">Cancelar</Button>
-          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão de cadastrar assunto">Cadastrar</Button>
+          <Button onClick={handleClose} color='error' variant='contained' aria-label="Botão para cancelar">Cancelar</Button>
+          <Button onClick={handleValidateInput} color='success' variant='contained' aria-label="Botão para cadastrar assunto">Cadastrar</Button>
         </DialogActions>
       </Dialog>
       <SnackbarError openSnackBarError={openSnackBarError} setOpenSnackBarError={setOpenSnackBarError} mensagemSnackBarError={mensagemSnackBarError} />

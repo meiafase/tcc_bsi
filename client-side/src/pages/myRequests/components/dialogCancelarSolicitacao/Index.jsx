@@ -43,11 +43,11 @@ export default function DialogCancelarSolicitacao(props) {
 
     return (
         <Dialog open={props.openDialogCancelarSolicitacao} onClose={handleClose}>
-            <DialogTitle>Cancelar Solicitação</DialogTitle>
+            <DialogTitle aria-label="Título do Diálogo: Cancelar Solicitação">Cancelar Solicitação</DialogTitle>
             <DialogContent>
                 <DialogContentText sx={{textAlign: 'center', width: '500px', marginBottom: '10px'}}>
-                    <p>Tem certeza de que deseja cancelar a solicitação?</p>
-                    <b>Obrigatório Informar O Motivo Do Cancelamento.</b>
+                    <p aria-label="Tem certeza de que deseja cancelar a solicitação?">Tem certeza de que deseja cancelar a solicitação?</p>
+                    <b aria-label="Aviso: Obrigatório informar o motivo do cancelamento.">Obrigatório Informar O Motivo Do Cancelamento.</b>
                 </DialogContentText>
                 <TextField
                     id="outlined-multiline-flexible"
@@ -64,7 +64,7 @@ export default function DialogCancelarSolicitacao(props) {
                 <Button variant="outlined" startIcon={<KeyboardBackspaceIcon />} onClick={handleClose} aria-label="Enviar">
                     Voltar
                 </Button>
-                <Button variant="contained" color="error" endIcon={<CloseIcon />} onClick={handleValidateInput} aria-label="Enviar">
+                <Button variant="contained" color="error" endIcon={<CloseIcon />} onClick={handleValidateInput} aria-label="Cancelar">
                 cancelar pedido
                 </Button>
             </DialogActions>
