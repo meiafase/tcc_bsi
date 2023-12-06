@@ -85,7 +85,7 @@ class PedidoService
                 $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada e atribuída automaticamente para {$responsavel->name}";
                 //Envio de email ao responsavel
                 $conteudo = array("pedido_id" => $pedido->id, "atribuicao" => true);
-                // Mail::to($responsavel['email'])->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
+                Mail::to($responsavel['email'])->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
             } else {
                 $descricaoHist = "Solicitação nº " . str_pad($pedido->id, 6, 0, STR_PAD_LEFT) . " cadastrada";
             }
@@ -102,7 +102,7 @@ class PedidoService
             //Envio de email ao solicitante
             $solicitante = $dados['usuario']['email'];
             $conteudo = array("pedido_id" => $pedido->id, "mensagem" => $descricaoHist);
-            // Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
+            Mail::to($solicitante)->send(new SolicitacaoMail('Nova Solicitação', $conteudo));
 
             DB::commit();
             return array(
@@ -288,7 +288,7 @@ class PedidoService
             if ($destinatario_id) {
                 $destinatario = $this->usuarioService->buscar($destinatario_id);
                 $conteudo = array("pedido_id" => $pedido_id, "atualizacao" => true);
-                // Mail::to($destinatario['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
+                Mail::to($destinatario['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
             }
 
             DB::commit();
@@ -364,7 +364,7 @@ class PedidoService
             //Envio de email ao solicitante
             $solicitante = $this->usuarioService->buscar($pedido->solicitante_id);
             $conteudo = array("pedido_id" => $pedido_id, "atualizacao" => true);
-            // Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
+            Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação Atualizada', $conteudo));
 
             DB::commit();
             return array(
@@ -453,13 +453,13 @@ class PedidoService
 
                 //Envio de email ao solicitante - concluído
                 $conteudo = array("pedido_id" => $pedido_id, "atendimento_concluido" => true);
-                // Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação - Atendimento Concluído', $conteudo));
+                Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação - Atendimento Concluído', $conteudo));
             }
 
             if ($dados['status_id'] == 5) {
                 //Envio de email ao solicitante - cancelado
                 $conteudo = array("pedido_id" => $pedido_id, "justificativa" => $dados['justificativa']);
-                // Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação cancelada', $conteudo));
+                Mail::to($solicitante['dados']['email'])->send(new SolicitacaoMail('Solicitação cancelada', $conteudo));
             }
 
             $this->repository->atualizarColuna($pedido_id, $arrAlteracao);
@@ -498,7 +498,7 @@ class PedidoService
             $pedido = $this->repository->obter($pedido_id);
             $responsavel = $this->usuarioService->buscar($pedido->responsavel_id);
             $conteudo = array("pedido_id" => $pedido_id, "avaliacao" => true);
-            // Mail::to($responsavel['dados']['email'])->send(new SolicitacaoMail('Seu atendimento foi avaliado', $conteudo));
+            Mail::to($responsavel['dados']['email'])->send(new SolicitacaoMail('Seu atendimento foi avaliado', $conteudo));
 
             DB::commit();
 
@@ -630,7 +630,7 @@ class PedidoService
             //Envio de email ao responsavel
             $responsavel = $novo_responsavel['dados']['email'];
             $conteudo = array("pedido_id" => $pedido_id, "atribuicao" => true);
-            // Mail::to($responsavel)->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
+            Mail::to($responsavel)->send(new SolicitacaoMail('Nova solicitação atribuída para você', $conteudo));
 
             DB::commit();
 
